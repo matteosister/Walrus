@@ -17,7 +17,7 @@ class PageCollectionTest extends WalrusTestCase
     public function testFullDir()
     {
         $this->addRandomPages(3);
-        $pageCollection = new PageCollection();
+        $pageCollection = new PageCollection(Collection::TYPE_PAGES);
         $pageCollection->load($this->pagesDir);
         $this->assertInstanceOf('\ArrayAccess', $pageCollection);
         $this->assertInstanceOf('\Countable', $pageCollection);
@@ -29,7 +29,7 @@ class PageCollectionTest extends WalrusTestCase
      */
     public function testEmptyDir()
     {
-        $pageCollection = new PageCollection();
+        $pageCollection = new PageCollection(Collection::TYPE_PAGES);
         $pageCollection->load($this->playgroundDir.'/non-existent');
     }
 }

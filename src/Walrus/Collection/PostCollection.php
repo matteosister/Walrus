@@ -2,7 +2,7 @@
 /**
  * User: matteo
  * Date: 12/09/12
- * Time: 10.17
+ * Time: 17.29
  *
  * Just for fun...
  */
@@ -11,11 +11,10 @@ namespace Walrus\Collection;
 
 use Walrus\Collection\Collection;
 
-
 /**
- * Class representing a collection of pages
+ * Class representing a collection of posts
  */
-class PageCollection extends Collection
+class PostCollection extends Collection
 {
     /**
      * class constructor

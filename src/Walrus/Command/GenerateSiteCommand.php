@@ -13,7 +13,9 @@ use Walrus\Command\BaseCommand,
     Walrus\MDObject\Post\Post,
     Walrus\MDObject\Page\Page,
     Walrus\DI\Configuration,
-    Walrus\Collection\PageCollection;
+    Walrus\Collection\PageCollection,
+    Walrus\Collection\PostCollection,
+    Walrus\Collection\Collection;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
@@ -76,7 +78,7 @@ class GenerateSiteCommand extends BaseCommand
     private function parsePages(OutputInterface $output)
     {
         $dir = $this->configuration->drafing_dir.'/pages';
-        $pageFactory = new PageCollection();
+        $pageFactory = new PageCollection(Collection::TYPE_PAGES);
         try {
             $num = $pageFactory->load($dir);
             if (count($pageFactory) == 0) {
