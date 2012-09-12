@@ -31,16 +31,22 @@ class GenerateSiteCommand extends BaseCommand
     protected $twigEnvironment;
 
     /**
+     * @var \Twig_Environment
+     */
+    protected $themeEnvironment;
+
+    /**
      * constructor
      *
      * @param \Walrus\DI\Configuration $configuration configuration
      * @param \Twig_Environment        $environment   twig environment
      */
-    public function __construct(Configuration $configuration, \Twig_Environment $environment)
+    public function __construct(Configuration $configuration, \Twig_Environment $environment, \Twig_Environment $themeEnvironment)
     {
         parent::__construct();
         $this->configuration = $configuration;
         $this->twigEnvironment = $environment;
+        $this->themeEnvironment = $themeEnvironment;
     }
 
     /**
@@ -78,14 +84,25 @@ class GenerateSiteCommand extends BaseCommand
     private function parsePages(OutputInterface $output)
     {
         $dir = $this->configuration->drafing_dir.'/pages';
-        $pageFactory = new PageCollection(Collection::TYPE_PAGES);
+        $pageCollection = new PageCollection(Collection::TYPE_PAGES);
         try {
-            $num = $pageFactory->load($dir);
-            if (count($pageFactory) == 0) {
+            $pageCollection->load($dir);
+            if (count($pageCollection) == 0) {
                 $output->writeln('<info>No pages to generate</info>');
+
                 return;
             }
-            $output->writeln(sprintf('<info>Generating %s page/s...</info>', count($pageFactory)));
+            $output->writeln(sprintf('<info>Generating %s page/s...</info>', count($pageCollection)));
+            foreach ($pageCollection as $page) {
+                $url = $page->getMetadata()->getUrl().'.html';
+                $filename = $this->configuration->get('public_dir').'/'.$url;
+                if (file_exists($filename)) {
+                    unlink($filename);
+                }
+                file_put_contents($filename, $this->themeEnvironment->render('page.html.twig', array(
+                    'page' => $page
+                )));
+            }
         } catch (\Walrus\Exception\NoPagesCreated $e) {
             $output->writeln('<info>no pages created...</info>');
         }
