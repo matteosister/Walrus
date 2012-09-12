@@ -1,0 +1,6 @@
+parameters:
+  utilities.class: Walrus\Utilities\Utilities
+
+services:
+  utilities:
+    class: %utilities.class%

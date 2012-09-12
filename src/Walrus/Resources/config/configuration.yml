@@ -1,0 +1,10 @@
+parameters:
+  configuration.class: Walrus\DI\Configuration
+
+services:
+  configuration:
+    class: %configuration.class%
+    calls:
+      - [ set, [ "root_dir", "%ROOT_PATH%" ]]
+      - [ set, [ "drafing_dir", "%ROOT_PATH%/drafting" ]]
+      - [ set, [ "public_dir", "%ROOT_PATH%/public" ]]

@@ -1,0 +1,17 @@
+parameters:
+  create_post.command.class: Walrus\Command\CreatePostCommand
+  create_page.command.class: Walrus\Command\CreatePageCommand
+  generate_site.command.class: Walrus\Command\GenerateSiteCommand
+
+services:
+  create_post.command:
+    class: %create_post.command.class%
+    arguments: [ @configuration, @twig, @utilities ]
+
+  create_page.command:
+    class: %create_page.command.class%
+    arguments: [ @configuration, @twig, @utilities ]
+
+  generate_site.command:
+    class: %generate_site.command.class%
+    arguments: [ @configuration, @twig ]

@@ -1,0 +1,15 @@
+parameters:
+  twig.loader.class: Twig_Loader_Filesystem
+  twig.loader.tpl_path: %ROOT_PATH%/Walrus/src/Walrus/Resources/tpl
+  twig.environment.class: Twig_Environment
+  twig.cache: false
+
+services:
+  twig.loader:
+    class: %twig.loader.class%
+    arguments: [%twig.loader.tpl_path%]
+  twig:
+    class: %twig.environment.class%
+    arguments:
+      - @twig.loader
+      - { cache: %twig.cache% }
