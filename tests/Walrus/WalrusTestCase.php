@@ -25,6 +25,7 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
     protected $playgroundDir;
     protected $draftingDir;
     protected $pagesDir;
+    protected $postsDir;
 
     const DATE_FORMAT = 'Y-m-d_H:i:s';
     const PAGE_TITLE = 'The Test Title';
@@ -45,6 +46,10 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
         if (!is_dir($this->pagesDir)) {
             mkdir($this->pagesDir);
         }
+        $this->postsDir = $this->draftingDir.'/posts';
+        if (!is_dir($this->postsDir)) {
+            mkdir($this->postsDir);
+        }
     }
 
     protected function tearDown()
@@ -54,7 +59,13 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
         foreach($iterator as $file) {
             unlink($file);
         }
+        $iterator = $finder->files()->in($this->draftingDir.'/posts');
+        foreach($iterator as $file) {
+            unlink($file);
+        }
         rmdir($this->pagesDir);
+        rmdir($this->postsDir);
+        rmdir($this->draftingDir);
     }
 
     protected function addRandomPages($num = 1)
@@ -105,6 +116,7 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
         $twig = $this->getTwig();
         $utilities = $this->getMockUtilities();
         $application->add(new CreatePageCommand($configuration, $twig, $utilities));
+        $application->add(new CreatePostCommand($configuration, $twig, $utilities));
 
         return $application;
     }
