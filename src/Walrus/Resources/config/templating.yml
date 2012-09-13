@@ -4,6 +4,7 @@ parameters:
   twig.loader.theme.tpl_path: %ROOT_PATH%/themes/cypress/Templates
   twig.environment.class: Twig_Environment
   twig.cache: false
+  twig.extension.walrus.class: Walrus\Extension\WalrusExtension
 
 services:
   twig.loader:
@@ -13,6 +14,9 @@ services:
   twig.loader.theme:
     class: %twig.loader.class%
     arguments: [%twig.loader.theme.tpl_path%]
+
+  twig.extension.walrus:
+    class: %twig.extension.walrus.class%
 
   twig:
     class: %twig.environment.class%
@@ -25,3 +29,5 @@ services:
     arguments:
       - @twig.loader.theme
       - { cache: %twig.cache% }
+    calls:
+      - [ addExtension, [ @twig.extension.walrus ]]
