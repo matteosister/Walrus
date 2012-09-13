@@ -1,0 +1,13 @@
+parameters:
+  less.bootstrap.project.class: LessElephant\LessProject
+  less.bootstrap.source.folder: %ROOT_PATH%/vendor/twitter/bootstrap/less
+  less.bootstrap.source.file: bootstrap.less
+  less.bootstrap.destination: %PUBLIC_PATH%/css/bootstrap.css
+
+services:
+  less.bootstrap.project:
+    class: %less.bootstrap.project.class%
+    arguments:
+      - %less.bootstrap.source.folder%
+      - %less.bootstrap.source.file%
+      - %less.bootstrap.destination%

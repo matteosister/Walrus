@@ -14,4 +14,4 @@ services:
 
   generate_site.command:
     class: %generate_site.command.class%
-    arguments: [ @configuration, @twig, @twig.theme ]
+    arguments: [ @configuration, @twig, @twig.theme, @less.bootstrap.project ]

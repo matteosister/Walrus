@@ -22,12 +22,14 @@ use Symfony\Component\Console\Application;
 
 $container = new ContainerBuilder();
 $container->setParameter("ROOT_PATH", realpath(__DIR__.'/../../../../'));
+$container->setParameter("PUBLIC_PATH", realpath(__DIR__.'/../../../../public'));
 
 $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/config'));
 $loader->load('templating.yml');
 $loader->load('commands.yml');
 $loader->load('utilities.yml');
 $loader->load('configuration.yml');
+$loader->load('less.yml');
 
 $application = new Application();
 $application->add($container->get('create_post.command'));
