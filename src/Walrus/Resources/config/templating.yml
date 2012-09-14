@@ -17,8 +17,8 @@ services:
 
   twig.extension.walrus:
     class: %twig.extension.walrus.class%
-    calls:
-      - [ setConfiguration, [@walrus.configuration] ]
+    arguments:
+      - @walrus.configuration
 
   twig:
     class: %twig.environment.class%

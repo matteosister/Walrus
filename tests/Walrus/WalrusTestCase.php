@@ -87,7 +87,7 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
     protected function getMockConfiguration()
     {
         $configuration = $this->getMock('Walrus\DI\Configuration', array('get'));
-        $configuration->expects($this->once())
+        $configuration->expects($this->any())
             ->method('get')
             ->with($this->equalTo('drafing_dir'))
             ->will($this->returnValue(realpath(__DIR__.'/Playground/drafting')));

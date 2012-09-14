@@ -86,6 +86,7 @@ class GenerateSiteCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->writeHeader($output);
+        $this->compileAssets($output);
         $this->parsePages($output);
         $this->parsePosts($output);
     }
@@ -99,14 +100,6 @@ class GenerateSiteCommand extends BaseCommand
      */
     private function parsePages(OutputInterface $output)
     {
-        if (count($this->assetProjectsCollection) > 0) {
-            $output->writeln('<info>Compiling</info> <comment>static assets</comment>');
-            $this->assetProjectsCollection->compile();
-            $this->assetProjectsCollection->publish($this->configuration->get('public_dir').'/css');
-            $output->writeln('<info>Compiling</info> <comment>Done!</comment>');
-        } else {
-            $output->writeln('<comment>No assets to compile</comment>');
-        }
         $dir = $this->configuration->drafing_dir.'/pages';
         $pageCollection = new PageCollection(Collection::TYPE_PAGES);
         try {
@@ -116,7 +109,7 @@ class GenerateSiteCommand extends BaseCommand
 
                 return;
             }
-            $output->writeln(sprintf('<info>Generating</info> %s page/s...', count($pageCollection)));
+            $output->writeln(sprintf('<info>Generating</info> %s page/s', count($pageCollection)));
             foreach ($pageCollection as $page) {
                 $url = $page->getMetadata()->getUrl().'.html';
                 $filename = $this->configuration->get('public_dir').'/'.$url;
@@ -153,10 +146,22 @@ class GenerateSiteCommand extends BaseCommand
         if (iterator_count($posts) == 0) {
             return $output->writeln('<info>No posts to generate</info>');
         }
-        $output->writeln(sprintf('<info>Generating</info> %s post/s...', iterator_count($posts)));
+        $output->writeln(sprintf('<info>Generating</info> %s post/s', iterator_count($posts)));
         foreach ($posts as $postFile) {
             $md = file_get_contents($postFile->getRealPath());
             $post = new Post($md);
+        }
+    }
+
+    private function compileAssets(OutputInterface $output)
+    {
+        if (count($this->assetProjectsCollection) > 0) {
+            $output->writeln('<info>Compiling</info> <comment>static assets</comment>');
+            $this->assetProjectsCollection->compile();
+            $this->assetProjectsCollection->publish($this->configuration->get('public_dir').'/css');
+            $output->writeln('<info>Compiling</info> <comment>Done!</comment>');
+        } else {
+            $output->writeln('<comment>No assets to compile</comment>');
         }
     }
 }

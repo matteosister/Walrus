@@ -19,7 +19,12 @@ class WalrusExtension extends \Twig_Extension
      */
     private $configuration;
 
-    public function setConfiguration(Configuration $configuration)
+    /**
+     * class constructor
+     *
+     * @param \Walrus\DI\Configuration $configuration configuration instance
+     */
+    public function __construct(Configuration $configuration)
     {
         $this->configuration = $configuration;
     }
