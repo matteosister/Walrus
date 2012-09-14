@@ -14,9 +14,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Config\FileLocator,
     Symfony\Component\Console\Application,
     Symfony\Component\Yaml\Parser,
-    Symfony\Component\Finder\Finder;
+    Symfony\Component\Finder\Finder,
+    Symfony\Component\Config\Definition\Processor,
+    Symfony\Component\Yaml\Yaml;
 
-use Walrus\DI\AssetCompilerPass;
+use Walrus\DI\AssetCompilerPass,
+    Walrus\Configuration\ThemeConfiguration;
 
 class Walrus
 {
@@ -32,33 +35,18 @@ class Walrus
 
     public function __construct($rootPath)
     {
-        $container = new ContainerBuilder();
-        $container->addCompilerPass(new AssetCompilerPass());
-        $container->setParameter("ROOT_PATH", realpath($rootPath));
-        $container->setParameter("PUBLIC_PATH", $container->getParameter('ROOT_PATH').'/public');
+        $this->container = new ContainerBuilder();
+        $this->container->addCompilerPass(new AssetCompilerPass());
+        $this->container->setParameter("ROOT_PATH", realpath($rootPath));
+        $this->container->setParameter("PUBLIC_PATH", $this->container->getParameter('ROOT_PATH').'/public');
 
         $parser = new Parser();
-        $values = $parser->parse(file_get_contents($container->getParameter('ROOT_PATH').'/config.yml'));
+        $values = $parser->parse(file_get_contents($this->container->getParameter('ROOT_PATH').'/config.yml'));
 
-        $container->setParameter('THEME_PATH', $container->getParameter('ROOT_PATH').'/themes/'.$values['walrus']['theme']);
-        
-        $loader = new YamlFileLoader($container, new FileLocator(array(
-            __DIR__.'/Resources/config',
-            $container->getParameter('THEME_PATH').'/di'
-        )));
-        $loader->load('templating.yml');
-        $loader->load('commands.yml');
-        $loader->load('utilities.yml');
-        $loader->load('configuration.yml');
-        $loader->load('assets.yml');
-
-        $finder = new Finder();
-        $iterator = $finder->files()->in($container->getParameter('THEME_PATH').'/di')->name('*.yml');
-        foreach($iterator as $file) {
-            $loader->load($file->getRelativePathname());
-        }
-        $container->compile();
-        $this->container = $container;
+        $this->container->setParameter('THEME_PATH', $this->container->getParameter('ROOT_PATH').'/themes/'.$values['walrus']['theme']);
+        $this->loadDI();
+        $this->loadThemeConfiguration();
+        $this->container->compile();
     }
 
     public function getApplication()
@@ -71,5 +59,33 @@ class Walrus
             $this->application->add($this->container->get('generate_site.command'));
         }
         return $this->application;
+    }
+
+    private function loadThemeConfiguration()
+    {
+        $config = Yaml::parse($this->container->getParameter('THEME_PATH').'/theme.yml');
+        $processor = new Processor();
+        $conf = new ThemeConfiguration();
+        $processedConfiguration = $processor->processConfiguration($conf, $config);
+        var_dump($processedConfiguration);
+    }
+
+    private function loadDI()
+    {
+        $loader = new YamlFileLoader($this->container, new FileLocator(array(
+            __DIR__.'/Resources/config',
+            $this->container->getParameter('THEME_PATH').'/di'
+        )));
+        $loader->load('templating.yml');
+        $loader->load('commands.yml');
+        $loader->load('utilities.yml');
+        $loader->load('configuration.yml');
+        $loader->load('assets.yml');
+
+        $finder = new Finder();
+        $iterator = $finder->files()->in($this->container->getParameter('THEME_PATH').'/di')->name('*.yml');
+        foreach($iterator as $file) {
+            $loader->load($file->getRelativePathname());
+        }
     }
 }
