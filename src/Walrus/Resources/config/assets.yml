@@ -1,0 +1,6 @@
+parameters:
+  asset.projects_collection.class: Walrus\Asset\Collection
+
+services:
+  asset.projects_collection:
+    class: %asset.projects_collection.class%

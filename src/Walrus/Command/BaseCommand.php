@@ -35,7 +35,7 @@ abstract class BaseCommand extends Command
         $output->writeln("    ||||     \\");
         $output->writeln("    ||||   <info>I am the Walrus</info>");
         $output->writeln("   ,\|\|         `,");
-        $output->writeln("  /                \\");
+        //$output->writeln("  /                \\");
         $output->writeln('');
     }
 

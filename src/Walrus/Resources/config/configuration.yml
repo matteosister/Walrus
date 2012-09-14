@@ -2,7 +2,7 @@ parameters:
   configuration.class: Walrus\DI\Configuration
 
 services:
-  configuration:
+  walrus.configuration:
     class: %configuration.class%
     calls:
       - [ set, [ "root_dir", "%ROOT_PATH%" ]]

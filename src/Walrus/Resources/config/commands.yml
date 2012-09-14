@@ -6,12 +6,12 @@ parameters:
 services:
   create_post.command:
     class: %create_post.command.class%
-    arguments: [ @configuration, @twig, @utilities ]
+    arguments: [ @walrus.configuration, @twig, @utilities ]
 
   create_page.command:
     class: %create_page.command.class%
-    arguments: [ @configuration, @twig, @utilities ]
+    arguments: [ @walrus.configuration, @twig, @utilities ]
 
   generate_site.command:
     class: %generate_site.command.class%
-    arguments: [ @configuration, @twig, @twig.theme, @less.bootstrap.project ]
+    arguments: [ @walrus.configuration, @twig, @twig.theme, @asset.projects_collection ]

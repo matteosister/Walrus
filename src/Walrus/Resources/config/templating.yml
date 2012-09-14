@@ -1,10 +1,10 @@
 parameters:
   twig.loader.class: Twig_Loader_Filesystem
   twig.loader.tpl_path: %ROOT_PATH%/Walrus/src/Walrus/Resources/tpl
-  twig.loader.theme.tpl_path: %ROOT_PATH%/themes/cypress/Templates
+  twig.loader.theme.tpl_path: %ROOT_PATH%/themes/cypress/templates
   twig.environment.class: Twig_Environment
   twig.cache: false
-  twig.extension.walrus.class: Walrus\Extension\WalrusExtension
+  twig.extension.walrus.class: Walrus\Twig\Extension\WalrusExtension
 
 services:
   twig.loader:
@@ -17,6 +17,8 @@ services:
 
   twig.extension.walrus:
     class: %twig.extension.walrus.class%
+    calls:
+      - [ setConfiguration, [@walrus.configuration] ]
 
   twig:
     class: %twig.environment.class%

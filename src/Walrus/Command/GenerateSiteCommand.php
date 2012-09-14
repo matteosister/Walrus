@@ -17,6 +17,7 @@ use Walrus\Command\BaseCommand,
     Walrus\Collection\PostCollection,
     Walrus\Collection\Collection;
 use LessElephant\LessProject;
+use CompassElephant\CompassProject;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
@@ -37,28 +38,31 @@ class GenerateSiteCommand extends BaseCommand
     protected $themeEnvironment;
 
     /**
-     * @var \LessElephant\LessProject
+     * @var \Walrus\Asset\Collection
      */
-    protected $lessProject;
+    protected $assetProjectsCollection;
 
     /**
      * constructor
      *
-     * @param \Walrus\DI\Configuration $configuration configuration
-     * @param \Twig_Environment        $environment   twig environment
+     * @param \Walrus\DI\Configuration        $configuration    configuration
+     * @param \Twig_Environment               $environment      twig environment
+     * @param \Twig_Environment               $themeEnvironment twig environment for the theme
+     * @param \LessElephant\LessProject       $lessProject      less project
+     * @param \CompassElephant\CompassProject $compassProject   compass project
      */
     public function __construct(
         Configuration $configuration,
         \Twig_Environment $environment,
         \Twig_Environment $themeEnvironment,
-        LessProject $lessProject
+        \Walrus\Asset\Collection $assetProjectCollection
     )
     {
         parent::__construct();
         $this->configuration = $configuration;
         $this->twigEnvironment = $environment;
         $this->themeEnvironment = $themeEnvironment;
-        $this->lessProject = $lessProject;
+        $this->assetProjectsCollection = $assetProjectCollection;
     }
 
     /**
@@ -95,8 +99,13 @@ class GenerateSiteCommand extends BaseCommand
      */
     private function parsePages(OutputInterface $output)
     {
-        if (!$this->lessProject->isClean()) {
-            $this->lessProject->compile();
+        if (count($this->assetProjectsCollection) > 0) {
+            $output->writeln('<info>Compiling</info> <comment>static assets</comment>');
+            $this->assetProjectsCollection->compile();
+            $this->assetProjectsCollection->publish($this->configuration->get('public_dir').'/css');
+            $output->writeln('<info>Compiling</info> <comment>Done!</comment>');
+        } else {
+            $output->writeln('<comment>No assets to compile</comment>');
         }
         $dir = $this->configuration->drafing_dir.'/pages';
         $pageCollection = new PageCollection(Collection::TYPE_PAGES);
@@ -107,7 +116,7 @@ class GenerateSiteCommand extends BaseCommand
 
                 return;
             }
-            $output->writeln(sprintf('<info>Generating %s page/s...</info>', count($pageCollection)));
+            $output->writeln(sprintf('<info>Generating</info> %s page/s...', count($pageCollection)));
             foreach ($pageCollection as $page) {
                 $url = $page->getMetadata()->getUrl().'.html';
                 $filename = $this->configuration->get('public_dir').'/'.$url;
@@ -118,6 +127,7 @@ class GenerateSiteCommand extends BaseCommand
                     'page' => $page
                 )));
             }
+            $output->writeln(sprintf('<info>Generating</info> %s page/s <comment>done</comment>', count($pageCollection)));
         } catch (\Walrus\Exception\NoPagesCreated $e) {
             $output->writeln('<info>no pages created...</info>');
         }
@@ -143,7 +153,7 @@ class GenerateSiteCommand extends BaseCommand
         if (iterator_count($posts) == 0) {
             return $output->writeln('<info>No posts to generate</info>');
         }
-        $output->writeln(sprintf('<info>Generating %s post/s...</info>', iterator_count($posts)));
+        $output->writeln(sprintf('<info>Generating</info> %s post/s...', iterator_count($posts)));
         foreach ($posts as $postFile) {
             $md = file_get_contents($postFile->getRealPath());
             $post = new Post($md);
