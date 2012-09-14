@@ -11,6 +11,7 @@ namespace Walrus;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\Loader\YamlFileLoader,
+    Symfony\Component\DependencyInjection\Definition,
     Symfony\Component\Config\FileLocator,
     Symfony\Component\Console\Application,
     Symfony\Component\Yaml\Parser,
@@ -66,8 +67,21 @@ class Walrus
         $config = Yaml::parse($this->container->getParameter('THEME_PATH').'/theme.yml');
         $processor = new Processor();
         $conf = new ThemeConfiguration();
-        $processedConfiguration = $processor->processConfiguration($conf, $config);
-        var_dump($processedConfiguration);
+        $pc = $processor->processConfiguration($conf, $config);
+        if (null !== $less = $pc['assets']['less']) {
+            $sourceFile = $this->container->getParameter('THEME_PATH').'/'.$less['source_file'];
+            if (is_file($sourceFile)) {
+                $pathParts = pathinfo($sourceFile);
+                $dir = $pathParts['dirname'];
+                $name = $pathParts['basename'];
+                $lessProject = new \LessElephant\LessProject($dir, $name, $this->container->getParameter('PUBLIC_PATH').'/css/bootstrap.css');
+                $def = new Definition('Walrus\Asset\Project\Less', array($lessProject));
+                $def->addTag('asset.project');
+                $this->container->addDefinitions(array('walrus.asset.less.project' => $def));
+            } else {
+                throw new \RuntimeException(sprintf('the file %s do not exists', $sourceFile));
+            }
+        }
     }
 
     private function loadDI()
