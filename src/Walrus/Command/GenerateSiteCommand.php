@@ -28,6 +28,11 @@ use Symfony\Component\Finder\Finder;
 class GenerateSiteCommand extends BaseCommand
 {
     /**
+     * @var \Walrus\DI\Configuration
+     */
+    protected $configuration;
+
+    /**
      * @var \Twig_Environment
      */
     protected $twigEnvironment;
@@ -45,11 +50,10 @@ class GenerateSiteCommand extends BaseCommand
     /**
      * constructor
      *
-     * @param \Walrus\DI\Configuration        $configuration    configuration
-     * @param \Twig_Environment               $environment      twig environment
-     * @param \Twig_Environment               $themeEnvironment twig environment for the theme
-     * @param \LessElephant\LessProject       $lessProject      less project
-     * @param \CompassElephant\CompassProject $compassProject   compass project
+     * @param \Walrus\DI\Configuration $configuration          configuration
+     * @param \Twig_Environment        $environment            twig environment
+     * @param \Twig_Environment        $themeEnvironment       twig environment for the theme
+     * @param \Walrus\Asset\Collection $assetProjectCollection less project
      */
     public function __construct(
         Configuration $configuration,
