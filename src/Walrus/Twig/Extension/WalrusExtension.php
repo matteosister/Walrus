@@ -29,6 +29,18 @@ class WalrusExtension extends \Twig_Extension
         $this->configuration = $configuration;
     }
 
+    public function getFunctions()
+    {
+        return array(
+            'stylesheets' => new \Twig_Function_Method($this, 'stylesheets')
+        );
+    }
+
+    public function stylesheets()
+    {
+
+    }
+
     /**
      * Returns the name of the extension.
      *

@@ -20,7 +20,11 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Yaml\Yaml;
 
 use Walrus\DI\AssetCompilerPass,
-    Walrus\Configuration\ThemeConfiguration;
+    Walrus\Configuration\ThemeConfiguration,
+    Walrus\Asset\Project\CssFolder;
+
+use LessElephant\LessProject;
+use CompassElephant\CompassProject;
 
 class Walrus
 {
@@ -34,6 +38,11 @@ class Walrus
      */
     private $application;
 
+    /**
+     * class constructor
+     *
+     * @param string $rootPath root of the project
+     */
     public function __construct($rootPath)
     {
         $this->container = new ContainerBuilder();
@@ -45,7 +54,7 @@ class Walrus
         $values = $parser->parse(file_get_contents($this->container->getParameter('ROOT_PATH').'/config.yml'));
 
         $this->container->setParameter('THEME_PATH', $this->container->getParameter('ROOT_PATH').'/themes/'.$values['walrus']['theme']);
-        $this->loadDI();
+        $this->loadWalrusDI();
         $this->loadThemeConfiguration();
         $this->container->compile();
     }
@@ -68,38 +77,51 @@ class Walrus
         $processor = new Processor();
         $conf = new ThemeConfiguration();
         $pc = $processor->processConfiguration($conf, $config);
+        // less
         if (null !== $less = $pc['assets']['less']) {
             $sourceFile = $this->container->getParameter('THEME_PATH').'/'.$less['source_file'];
             if (is_file($sourceFile)) {
                 $pathParts = pathinfo($sourceFile);
                 $dir = $pathParts['dirname'];
                 $name = $pathParts['basename'];
-                $lessProject = new \LessElephant\LessProject($dir, $name, $this->container->getParameter('PUBLIC_PATH').'/css/bootstrap.css');
+                $lessProject = new LessProject($dir, $name, $this->container->getParameter('PUBLIC_PATH').'/css/bootstrap.css');
                 $def = new Definition('Walrus\Asset\Project\Less', array($lessProject));
                 $def->addTag('asset.project');
                 $this->container->addDefinitions(array('walrus.asset.less.project' => $def));
             } else {
-                throw new \RuntimeException(sprintf('the file %s do not exists', $sourceFile));
+                throw new \RuntimeException(sprintf('the file %s do not exists, the less project could not be initialized', $sourceFile));
             }
+        }
+        // compass
+        if (null !== $compass = $pc['assets']['compass']) {
+            $sourceFolder = $this->container->getParameter('THEME_PATH').'/'.$compass['source_folder'];
+            if (is_dir($sourceFolder)) {
+                $compassProject = new CompassProject($sourceFolder);
+                $def = new Definition('Walrus\Asset\Project\Compass', array($compassProject));
+                $def->addTag('asset.project');
+                $this->container->addDefinitions(array('walrus.asset.less.project' => $def));
+            } else {
+                throw new \RuntimeException(sprintf('the folder %s do not exists, the compass project couldn\'t be initalized', $sourceFolder));
+            }
+        }
+        // css_source
+        if (null !== $cssSource = $pc['assets']['css_source']) {
+            // TODO: validate folder paths
+            $def = new Definition('Walrus\Asset\Project\CssFolder', array(array_map(function($folder) {
+                return $this->container->getParameter('THEME_PATH').'/'.$folder;
+            }, $cssSource)));
+            $def->addTag('asset.project');
+            $this->container->addDefinitions(array('walrus.asset.css_folder.project' => $def));
         }
     }
 
-    private function loadDI()
+    private function loadWalrusDI()
     {
-        $loader = new YamlFileLoader($this->container, new FileLocator(array(
-            __DIR__.'/Resources/config',
-            $this->container->getParameter('THEME_PATH').'/di'
-        )));
+        $loader = new YamlFileLoader($this->container, new FileLocator(array(__DIR__.'/Resources/config')));
         $loader->load('templating.yml');
         $loader->load('commands.yml');
         $loader->load('utilities.yml');
         $loader->load('configuration.yml');
         $loader->load('assets.yml');
-
-        $finder = new Finder();
-        $iterator = $finder->files()->in($this->container->getParameter('THEME_PATH').'/di')->name('*.yml');
-        foreach($iterator as $file) {
-            $loader->load($file->getRelativePathname());
-        }
     }
 }

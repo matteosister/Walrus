@@ -90,9 +90,19 @@ class GenerateSiteCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->writeHeader($output);
+        $this->cleanup($output);
         $this->compileAssets($output);
         $this->parsePages($output);
         $this->parsePosts($output);
+    }
+
+    private function cleanup(OutputInterface $output)
+    {
+        $output->writeln('<info>Cleaning</info> ...');
+        foreach(Finder::create()->files()->in($this->configuration->get('public_dir')) as $file) {
+            $output->writeln(sprintf('<info>Delete</info> %s', $file->getRelativePathname()));
+            unlink($file->getRealPath());
+        }
     }
 
     /**
