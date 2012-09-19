@@ -28,10 +28,6 @@ class Less implements ProjectInterface
 
     /**
      * compile a project
-     *
-     * @param bool $force force recompile
-     *
-     * @return bool
      */
     function compile()
     {
@@ -48,5 +44,6 @@ class Less implements ProjectInterface
     function publish($to = null)
     {
         // nothing to do here, less publish to the final destination
+        // TODO: filers assetic style? Maybe assetic?
     }
 }

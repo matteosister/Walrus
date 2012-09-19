@@ -28,9 +28,7 @@ class AssetCompilerPass implements CompilerPassInterface
         if (false === $container->hasDefinition('asset.projects_collection')) {
             return;
         }
-
         $definition = $container->getDefinition('asset.projects_collection');
-
         foreach ($container->findTaggedServiceIds('asset.project') as $id => $attributes) {
             $definition->addMethodCall('addProject', array(new Reference($id)));
         }

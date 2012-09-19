@@ -71,50 +71,6 @@ class Walrus
         return $this->application;
     }
 
-    private function loadThemeConfiguration()
-    {
-        $config = Yaml::parse($this->container->getParameter('THEME_PATH').'/theme.yml');
-        $processor = new Processor();
-        $conf = new ThemeConfiguration();
-        $pc = $processor->processConfiguration($conf, $config);
-        // less
-        if (null !== $less = $pc['assets']['less']) {
-            $sourceFile = $this->container->getParameter('THEME_PATH').'/'.$less['source_file'];
-            if (is_file($sourceFile)) {
-                $pathParts = pathinfo($sourceFile);
-                $dir = $pathParts['dirname'];
-                $name = $pathParts['basename'];
-                $lessProject = new LessProject($dir, $name, $this->container->getParameter('PUBLIC_PATH').'/css/bootstrap.css');
-                $def = new Definition('Walrus\Asset\Project\Less', array($lessProject));
-                $def->addTag('asset.project');
-                $this->container->addDefinitions(array('walrus.asset.less.project' => $def));
-            } else {
-                throw new \RuntimeException(sprintf('the file %s do not exists, the less project could not be initialized', $sourceFile));
-            }
-        }
-        // compass
-        if (null !== $compass = $pc['assets']['compass']) {
-            $sourceFolder = $this->container->getParameter('THEME_PATH').'/'.$compass['source_folder'];
-            if (is_dir($sourceFolder)) {
-                $compassProject = new CompassProject($sourceFolder);
-                $def = new Definition('Walrus\Asset\Project\Compass', array($compassProject));
-                $def->addTag('asset.project');
-                $this->container->addDefinitions(array('walrus.asset.less.project' => $def));
-            } else {
-                throw new \RuntimeException(sprintf('the folder %s do not exists, the compass project couldn\'t be initalized', $sourceFolder));
-            }
-        }
-        // css_source
-        if (null !== $cssSource = $pc['assets']['css_source']) {
-            // TODO: validate folder paths
-            $def = new Definition('Walrus\Asset\Project\CssFolder', array(array_map(function($folder) {
-                return $this->container->getParameter('THEME_PATH').'/'.$folder;
-            }, $cssSource)));
-            $def->addTag('asset.project');
-            $this->container->addDefinitions(array('walrus.asset.css_folder.project' => $def));
-        }
-    }
-
     private function loadWalrusDI()
     {
         $loader = new YamlFileLoader($this->container, new FileLocator(array(__DIR__.'/Resources/config')));
@@ -123,5 +79,64 @@ class Walrus
         $loader->load('utilities.yml');
         $loader->load('configuration.yml');
         $loader->load('assets.yml');
+    }
+
+    private function loadThemeConfiguration()
+    {
+        $config = Yaml::parse($this->container->getParameter('THEME_PATH').'/theme.yml');
+        $processor = new Processor();
+        $conf = new ThemeConfiguration();
+        $pc = $processor->processConfiguration($conf, $config);
+        foreach($pc['assets'] as $assetsConfiguration) {
+            switch($assetsConfiguration['type']) {
+                case 'compass':
+                    $this->compassConfiguration($assetsConfiguration);
+                    break;
+                case 'less':
+                    $this->lessConfiguration($assetsConfiguration);
+                    break;
+                case 'css_source':
+                    $this->cssFolderConfiguration($assetsConfiguration);
+                    break;
+            }
+        }
+    }
+
+    private function compassConfiguration($compass)
+    {
+        $sourceFolder = $this->container->getParameter('THEME_PATH').'/'.$compass['source_folder'];
+        if (is_dir($sourceFolder)) {
+            $compassProject = new CompassProject($sourceFolder);
+            $def = new Definition('Walrus\Asset\Project\Compass', array($compassProject));
+            $def->addTag('asset.project');
+            $this->container->addDefinitions(array('walrus.asset.compass.project' => $def));
+        } else {
+            throw new \RuntimeException(sprintf('the folder %s do not exists, the compass project couldn\'t be initalized', $sourceFolder));
+        }
+    }
+
+    private function lessConfiguration($less)
+    {
+        $sourceFile = $this->container->getParameter('THEME_PATH').'/'.$less['source_file'];
+        if (is_file($sourceFile)) {
+            $pathParts = pathinfo($sourceFile);
+            $dir = $pathParts['dirname'];
+            $name = $pathParts['basename'];
+            $lessProject = new LessProject($dir, $name, $this->container->getParameter('PUBLIC_PATH').'/css/bootstrap.css');
+            $def = new Definition('Walrus\Asset\Project\Less', array($lessProject));
+            $def->addTag('asset.project');
+            $this->container->addDefinitions(array('walrus.asset.less.project' => $def));
+        } else {
+            throw new \RuntimeException(sprintf('the file %s do not exists, the less project could not be initialized', $sourceFile));
+        }
+    }
+
+    private function cssFolderConfiguration($cssSource)
+    {
+        // TODO: validate folder paths
+        $fileFolder = $this->container->getParameter('THEME_PATH').'/'.$cssSource['source_folder'];
+        $def = new Definition('Walrus\Asset\Project\CssFolder', array($fileFolder));
+        $def->addTag('asset.project');
+        $this->container->addDefinitions(array('walrus.asset.css_folder.project' => $def));
     }
 }

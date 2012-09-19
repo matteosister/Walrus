@@ -19,6 +19,7 @@ services:
     class: %twig.extension.walrus.class%
     arguments:
       - @walrus.configuration
+      - @asset.projects_collection
 
   twig:
     class: %twig.environment.class%

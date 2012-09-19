@@ -11,20 +11,21 @@ namespace Walrus\Asset\Project;
 
 use Walrus\Asset\ProjectInterface;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Filesystem\Filesystem;
 
 class CssFolder implements ProjectInterface
 {
     /**
-     * @var array
+     * @var string
      */
-    private $folders;
+    private $folder;
 
     /**
      * Class constructor
      */
-    public function __construct($folders)
+    public function __construct($folder)
     {
-        $this->folders = $folders;
+        $this->folder = $folder;
     }
 
     /**
@@ -45,11 +46,11 @@ class CssFolder implements ProjectInterface
      */
     function publish($to = null)
     {
-
-        $iterator = Finder::create()->files()->name('*.css')->in($this->folders);
+        $iterator = Finder::create()->files()->name('*.css')->in($this->folder);
         if (iterator_count($iterator)) {
             foreach ($iterator as $file) {
-                copy($file->getRealPath(), sprintf('%s/%s', $to, $file->getRelativePathname()));
+                $fs = new Filesystem();
+                $fs->copy($file->getRealPath(), sprintf('%s/%s', $to, $file->getRelativePathname()));
             }
         }
     }

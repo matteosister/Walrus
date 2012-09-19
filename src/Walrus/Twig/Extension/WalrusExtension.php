@@ -9,7 +9,9 @@
 
 namespace Walrus\Twig\Extension;
 
-use Walrus\DI\Configuration;
+use Walrus\DI\Configuration,
+    Walrus\Asset\Collection;
+
 use Symfony\Component\Finder\Finder;
 
 class WalrusExtension extends \Twig_Extension
@@ -20,19 +22,25 @@ class WalrusExtension extends \Twig_Extension
     private $configuration;
 
     /**
+     * @var \Walrus\Asset\Collection
+     */
+    private $assetCollection;
+
+    /**
      * class constructor
      *
      * @param \Walrus\DI\Configuration $configuration configuration instance
      */
-    public function __construct(Configuration $configuration)
+    public function __construct(Configuration $configuration, Collection $assetCollection)
     {
         $this->configuration = $configuration;
+        $this->assetCollection = $assetCollection;
     }
 
     public function getFunctions()
     {
         return array(
-            'stylesheets' => new \Twig_Function_Method($this, 'stylesheets')
+            'stylesheets' => new \Twig_Function_Method($this, 'stylesheets', array('is_safe' => array('all')))
         );
     }
 
