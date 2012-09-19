@@ -18,9 +18,10 @@ use Walrus\Command\BaseCommand,
     Walrus\Collection\Collection;
 use LessElephant\LessProject;
 use CompassElephant\CompassProject;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Finder\Finder;
+use Symfony\Component\Console\Input\InputInterface,
+    Symfony\Component\Console\Output\OutputInterface,
+    Symfony\Component\Finder\Finder,
+    Symfony\Component\Filesystem\Filesystem;
 
 /**
  * generate:site command
@@ -98,11 +99,11 @@ class GenerateSiteCommand extends BaseCommand
 
     private function cleanup(OutputInterface $output)
     {
-        $output->writeln('<info>Cleaning</info> ...');
-        foreach(Finder::create()->files()->in($this->configuration->get('public_dir')) as $file) {
-            $output->writeln(sprintf('<info>Delete</info> %s', $file->getRelativePathname()));
-            unlink($file->getRealPath());
-        }
+        $output->writeln($this->getLine('cleaning', 'public folder'));
+        $iterator = Finder::create()->files()->in($this->configuration->get('public_dir'));
+        $fs = new Filesystem();
+        $fs->remove($iterator);
+        $output->writeln($this->getDone('cleaning'));
     }
 
     /**
@@ -123,7 +124,7 @@ class GenerateSiteCommand extends BaseCommand
 
                 return;
             }
-            $output->writeln(sprintf('<info>Generating</info> %s page/s', count($pageCollection)));
+            $output->writeln($this->getLine('generating', sprintf('%s page/s', count($pageCollection))));
             foreach ($pageCollection as $page) {
                 $url = $page->getMetadata()->getUrl().'.html';
                 $filename = $this->configuration->get('public_dir').'/'.$url;
@@ -133,8 +134,9 @@ class GenerateSiteCommand extends BaseCommand
                 file_put_contents($filename, $this->themeEnvironment->render('page.html.twig', array(
                     'page' => $page
                 )));
+                $output->writeln($this->getLine('generating page', sprintf('"%s"', $page->getMetadata()->getTitle())));
             }
-            $output->writeln(sprintf('<info>Generating</info> %s page/s <comment>done</comment>', count($pageCollection)));
+            $output->writeln($this->getDone('generating pages'));
         } catch (\Walrus\Exception\NoPagesCreated $e) {
             $output->writeln('<info>no pages created...</info>');
         }
@@ -160,7 +162,7 @@ class GenerateSiteCommand extends BaseCommand
         if (iterator_count($posts) == 0) {
             return $output->writeln('<info>No posts to generate</info>');
         }
-        $output->writeln(sprintf('<info>Generating</info> %s post/s', iterator_count($posts)));
+        $output->writeln($this->getLine('generating', sprintf('%s post/s', iterator_count($posts))));
         foreach ($posts as $postFile) {
             $md = file_get_contents($postFile->getRealPath());
             $post = new Post($md);
@@ -170,10 +172,12 @@ class GenerateSiteCommand extends BaseCommand
     private function compileAssets(OutputInterface $output)
     {
         if (count($this->assetProjectsCollection) > 0) {
-            $output->writeln('<info>Compiling</info> <comment>static assets</comment>');
+            $output->writeln($this->getLine('compiling', 'static assets (js/css)'));
             $this->assetProjectsCollection->compile();
+            $output->writeln($this->getDone('compiling'));
+            $output->writeln($this->getLine('moving', 'static assets in the public folder'));
             $this->assetProjectsCollection->publish($this->configuration->get('public_dir').'/css');
-            $output->writeln('<info>Compiling</info> <comment>Done!</comment>');
+            $output->writeln($this->getDone('moving'));
         } else {
             $output->writeln('<comment>No assets to compile</comment>');
         }

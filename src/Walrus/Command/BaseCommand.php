@@ -17,6 +17,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 abstract class BaseCommand extends Command
 {
+    const COMMAND_SECTION_PAD = 17;
+    const COMMAND_STRING_PAD = ' ';
+
     /**
      * @var \Walrus\DI\Configuration
      */
@@ -47,5 +50,16 @@ abstract class BaseCommand extends Command
     protected function writeRuler(OutputInterface $output)
     {
         $output->writeln('');
+    }
+
+    protected function getLine($section, $message, $comment = false)
+    {
+        $tpl = $comment ? '<info>%s</info> <comment>%s</comment>' : '<info>%s</info> %s';
+        return sprintf($tpl, str_pad($section, static::COMMAND_SECTION_PAD, static::COMMAND_STRING_PAD, STR_PAD_RIGHT), $message);
+    }
+
+    protected function getDone($section)
+    {
+        return sprintf('<info>%s</info> <comment>done</comment>', str_pad($section, static::COMMAND_SECTION_PAD, static::COMMAND_STRING_PAD, STR_PAD_RIGHT));
     }
 }

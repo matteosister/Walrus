@@ -45,6 +45,7 @@ class CssFolder implements ProjectInterface
      */
     function publish($to = null)
     {
+
         $iterator = Finder::create()->files()->name('*.css')->in($this->folders);
         if (iterator_count($iterator)) {
             foreach ($iterator as $file) {
