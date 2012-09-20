@@ -13,6 +13,9 @@ use Walrus\Asset\ProjectInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
 
+/**
+ * CssFolder project
+ */
 class CssFolder implements ProjectInterface
 {
     /**
@@ -22,6 +25,8 @@ class CssFolder implements ProjectInterface
 
     /**
      * Class constructor
+     *
+     * @param string $folder folder
      */
     public function __construct($folder)
     {
@@ -33,7 +38,7 @@ class CssFolder implements ProjectInterface
      *
      * @return bool
      */
-    function compile()
+    public function compile()
     {
     }
 
@@ -44,14 +49,9 @@ class CssFolder implements ProjectInterface
      *
      * @return null
      */
-    function publish($to = null)
+    public function publish($to = null)
     {
-        $iterator = Finder::create()->files()->name('*.css')->in($this->folder);
-        if (iterator_count($iterator)) {
-            foreach ($iterator as $file) {
-                $fs = new Filesystem();
-                $fs->copy($file->getRealPath(), sprintf('%s/%s', $to, $file->getRelativePathname()));
-            }
-        }
+        $fs = new Filesystem();
+        $fs->mirror($this->folder, $to);
     }
 }

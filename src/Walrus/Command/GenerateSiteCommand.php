@@ -103,7 +103,7 @@ class GenerateSiteCommand extends BaseCommand
         $iterator = Finder::create()->files()->in($this->configuration->get('public_dir'));
         $fs = new Filesystem();
         $fs->remove($iterator);
-        $output->writeln($this->getDone('cleaning'));
+        //$output->writeln($this->getDone('cleaning'));
     }
 
     /**
@@ -136,9 +136,9 @@ class GenerateSiteCommand extends BaseCommand
                 )));
                 $output->writeln($this->getLine('generating page', sprintf('"%s"', $page->getMetadata()->getTitle())));
             }
-            $output->writeln($this->getDone('generating pages'));
+            //$output->writeln($this->getDone('generating pages'));
         } catch (\Walrus\Exception\NoPagesCreated $e) {
-            $output->writeln('<info>no pages created...</info>');
+            $output->writeln('<info>no pages created</info>');
         }
     }
 
@@ -153,7 +153,7 @@ class GenerateSiteCommand extends BaseCommand
     {
         $dir = $this->configuration->drafing_dir.'/posts';
         if (!is_dir($dir)) {
-            $output->writeln('<info>no posts created...</info>');
+            $output->writeln('no posts created');
 
             return;
         }
@@ -174,10 +174,10 @@ class GenerateSiteCommand extends BaseCommand
         if (count($this->assetProjectsCollection) > 0) {
             $output->writeln($this->getLine('compiling', 'static assets (js/css)'));
             $this->assetProjectsCollection->compile();
-            $output->writeln($this->getDone('compiling'));
+            //$output->writeln($this->getDone('compiling'));
             $output->writeln($this->getLine('moving', 'static assets in the public folder'));
             $this->assetProjectsCollection->publish($this->configuration->get('public_dir').'/css');
-            $output->writeln($this->getDone('moving'));
+            //$output->writeln($this->getDone('moving'));
         } else {
             $output->writeln('<comment>No assets to compile</comment>');
         }

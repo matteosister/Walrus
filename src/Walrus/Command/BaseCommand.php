@@ -17,8 +17,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 abstract class BaseCommand extends Command
 {
-    const COMMAND_SECTION_PAD = 17;
-    const COMMAND_STRING_PAD = ' ';
+    const COMMAND_SECTION_PAD = 20;
+    const COMMAND_STRING_PAD = '.';
 
     /**
      * @var \Walrus\DI\Configuration
@@ -36,9 +36,8 @@ abstract class BaseCommand extends Command
         $output->writeln("    .-0 0 `\\");
         $output->writeln("  =(:(::)=  ;");
         $output->writeln("    ||||     \\");
-        $output->writeln("    ||||   <info>I am the Walrus</info>");
+        $output->writeln("    ||||   <info>I am the</info> <comment>Walrus</comment>");
         $output->writeln("   ,\|\|         `,");
-        //$output->writeln("  /                \\");
         $output->writeln('');
     }
 
