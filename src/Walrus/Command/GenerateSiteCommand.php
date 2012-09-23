@@ -126,7 +126,11 @@ class GenerateSiteCommand extends BaseCommand
             }
             $output->writeln($this->getLine('generating', sprintf('%s page/s', count($pageCollection))));
             foreach ($pageCollection as $page) {
-                $url = $page->getMetadata()->getUrl().'.html';
+                if ($page->getMetadata()->getHomepage()) {
+                    $url = 'index.html';
+                } else {
+                    $url = $page->getMetadata()->getUrl().'.html';
+                }
                 $filename = $this->configuration->get('public_dir').'/'.$url;
                 if (file_exists($filename)) {
                     unlink($filename);
