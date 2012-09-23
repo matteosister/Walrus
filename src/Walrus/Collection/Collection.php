@@ -16,7 +16,10 @@ use Walrus\Exception\NoPagesCreated,
 
 use Symfony\Component\Finder\Finder;
 
-class Collection implements \ArrayAccess, \Countable, \Iterator
+/**
+ * generic collection class
+ */
+abstract class Collection implements \ArrayAccess, \Countable, \Iterator
 {
     const TYPE_PAGES = 'pages';
     const TYPE_POSTS = 'posts';
@@ -24,7 +27,7 @@ class Collection implements \ArrayAccess, \Countable, \Iterator
     protected $objects;
 
     /**
-     * @var Symfony\Component\Finder\Finder
+     * @var \Symfony\Component\Finder\Finder
      */
     private $iterator;
 
@@ -47,9 +50,17 @@ class Collection implements \ArrayAccess, \Countable, \Iterator
     }
 
     /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->objects;
+    }
+
+    /**
      * load md files from a folder
      *
-     * @param $dir
+     * @param string $dir directory to search for...
      *
      * @throws \Walrus\Exception\NoPostsCreated
      * @throws \Walrus\Exception\NoPagesCreated

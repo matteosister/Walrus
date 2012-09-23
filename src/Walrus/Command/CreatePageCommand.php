@@ -9,13 +9,16 @@
 
 namespace Walrus\Command;
 
-use Walrus\Command\BaseCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Walrus\Utilities\Utilities;
-use Walrus\DI\Configuration;
+use Walrus\Command\BaseCommand,
+    Walrus\Utilities\Utilities,
+    Walrus\DI\Configuration,
+    Walrus\Collection\PageCollection,
+    Walrus\Collection\Collection,
+    Walrus\MDObject\Page\Page;
 
 /**
  * create:page command
@@ -35,6 +38,11 @@ class CreatePageCommand extends BaseCommand
     protected $utilities;
 
     /**
+     * @var string
+     */
+    private $pagesFolder;
+
+    /**
      * constructor
      *
      * @param \Walrus\DI\Configuration    $configuration configuration
@@ -47,6 +55,7 @@ class CreatePageCommand extends BaseCommand
         $this->configuration = $configuration;
         $this->twigEnvironment = $environment;
         $this->utilities = $utilities;
+        $this->pagesFolder = $this->configuration->get('drafing_dir').'/'.static::NAME.'s';
     }
 
     /**
@@ -72,9 +81,13 @@ class CreatePageCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $pageCollection = new PageCollection(Collection::TYPE_PAGES);
+        $pageCollection->load($this->configuration->get('drafing_dir').'/'.static::NAME.'s');
         $date = $this->utilities->getDateFormatted();
         $title = $input->getArgument('title');
-        $slug = $this->utilities->slugify($title);
+        $slug = $this->utilities->getUniqueSlug(array_map(function(Page $p) {
+            return $p->getMetadata()->getUrl();
+        }, $pageCollection->toArray()), $title);
         $this->writeHeader($output);
         $template = $this->twigEnvironment->loadTemplate(static::NAME.'.md.twig');
         $fileContent = $template->render(array(
@@ -83,7 +96,7 @@ class CreatePageCommand extends BaseCommand
             'url' => $input->getOption('homepage') ? '' : $slug,
             'homepage' => $input->getOption('homepage') ? true : false
         ));
-        $dir = $this->configuration->get('drafing_dir').'/'.static::NAME.'s';
+        $dir = $this->pagesFolder;
         if (!is_dir($dir)) {
             mkdir($dir);
         }
