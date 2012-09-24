@@ -1,5 +1,5 @@
 parameters:
-  asset.projects_collection.class: Walrus\Asset\Collection
+  asset.projects_collection.class: Walrus\Asset\AssetCollection
 
 services:
   asset.projects_collection:

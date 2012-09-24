@@ -1,0 +1,11 @@
+parameters:
+  walrus.collection.page.type: pages
+  walrus.collection.page.dir: %ROOT_PATH%/drafting/pages
+  walrus.collection.page.class: Walrus\Collection\PageCollection
+
+services:
+  walrus.collection.page:
+    class: %walrus.collection.page.class%
+    arguments: [%walrus.collection.page.type%]
+    calls:
+      - [ load, [ %walrus.collection.page.dir% ]]

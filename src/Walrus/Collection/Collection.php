@@ -64,11 +64,13 @@ abstract class Collection implements \ArrayAccess, \Countable, \Iterator
      *
      * @throws \Walrus\Exception\NoPostsCreated
      * @throws \Walrus\Exception\NoPagesCreated
+     * @return void
      */
     public function load($dir)
     {
         if (!is_dir($dir)) {
-            switch ($this->type)
+            return;
+            /*switch ($this->type)
             {
                 case static::TYPE_PAGES:
                     throw new \Walrus\Exception\NoPagesCreated();
@@ -76,7 +78,7 @@ abstract class Collection implements \ArrayAccess, \Countable, \Iterator
                 case static::TYPE_POSTS:
                     throw new \Walrus\Exception\NoPostsCreated();
                     break;
-            }
+            }*/
         }
         $finder = new Finder();
         $this->iterator = $finder->files()->in($dir);

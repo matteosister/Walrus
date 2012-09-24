@@ -11,7 +11,7 @@ namespace Walrus\Asset;
 
 use Walrus\Asset\ProjectInterface;
 
-class Collection implements \Countable, \ArrayAccess, \Iterator
+class AssetCollection implements \Countable, \ArrayAccess, \Iterator
 {
     /**
      * @var array

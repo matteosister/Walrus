@@ -9,8 +9,6 @@
 
 namespace Walrus\MDObject\Page;
 
-use dflydev\markdown\MarkdownParser;
-
 /**
  * Post content
  */
@@ -27,6 +25,16 @@ class Content
     public function __construct($md)
     {
         $this->md = trim($md);
+    }
+
+    /**
+     * toString magic method
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->md;
     }
 
     /**
@@ -47,15 +55,5 @@ class Content
     public function getMd()
     {
         return $this->md;
-    }
-
-    /**
-     * get the html code
-     */
-    public function getHtml()
-    {
-        $parser = new MarkdownParser();
-
-        return $parser->transform($this->md);
     }
 }

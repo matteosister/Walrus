@@ -79,6 +79,7 @@ class Walrus
         $loader->load('utilities.yml');
         $loader->load('configuration.yml');
         $loader->load('assets.yml');
+        $loader->load('collections.yml');
     }
 
     private function loadThemeConfiguration()

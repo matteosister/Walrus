@@ -15,7 +15,8 @@ use Walrus\Command\BaseCommand,
     Walrus\DI\Configuration,
     Walrus\Collection\PageCollection,
     Walrus\Collection\PostCollection,
-    Walrus\Collection\Collection;
+    Walrus\Collection\Collection,
+    Walrus\Asset\AssetCollection;
 use LessElephant\LessProject;
 use CompassElephant\CompassProject;
 use Symfony\Component\Console\Input\InputInterface,
@@ -44,9 +45,19 @@ class GenerateSiteCommand extends BaseCommand
     protected $themeEnvironment;
 
     /**
+     * @var \Twig_Environment
+     */
+    protected $stringEnvironment;
+
+    /**
      * @var \Walrus\Asset\Collection
      */
     protected $assetProjectsCollection;
+
+    /**
+     * @var PageCollection
+     */
+    protected $pageCollection;
 
     /**
      * constructor
@@ -54,20 +65,25 @@ class GenerateSiteCommand extends BaseCommand
      * @param \Walrus\DI\Configuration $configuration          configuration
      * @param \Twig_Environment        $environment            twig environment
      * @param \Twig_Environment        $themeEnvironment       twig environment for the theme
+     * @param \Twig_Environment        $stringEnvironment      twig environment from string
      * @param \Walrus\Asset\Collection $assetProjectCollection less project
      */
     public function __construct(
         Configuration $configuration,
         \Twig_Environment $environment,
         \Twig_Environment $themeEnvironment,
-        \Walrus\Asset\Collection $assetProjectCollection
+        \Twig_Environment $stringEnvironment,
+        AssetCollection $assetProjectCollection,
+        PageCollection $pageCollection
     )
     {
         parent::__construct();
         $this->configuration = $configuration;
         $this->twigEnvironment = $environment;
         $this->themeEnvironment = $themeEnvironment;
+        $this->stringEnvironment = $stringEnvironment;
         $this->assetProjectsCollection = $assetProjectCollection;
+        $this->pageCollection = $pageCollection;
     }
 
     /**
@@ -115,17 +131,14 @@ class GenerateSiteCommand extends BaseCommand
      */
     private function parsePages(OutputInterface $output)
     {
-        $dir = $this->configuration->drafing_dir.'/pages';
-        $pageCollection = new PageCollection(Collection::TYPE_PAGES);
         try {
-            $pageCollection->load($dir);
-            if (count($pageCollection) == 0) {
+            if (count($this->pageCollection) == 0) {
                 $output->writeln('<info>No pages to generate</info>');
 
                 return;
             }
-            $output->writeln($this->getLine('generating', sprintf('%s page/s', count($pageCollection))));
-            foreach ($pageCollection as $page) {
+            $output->writeln($this->getLine('generating', sprintf('%s page/s', count($this->pageCollection))));
+            foreach ($this->pageCollection as $page) {
                 if ($page->getMetadata()->getHomepage()) {
                     $url = 'index.html';
                 } else {
@@ -136,7 +149,8 @@ class GenerateSiteCommand extends BaseCommand
                     unlink($filename);
                 }
                 file_put_contents($filename, $this->themeEnvironment->render('page.html.twig', array(
-                    'page' => $page
+                    'page' => $page,
+                    'content' => $this->stringEnvironment->render($page->getContent())
                 )));
                 $output->writeln($this->getLine('generating page', sprintf('<comment>%s</comment>', $page->getMetadata()->getTitle())));
             }

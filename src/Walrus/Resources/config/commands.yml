@@ -14,4 +14,10 @@ services:
 
   generate_site.command:
     class: %generate_site.command.class%
-    arguments: [ @walrus.configuration, @twig, @twig.theme, @asset.projects_collection ]
+    arguments:
+      - @walrus.configuration
+      - @twig
+      - @twig.theme
+      - @twig.string
+      - @asset.projects_collection
+      - @walrus.collection.page

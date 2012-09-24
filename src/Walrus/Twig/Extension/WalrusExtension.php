@@ -10,9 +10,11 @@
 namespace Walrus\Twig\Extension;
 
 use Walrus\DI\Configuration,
-    Walrus\Asset\Collection;
+    Walrus\Asset\AssetCollection,
+    Walrus\Collection\PageCollection;
 
 use Symfony\Component\Finder\Finder;
+use dflydev\markdown\MarkdownParser;
 
 class WalrusExtension extends \Twig_Extension
 {
@@ -22,7 +24,7 @@ class WalrusExtension extends \Twig_Extension
     private $configuration;
 
     /**
-     * @var \Walrus\Asset\Collection
+     * @var \Walrus\Asset\AssetCollection
      */
     private $assetCollection;
 
@@ -31,10 +33,20 @@ class WalrusExtension extends \Twig_Extension
      *
      * @param \Walrus\DI\Configuration $configuration configuration instance
      */
-    public function __construct(Configuration $configuration, Collection $assetCollection)
+    public function __construct(
+        Configuration $configuration,
+        AssetCollection $assetCollection
+    )
     {
         $this->configuration = $configuration;
         $this->assetCollection = $assetCollection;
+    }
+
+    public function getFilters()
+    {
+        return array(
+            'md_to_html'  => new \Twig_Filter_Method($this, 'mdToHtml', array('is_safe' => array('all')))
+        );
     }
 
     public function getFunctions()
@@ -47,6 +59,20 @@ class WalrusExtension extends \Twig_Extension
     public function stylesheets()
     {
 
+    }
+
+    /**
+     * convert an md string to html
+     *
+     * @param string $md markdown source
+     *
+     * @return string
+     */
+    public function mdToHtml($md)
+    {
+        $parser = new MarkdownParser();
+
+        return $parser->transform($md);
     }
 
     /**
