@@ -107,7 +107,7 @@ class Walrus
         $sourceFolder = $this->container->getParameter('THEME_PATH').'/'.$compass['source_folder'];
         if (is_dir($sourceFolder)) {
             $compassProject = new CompassProject($sourceFolder);
-            $def = new Definition('Walrus\Asset\Project\Compass', array($compassProject));
+            $def = new Definition('Walrus\Asset\Project\Compass', array($compassProject, $compass['name']));
             $def->addTag('asset.project');
             $this->container->addDefinitions(array('walrus.asset.compass.project' => $def));
         } else {
@@ -123,7 +123,7 @@ class Walrus
             $dir = $pathParts['dirname'];
             $name = $pathParts['basename'];
             $lessProject = new LessProject($dir, $name, $this->container->getParameter('PUBLIC_PATH').'/css/bootstrap.css');
-            $def = new Definition('Walrus\Asset\Project\Less', array($lessProject));
+            $def = new Definition('Walrus\Asset\Project\Less', array($lessProject, $less['name']));
             $def->addTag('asset.project');
             $this->container->addDefinitions(array('walrus.asset.less.project' => $def));
         } else {
@@ -135,7 +135,7 @@ class Walrus
     {
         // TODO: validate folder paths
         $fileFolder = $this->container->getParameter('THEME_PATH').'/'.$cssSource['source_folder'];
-        $def = new Definition('Walrus\Asset\Project\CssFolder', array($fileFolder));
+        $def = new Definition('Walrus\Asset\Project\CssFolder', array($fileFolder, $cssSource['name']));
         $def->addTag('asset.project');
         $this->container->addDefinitions(array('walrus.asset.css_folder.project' => $def));
     }

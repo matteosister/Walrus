@@ -26,4 +26,11 @@ interface ProjectInterface
      * @return null
      */
     function publish($to = null);
+
+    /**
+     * project name getter
+     *
+     * @return string
+     */
+    function getName();
 }

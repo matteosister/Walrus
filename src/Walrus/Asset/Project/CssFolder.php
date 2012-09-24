@@ -24,13 +24,21 @@ class CssFolder implements ProjectInterface
     private $folder;
 
     /**
+     * @var string
+     */
+    private $name = 'css folder';
+
+    /**
      * Class constructor
      *
      * @param string $folder folder
      */
-    public function __construct($folder)
+    public function __construct($folder, $name = null)
     {
         $this->folder = $folder;
+        if (null !== $name) {
+            $this->name = $name;
+        }
     }
 
     /**
@@ -53,5 +61,15 @@ class CssFolder implements ProjectInterface
     {
         $fs = new Filesystem();
         $fs->mirror($this->folder, $to);
+    }
+
+    /**
+     * project name getter
+     *
+     * @return string
+     */
+    function getName()
+    {
+        return $this->name;
     }
 }

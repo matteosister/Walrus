@@ -12,18 +12,32 @@ namespace Walrus\Asset\Project;
 use Walrus\Asset\ProjectInterface;
 use LessElephant\LessProject;
 
+/**
+ * Less project
+ */
 class Less implements ProjectInterface
 {
+    /**
+     * @var \LessElephant\LessProject
+     */
     private $project;
+
+    /**
+     * @var string
+     */
+    private $name;
 
     /**
      * class constructor
      *
      * @param LessProject $project LessProject instace
      */
-    public function __construct(LessProject $project)
+    public function __construct(LessProject $project, $name = null)
     {
         $this->project = $project;
+        if (null !== $name) {
+            $this->name = $name;
+        }
     }
 
     /**
@@ -45,5 +59,15 @@ class Less implements ProjectInterface
     {
         // nothing to do here, less publish to the final destination
         // TODO: filers assetic style? Maybe assetic?
+    }
+
+    /**
+     * project name getter
+     *
+     * @return string
+     */
+    function getName()
+    {
+        return $this->name;
     }
 }

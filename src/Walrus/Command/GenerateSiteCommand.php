@@ -138,7 +138,7 @@ class GenerateSiteCommand extends BaseCommand
                 file_put_contents($filename, $this->themeEnvironment->render('page.html.twig', array(
                     'page' => $page
                 )));
-                $output->writeln($this->getLine('generating page', sprintf('"%s"', $page->getMetadata()->getTitle())));
+                $output->writeln($this->getLine('generating page', sprintf('<comment>%s</comment>', $page->getMetadata()->getTitle())));
             }
             //$output->writeln($this->getDone('generating pages'));
         } catch (\Walrus\Exception\NoPagesCreated $e) {
@@ -177,7 +177,10 @@ class GenerateSiteCommand extends BaseCommand
     {
         if (count($this->assetProjectsCollection) > 0) {
             $output->writeln($this->getLine('compiling', 'static assets (js/css)'));
-            $this->assetProjectsCollection->compile();
+            foreach ($this->assetProjectsCollection as $assetProject) {
+                $assetProject->compile();
+                $output->writeln($this->getLine('compiling', sprintf('<comment>%s</comment> project', $assetProject->getName())));
+            }
             //$output->writeln($this->getDone('compiling'));
             $output->writeln($this->getLine('moving', 'static assets in the public folder'));
             $this->assetProjectsCollection->publish($this->configuration->get('public_dir').'/css');

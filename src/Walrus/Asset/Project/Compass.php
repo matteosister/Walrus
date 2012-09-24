@@ -13,6 +13,9 @@ use Walrus\Asset\ProjectInterface;
 use CompassElephant\CompassProject;
 use Symfony\Component\Finder\Finder;
 
+/**
+ * Compass project
+ */
 class Compass implements ProjectInterface
 {
     /**
@@ -21,13 +24,21 @@ class Compass implements ProjectInterface
     private $project;
 
     /**
+     * @var string
+     */
+    private $name = 'compass';
+
+    /**
      * class constructor
      *
      * @param CompassProject $project project
      */
-    public function __construct(CompassProject $project)
+    public function __construct(CompassProject $project, $name = null)
     {
         $this->project = $project;
+        if (null !== $name) {
+            $this->name = $name;
+        }
     }
 
     /**
@@ -55,5 +66,15 @@ class Compass implements ProjectInterface
         foreach ($iterator as $file) {
             copy($file->getRealPath(), $to.'/'.$file->getRelativePathname());
         }
+    }
+
+    /**
+     * project name getter
+     *
+     * @return string
+     */
+    function getName()
+    {
+        return $this->name;
     }
 }

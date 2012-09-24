@@ -30,6 +30,7 @@ class ThemeConfiguration implements ConfigurationInterface
                     //->useAttributeAsKey('type')
                     ->prototype('array')
                     ->children()
+                        ->scalarNode('name')->end()
                         ->scalarNode('type')
                             ->validate()
                                 ->ifNotInArray(array('compass', 'less', 'css_source'))
