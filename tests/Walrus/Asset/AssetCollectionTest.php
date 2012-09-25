@@ -14,6 +14,9 @@ use Walrus\Asset\AssetCollection,
 
 class AssetCollectionTest extends WalrusTestCase
 {
+    /**
+     * @group assets
+     */
     public function testConstruct()
     {
         $ac = new AssetCollection();
@@ -23,6 +26,9 @@ class AssetCollectionTest extends WalrusTestCase
         $this->assertEmpty($ac->count());
     }
 
+    /**
+     * @group assets
+     */
     public function testAddProject()
     {
         $ac = new AssetCollection();

@@ -14,6 +14,9 @@ use Walrus\Collection\PageCollection,
 
 class PageCollectionTest extends WalrusTestCase
 {
+    /**
+     * @group collections
+     */
     public function testFullDir()
     {
         $this->addRandomPages(3);
@@ -27,6 +30,9 @@ class PageCollectionTest extends WalrusTestCase
         $this->iteratorTest(new PageCollection(Collection::TYPE_PAGES));
     }
 
+    /**
+     * @group collections
+     */
     public function testEmptyDir()
     {
         $pageCollection = new PageCollection(Collection::TYPE_PAGES);

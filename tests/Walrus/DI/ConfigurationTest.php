@@ -14,6 +14,9 @@ use Walrus\DI\Configuration,
 
 class ConfigurationTest extends WalrusTestCase
 {
+    /**
+     * @group di
+     */
     public function testSetterGetter()
     {
         $conf = new Configuration();
@@ -27,6 +30,7 @@ class ConfigurationTest extends WalrusTestCase
 
     /**
      * @expectedException Walrus\Exception\MissingConfigurationParameter
+     * @group di
      */
     public function testError()
     {

@@ -18,7 +18,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 class CreatePageCommandTest extends WalrusTestCase
 {
     /**
-     * test command execution
+     * @group cli
      */
     public function testExecute()
     {

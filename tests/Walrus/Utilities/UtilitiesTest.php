@@ -14,6 +14,9 @@ use Walrus\Utilities\Utilities,
 
 class UtilitiesTest extends WalrusTestCase
 {
+    /**
+     * @group utils
+     */
     public function testSlugify()
     {
         $u = new Utilities();
@@ -33,6 +36,9 @@ class UtilitiesTest extends WalrusTestCase
         $this->assertEquals('n-a', $u->slugify(''));
     }
 
+    /**
+     * @group utils
+     */
     public function testGetUniqueSlug()
     {
         $u = new Utilities();
@@ -43,6 +49,9 @@ class UtilitiesTest extends WalrusTestCase
         $this->assertEquals('test-2', $u->getUniqueSlug(array('test', 'test-1'), 'Test?'));
     }
 
+    /**
+     * @group utils
+     */
     public function testGetDateFormatted()
     {
         $u = new Utilities();

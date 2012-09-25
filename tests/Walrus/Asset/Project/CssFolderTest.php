@@ -14,6 +14,9 @@ use Walrus\Asset\Project\CssFolder,
 
 class CssFolderTest extends WalrusTestCase
 {
+    /**
+     * @group assets
+     */
     public function testConstruct()
     {
         $fileContent = 'body { background-color: #000 }';

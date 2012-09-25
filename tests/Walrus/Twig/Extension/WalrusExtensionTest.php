@@ -14,6 +14,9 @@ use Walrus\Twig\Extension\WalrusExtension,
 
 class WalrusExtensionTest extends WalrusTestCase
 {
+    /**
+     * @group twig
+     */
     public function testConstructor()
     {
         $ext = new WalrusExtension($this->getMockConfiguration(), $this->getMockAssetCollection());

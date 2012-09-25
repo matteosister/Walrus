@@ -14,6 +14,9 @@ use Walrus\Configuration\ThemeConfiguration,
 
 class ThemeConfigurationTest extends WalrusTestCase
 {
+    /**
+     * @group di
+     */
     public function testGetConfigTreeBuilder()
     {
         $themeConfiguration = new ThemeConfiguration();

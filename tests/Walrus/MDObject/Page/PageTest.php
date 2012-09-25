@@ -14,6 +14,9 @@ use Walrus\WalrusTestCase;
 
 class PageTest extends WalrusTestCase
 {
+    /**
+     * @group md
+     */
     public function testConstructor()
     {
         $page = new Page($this->getMDPageContent());
