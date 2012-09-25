@@ -9,6 +9,9 @@
 
 namespace Walrus\Asset;
 
+/**
+ * Interface for an asset project
+ */
 interface ProjectInterface
 {
     /**
@@ -26,6 +29,13 @@ interface ProjectInterface
      * @return null
      */
     function publish($to = null);
+
+    /**
+     * get the output for the header of the page
+     *
+     * @return string
+     */
+    function output();
 
     /**
      * project name getter

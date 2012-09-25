@@ -32,11 +32,11 @@ class AssetCollectionTest extends WalrusTestCase
     public function testAddProject()
     {
         $ac = new AssetCollection();
-        $mockProject = $this->getMock('Walrus\Asset\Project\CssFolder', array(), array(''));
+        $mockProject = $this->getMock('Walrus\Asset\Project\Css\CssFolder', array(), array(''));
         $ac->addProject($mockProject);
         $this->assertCount(1, $ac);
         $this->assertEquals($mockProject, $ac[0]);
-        foreach($ac as $project) {
+        foreach ($ac as $project) {
             $this->assertNotNull($project);
         }
         $ac[0] = null;

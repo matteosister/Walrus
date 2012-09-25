@@ -9,7 +9,7 @@
 
 namespace Walrus\Asset\Project;
 
-use Walrus\Asset\Project\CssFolder,
+use Walrus\Asset\Project\Css\CssFolder,
     Walrus\WalrusTestCase;
 
 class CssFolderTest extends WalrusTestCase

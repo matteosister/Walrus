@@ -7,7 +7,7 @@
  * Just for fun...
  */
 
-namespace Walrus\Asset\Project;
+namespace Walrus\Asset\Project\Css;
 
 use Walrus\Asset\ProjectInterface;
 use Symfony\Component\Finder\Finder;
@@ -62,6 +62,22 @@ class CssFolder implements ProjectInterface
     {
         $fs = new Filesystem();
         $fs->mirror($this->folder, $to);
+    }
+
+    /**
+     * get the output for the header of the page
+     *
+     * @return string
+     */
+    public function output()
+    {
+        $iterator = Finder::create()->files()->name('*.css')->in($this->folder);
+        $output = '';
+        foreach ($iterator as $file) {
+            $output .= sprintf('<link rel="stylesheet" type="text/css" href="/css/%s" media="screen, projection">', $file->getRelativePathName());
+        }
+
+        return $output;
     }
 
     /**

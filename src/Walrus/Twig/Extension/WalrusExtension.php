@@ -31,7 +31,8 @@ class WalrusExtension extends \Twig_Extension
     /**
      * class constructor
      *
-     * @param \Walrus\DI\Configuration $configuration configuration instance
+     * @param \Walrus\DI\Configuration      $configuration   configuration instance
+     * @param \Walrus\Asset\AssetCollection $assetCollection assets collection
      */
     public function __construct(
         Configuration $configuration,
@@ -42,6 +43,11 @@ class WalrusExtension extends \Twig_Extension
         $this->assetCollection = $assetCollection;
     }
 
+    /**
+     * filters
+     *
+     * @return array
+     */
     public function getFilters()
     {
         return array(
@@ -49,6 +55,11 @@ class WalrusExtension extends \Twig_Extension
         );
     }
 
+    /**
+     * functions
+     *
+     * @return array
+     */
     public function getFunctions()
     {
         return array(
@@ -56,9 +67,19 @@ class WalrusExtension extends \Twig_Extension
         );
     }
 
+    /**
+     * stylesheets
+     *
+     * @return string
+     */
     public function stylesheets()
     {
+        $out = '';
+        foreach ($this->assetCollection as $assetProject) {
+            $out .= $assetProject->output();
+        }
 
+        return $out;
     }
 
     /**

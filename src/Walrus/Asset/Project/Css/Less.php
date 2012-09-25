@@ -7,7 +7,7 @@
  * Just for fun...
  */
 
-namespace Walrus\Asset\Project;
+namespace Walrus\Asset\Project\Css;
 
 use Walrus\Asset\ProjectInterface;
 use LessElephant\LessProject;
@@ -43,7 +43,7 @@ class Less implements ProjectInterface
     /**
      * compile a project
      */
-    function compile()
+    public function compile()
     {
         $this->project->compile();
     }
@@ -55,10 +55,22 @@ class Less implements ProjectInterface
      *
      * @return null
      */
-    function publish($to = null)
+    public function publish($to = null)
     {
         // nothing to do here, less publish to the final destination
-        // TODO: filers assetic style? Maybe assetic?
+        // TODO: assetic?
+    }
+
+    /**
+     * get the output for the header of the page
+     *
+     * @return string
+     */
+    public function output()
+    {
+        $pathInfo = pathinfo($this->project->getDestination());
+
+        return sprintf('<link rel="stylesheet" type="text/css" href="/css/%s">', $pathInfo['basename']);
     }
 
     /**
