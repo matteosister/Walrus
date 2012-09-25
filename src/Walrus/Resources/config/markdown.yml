@@ -1,0 +1,9 @@
+parameters:
+  markdown.parser.class: dflydev\markdown\MarkdownExtraParser
+  markdown.parser.configuration: {}
+
+services:
+  markdown.parser:
+    class: %markdown.parser.class%
+    arguments:
+      - %markdown.parser.configuration%

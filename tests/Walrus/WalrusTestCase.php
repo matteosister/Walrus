@@ -105,7 +105,7 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
         $configuration = $this->getMock('Walrus\DI\Configuration', array('get'));
         $configuration->expects($this->any())
             ->method('get')
-            ->with($this->equalTo('drafing_dir'))
+            ->with($this->equalTo('drafting_dir'))
             ->will($this->returnValue(realpath(__DIR__.'/Playground/drafting')));
 
         return $configuration;

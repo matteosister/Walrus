@@ -65,7 +65,7 @@ class CreatePageCommand extends BaseCommand
         $this->configuration = $configuration;
         $this->twigEnvironment = $environment;
         $this->utilities = $utilities;
-        $this->pagesFolder = $this->configuration->get('drafing_dir').'/'.static::NAME.'s';
+        $this->pagesFolder = $this->configuration->get('drafting_dir').'/'.static::NAME.'s';
         $this->pageCollection = $pageCollection;
     }
 

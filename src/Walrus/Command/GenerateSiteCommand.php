@@ -10,17 +10,13 @@
 namespace Walrus\Command;
 
 use Walrus\Command\BaseCommand,
-    Walrus\MDObject\Post\Post,
     Walrus\MDObject\Page\Page,
     Walrus\DI\Configuration,
     Walrus\Collection\PageCollection,
-    Walrus\Collection\PostCollection,
-    Walrus\Collection\Collection,
     Walrus\Asset\AssetCollection;
-use LessElephant\LessProject;
-use CompassElephant\CompassProject;
 use Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface,
+    Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Finder\Finder,
     Symfony\Component\Filesystem\Filesystem;
 
@@ -60,6 +56,11 @@ class GenerateSiteCommand extends BaseCommand
     protected $pageCollection;
 
     /**
+     * @var string
+     */
+    protected $previosWatch = null;
+
+    /**
      * constructor
      *
      * @param \Walrus\DI\Configuration $configuration          configuration
@@ -93,6 +94,8 @@ class GenerateSiteCommand extends BaseCommand
     {
         $this
             ->setName('generate:site')
+            ->addOption('watch', null, InputOption::VALUE_NONE, 'Check for changes every second')
+            ->addOption('period', null, InputOption::VALUE_REQUIRED, 'Set the polling period in seconds (used with --watch)', 1)
             ->setDescription('Generate the website');
     }
 
@@ -107,9 +110,43 @@ class GenerateSiteCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->writeHeader($output);
+        if ($input->getOption('watch')) {
+            $this->watch($input, $output, true);
+        } else {
+            $this->doExecute($input, $output);
+        }
+    }
+
+    private function doExecute(InputInterface $input, OutputInterface $output)
+    {
+        $this->writeRuler($output);
         $this->cleanup($output);
         $this->compileAssets($output);
         $this->parsePages($output);
+    }
+
+    private function watch(InputInterface $input, OutputInterface $output)
+    {
+        while (true) {
+            $sha = $this->calculateSha();
+            if ($sha !== $this->previosWatch) {
+                $this->previosWatch = $sha;
+                $this->doExecute($input, $output);
+                $this->writeRuler($output);
+                $output->writeln('<question>watching for changes...</question>');
+            }
+            sleep($input->getOption('period'));
+        }
+    }
+
+    private function calculateSha()
+    {
+        $iterator = Finder::create()->files()->in($this->configuration->get('drafting_dir'));
+        $content = '';
+        foreach($iterator as $file) {
+            $content .= $file->getContents();
+        }
+        return sha1($content);
     }
 
     private function cleanup(OutputInterface $output)
