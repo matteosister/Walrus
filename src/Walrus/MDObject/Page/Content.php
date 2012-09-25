@@ -10,7 +10,7 @@
 namespace Walrus\MDObject\Page;
 
 /**
- * Post content
+ * Page content
  */
 class Content
 {
@@ -20,7 +20,7 @@ class Content
     private $md;
 
     /**
-     * @param string $md the content part of a post object
+     * @param string $md the content part of a page object
      */
     public function __construct($md)
     {

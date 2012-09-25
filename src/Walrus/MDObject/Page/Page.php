@@ -33,7 +33,7 @@ class Page extends BaseObject
      */
     public function __construct($md)
     {
-        $this->checkPost($md);
+        $this->checkPage($md);
         $this->metadata = $this->parseMetadata($md, 'Walrus\MDObject\Page\Metadata');
         $this->content = $this->parseContent($md, 'Walrus\MDObject\Page\Content');
     }

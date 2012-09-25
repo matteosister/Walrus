@@ -10,9 +10,7 @@
 namespace Walrus\Collection;
 
 use Walrus\Exception\NoPagesCreated,
-    Walrus\Exception\NoPostsCreated,
-    Walrus\MDObject\Page\Page,
-    Walrus\MDObject\Post\Post;
+    Walrus\MDObject\Page\Page;
 
 use Symfony\Component\Finder\Finder;
 
@@ -64,7 +62,6 @@ abstract class Collection implements \ArrayAccess, \Countable, \Iterator
      *
      * @param string $dir directory to search for...
      *
-     * @throws \Walrus\Exception\NoPostsCreated
      * @throws \Walrus\Exception\NoPagesCreated
      * @return void
      */
@@ -81,9 +78,6 @@ abstract class Collection implements \ArrayAccess, \Countable, \Iterator
             {
                 case static::TYPE_PAGES:
                     $this->objects[] = new Page($md);
-                    break;
-                case static::TYPE_POSTS:
-                    $this->objects[] = new Post($md);
                     break;
             }
         }

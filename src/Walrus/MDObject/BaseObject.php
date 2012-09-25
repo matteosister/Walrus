@@ -9,8 +9,7 @@
 
 namespace Walrus\MDObject;
 
-use Walrus\Exception\PostParseException,
-    Walrus\Exception\PageParseException,
+use Walrus\Exception\PageParseException,
     Walrus\Exception\MalformedMarkdownException;
 
 use dflydev\markdown\MarkdownParser;
@@ -21,18 +20,6 @@ use dflydev\markdown\MarkdownParser;
 class BaseObject
 {
     const SEPARATOR = "***";
-
-    /**
-     * @param string $md raw md content
-     *
-     * @throws \Walrus\Exception\PostParseException
-     */
-    protected function checkPost($md)
-    {
-        if (!preg_match('/^\*\*\*\n(.*)\*\*\*\n(.*)$/s', $md)) {
-            throw new PostParseException();
-        }
-    }
 
     /**
      * @param string $md raw md content
