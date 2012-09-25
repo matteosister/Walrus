@@ -43,19 +43,30 @@ class CreatePageCommand extends BaseCommand
     private $pagesFolder;
 
     /**
+     * @var
+     */
+    private $pageCollection;
+
+    /**
      * constructor
      *
      * @param \Walrus\DI\Configuration    $configuration configuration
      * @param \Twig_Environment           $environment   environment
      * @param \Walrus\Utilities\Utilities $utilities     utilities
      */
-    public function __construct(Configuration $configuration, \Twig_Environment $environment, Utilities $utilities)
+    public function __construct(
+        Configuration $configuration,
+        \Twig_Environment $environment,
+        Utilities $utilities,
+        PageCollection $pageCollection
+    )
     {
         parent::__construct();
         $this->configuration = $configuration;
         $this->twigEnvironment = $environment;
         $this->utilities = $utilities;
         $this->pagesFolder = $this->configuration->get('drafing_dir').'/'.static::NAME.'s';
+        $this->pageCollection = $pageCollection;
     }
 
     /**
@@ -81,13 +92,11 @@ class CreatePageCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $pageCollection = new PageCollection(Collection::TYPE_PAGES);
-        $pageCollection->load($this->configuration->get('drafing_dir').'/'.static::NAME.'s');
         $date = $this->utilities->getDateFormatted();
         $title = $input->getArgument('title');
         $slug = $this->utilities->getUniqueSlug(array_map(function(Page $p) {
             return $p->getMetadata()->getUrl();
-        }, $pageCollection->toArray()), $title);
+        }, $this->pageCollection->toArray()), $title);
         $this->writeHeader($output);
         $template = $this->twigEnvironment->loadTemplate(static::NAME.'.md.twig');
         $fileContent = $template->render(array(
@@ -103,6 +112,6 @@ class CreatePageCommand extends BaseCommand
         $fileName = $dir.'/'.$date.'_'.static::NAME.'_'.$slug.'.md';
         file_put_contents($fileName, $fileContent);
         $this->writeRuler($output);
-        $output->writeln(sprintf('<info>Page "%s" created</info>', $title));
+        $output->writeln(sprintf('<info>Page</info> <comment>%s</comment> created', $title));
     }
 }

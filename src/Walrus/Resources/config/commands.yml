@@ -10,7 +10,11 @@ services:
 
   create_page.command:
     class: %create_page.command.class%
-    arguments: [ @walrus.configuration, @twig, @utilities ]
+    arguments:
+      - @walrus.configuration
+      - @twig
+      - @utilities
+      - @walrus.collection.page
 
   generate_site.command:
     class: %generate_site.command.class%

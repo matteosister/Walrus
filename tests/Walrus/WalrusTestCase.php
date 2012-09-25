@@ -13,7 +13,8 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Console\Application;
 use Walrus\Command\CreatePageCommand,
     Walrus\Command\CreatePostCommand,
-    Walrus\Command\GenerateSiteCommand;
+    Walrus\Command\GenerateSiteCommand,
+    Walrus\Collection\Collection;
 
 require_once __DIR__ . '/../../../vendor/twig/twig/lib/Twig/Autoloader.php';
 
@@ -101,6 +102,17 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
         return $assetCollection;
     }
 
+    protected function getMockPageCollection()
+    {
+        $pageCollection = $this->getMock('Walrus\Collection\PageCollection', array(
+            'toArray'
+        ), array(Collection::TYPE_PAGES));
+        $pageCollection->expects($this->any())
+            ->method('toArray')
+            ->will($this->returnValue(array()));
+        return $pageCollection;
+    }
+
     protected function getMockUtilities()
     {
         $utilities = $this->getMock('Walrus\Utilities\Utilities', array('slugify', 'getDateFormatted'));
@@ -121,7 +133,7 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
         $configuration = $this->getMockConfiguration();
         $twig = $this->getTwig();
         $utilities = $this->getMockUtilities();
-        $application->add(new CreatePageCommand($configuration, $twig, $utilities));
+        $application->add(new CreatePageCommand($configuration, $twig, $utilities, $this->getMockPageCollection()));
         $application->add(new CreatePostCommand($configuration, $twig, $utilities));
 
         return $application;

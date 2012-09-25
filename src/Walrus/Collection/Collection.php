@@ -57,7 +57,7 @@ abstract class Collection implements \ArrayAccess, \Countable, \Iterator
      */
     public function toArray()
     {
-        return $this->objects;
+        return $this->objects == null ? array() : $this->objects;
     }
 
     /**

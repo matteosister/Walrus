@@ -80,7 +80,7 @@ class Utilities
      *
      * @return string
      */
-    public function getDateFormatted($format = 'Y-m-d_H:i:s')
+    public function getDateFormatted($format = 'Y-m-d_H:i')
     {
         return date($format);
     }
