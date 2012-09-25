@@ -22,7 +22,6 @@ use Symfony\Component\Finder\Finder;
 abstract class Collection implements \ArrayAccess, \Countable, \Iterator
 {
     const TYPE_PAGES = 'pages';
-    const TYPE_POSTS = 'posts';
 
     /**
      * @var array
@@ -76,14 +75,6 @@ abstract class Collection implements \ArrayAccess, \Countable, \Iterator
         }
         $finder = new Finder();
         $this->iterator = $finder->files()->in($dir);
-        $this->generate();
-    }
-
-    /**
-     * generate the collection
-     */
-    public function generate()
-    {
         foreach ($this->iterator as $md) {
             $md = file_get_contents($md->getRealPath());
             switch ($this->type)

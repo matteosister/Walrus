@@ -42,28 +42,6 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
     }
 
     /**
-     * Compile all projects
-     */
-    public function compile()
-    {
-        foreach($this->projects as $project) {
-            $project->compile();
-        }
-    }
-
-    /**
-     * publish all projects
-     *
-     * @param string $to destination folder
-     */
-    public function publish($to)
-    {
-        foreach($this->projects as $project) {
-            $project->publish($to);
-        }
-    }
-
-    /**
      * (PHP 5 &gt;= 5.1.0)<br/>
      * Count elements of an object
      * @link http://php.net/manual/en/countable.count.php

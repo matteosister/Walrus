@@ -32,6 +32,7 @@ class CssFolder implements ProjectInterface
      * Class constructor
      *
      * @param string $folder folder
+     * @param null   $name   project name
      */
     public function __construct($folder, $name = null)
     {

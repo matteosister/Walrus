@@ -110,7 +110,6 @@ class GenerateSiteCommand extends BaseCommand
         $this->cleanup($output);
         $this->compileAssets($output);
         $this->parsePages($output);
-        $this->parsePosts($output);
     }
 
     private function cleanup(OutputInterface $output)
@@ -160,33 +159,6 @@ class GenerateSiteCommand extends BaseCommand
         }
     }
 
-    /**
-     * parse posts
-     *
-     * @param \Symfony\Component\Console\Output\OutputInterface $output output
-     *
-     * @return void
-     */
-    private function parsePosts(OutputInterface $output)
-    {
-        $dir = $this->configuration->drafing_dir.'/posts';
-        if (!is_dir($dir)) {
-            $output->writeln('no posts created');
-
-            return;
-        }
-        $finder = new Finder();
-        $posts = $finder->files()->in($this->configuration->drafing_dir.'/posts');
-        if (iterator_count($posts) == 0) {
-            return $output->writeln('<info>No posts to generate</info>');
-        }
-        $output->writeln($this->getLine('generating', sprintf('%s post/s', iterator_count($posts))));
-        foreach ($posts as $postFile) {
-            $md = file_get_contents($postFile->getRealPath());
-            $post = new Post($md);
-        }
-    }
-
     private function compileAssets(OutputInterface $output)
     {
         if (count($this->assetProjectsCollection) > 0) {
@@ -194,11 +166,9 @@ class GenerateSiteCommand extends BaseCommand
             foreach ($this->assetProjectsCollection as $assetProject) {
                 $assetProject->compile();
                 $output->writeln($this->getLine('compiling', sprintf('<comment>%s</comment> project', $assetProject->getName())));
+                $assetProject->publish($this->configuration->get('public_dir').'/css');
+                $output->writeln($this->getLine('publishing', sprintf('<comment>%s</comment> project', $assetProject->getName())));
             }
-            //$output->writeln($this->getDone('compiling'));
-            $output->writeln($this->getLine('moving', 'static assets in the public folder'));
-            $this->assetProjectsCollection->publish($this->configuration->get('public_dir').'/css');
-            //$output->writeln($this->getDone('moving'));
         } else {
             $output->writeln('<comment>No assets to compile</comment>');
         }

@@ -11,6 +11,7 @@ namespace Walrus;
 
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Filesystem\Filesystem;
 use Walrus\Command\CreatePageCommand,
     Walrus\Command\CreatePostCommand,
     Walrus\Command\GenerateSiteCommand,
@@ -23,10 +24,17 @@ require_once __DIR__ . '/../../../vendor/twig/twig/lib/Twig/Autoloader.php';
  */
 class WalrusTestCase extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var Filesystem
+     */
+    protected $filesystem;
     protected $playgroundDir;
     protected $draftingDir;
     protected $pagesDir;
     protected $postsDir;
+    protected $assetsProjectsDir;
+    protected $assetsProjectsPublishDir;
+    protected $cssSourceProjectDir;
 
     const DATE_FORMAT = 'Y-m-d_H:i:s';
     const PAGE_TITLE = 'The Test Title';
@@ -38,35 +46,42 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->filesystem = new Filesystem();
         $this->playgroundDir = __DIR__.'/Playground';
         $this->draftingDir = $this->playgroundDir.'/drafting';
-        if (!is_dir($this->draftingDir)) {
-            mkdir($this->draftingDir);
-        }
+        $this->assetsProjectsDir= $this->playgroundDir.'/assets_projects';
+        $this->createFolderIfNotExists($this->draftingDir);
         $this->pagesDir = $this->draftingDir.'/pages';
-        if (!is_dir($this->pagesDir)) {
-            mkdir($this->pagesDir);
-        }
+        $this->createFolderIfNotExists($this->pagesDir);
         $this->postsDir = $this->draftingDir.'/posts';
-        if (!is_dir($this->postsDir)) {
-            mkdir($this->postsDir);
-        }
+        $this->createFolderIfNotExists($this->postsDir);
+        $this->createFolderIfNotExists($this->assetsProjectsDir);
+        $this->assetsProjectsPublishDir = $this->assetsProjectsDir . '/compile';
+        $this->createFolderIfNotExists($this->assetsProjectsPublishDir);
+        $this->cssSourceProjectDir = $this->assetsProjectsDir.'/css_source';
+        $this->createFolderIfNotExists($this->cssSourceProjectDir);
     }
 
     protected function tearDown()
     {
         $finder = new Finder();
-        $iterator = $finder->files()->in($this->draftingDir.'/pages');
-        foreach($iterator as $file) {
-            unlink($file);
+        $iterator = $finder->files()->in(array(
+            $this->pagesDir,
+            $this->postsDir,
+            $this->assetsProjectsDir
+        ));
+        $this->filesystem->remove($iterator);
+        $this->filesystem->remove($this->pagesDir);
+        $this->filesystem->remove($this->postsDir);
+        $this->filesystem->remove($this->draftingDir);
+        $this->filesystem->remove($this->assetsProjectsDir);
+    }
+
+    private function createFolderIfNotExists($folder)
+    {
+        if (!$this->filesystem->exists($folder)) {
+            $this->filesystem->mkdir($folder);
         }
-        $iterator = $finder->files()->in($this->draftingDir.'/posts');
-        foreach($iterator as $file) {
-            unlink($file);
-        }
-        rmdir($this->pagesDir);
-        rmdir($this->postsDir);
-        rmdir($this->draftingDir);
     }
 
     protected function addRandomPages($num = 1)
@@ -134,7 +149,6 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
         $twig = $this->getTwig();
         $utilities = $this->getMockUtilities();
         $application->add(new CreatePageCommand($configuration, $twig, $utilities, $this->getMockPageCollection()));
-        $application->add(new CreatePostCommand($configuration, $twig, $utilities));
 
         return $application;
     }
@@ -162,5 +176,23 @@ type: %s
     protected function defaultValue($var, $defaultValue, $check = array(null, false))
     {
         return in_array($var, $check) ? $defaultValue : $var;
+    }
+
+    protected function iteratorTest($iterator)
+    {
+        $object = 'test';
+        $this->assertCount(0, $iterator);
+        $iterator[] = $object;
+        $this->assertCount(1, $iterator);
+        foreach($iterator as $i => $sub) {
+            $this->assertNotNull($sub);
+            $this->assertNotNull($i);
+        }
+        $iterator[0] = null;
+        $this->assertEquals(null, $iterator[0]);
+        unset($iterator[0]);
+        $iterator[0] = $object;
+        $this->assertCount(1, $iterator);
+        $this->assertTrue(isset($iterator[0]));
     }
 }

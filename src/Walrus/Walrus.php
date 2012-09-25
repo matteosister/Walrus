@@ -63,8 +63,6 @@ class Walrus
     {
         if (null === $this->application) {
             $this->application = new Application();
-
-            $this->application->add($this->container->get('create_post.command'));
             $this->application->add($this->container->get('create_page.command'));
             $this->application->add($this->container->get('generate_site.command'));
         }

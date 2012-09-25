@@ -21,7 +21,10 @@ class PageCollectionTest extends WalrusTestCase
         $pageCollection->load($this->pagesDir);
         $this->assertInstanceOf('\ArrayAccess', $pageCollection);
         $this->assertInstanceOf('\Countable', $pageCollection);
+        $this->assertInstanceOf('\Iterator', $pageCollection);
         $this->assertCount(3, $pageCollection);
+        $this->assertInternalType('array', $pageCollection->toArray());
+        $this->iteratorTest(new PageCollection(Collection::TYPE_PAGES));
     }
 
     public function testEmptyDir()
