@@ -95,6 +95,12 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
         return $configuration;
     }
 
+    protected function getMockAssetCollection()
+    {
+        $assetCollection = $this->getMock('Walrus\Asset\AssetCollection', array());
+        return $assetCollection;
+    }
+
     protected function getMockUtilities()
     {
         $utilities = $this->getMock('Walrus\Utilities\Utilities', array('slugify', 'getDateFormatted'));

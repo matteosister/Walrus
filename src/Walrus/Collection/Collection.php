@@ -24,6 +24,9 @@ abstract class Collection implements \ArrayAccess, \Countable, \Iterator
     const TYPE_PAGES = 'pages';
     const TYPE_POSTS = 'posts';
 
+    /**
+     * @var array
+     */
     protected $objects;
 
     /**
@@ -70,15 +73,6 @@ abstract class Collection implements \ArrayAccess, \Countable, \Iterator
     {
         if (!is_dir($dir)) {
             return;
-            /*switch ($this->type)
-            {
-                case static::TYPE_PAGES:
-                    throw new \Walrus\Exception\NoPagesCreated();
-                    break;
-                case static::TYPE_POSTS:
-                    throw new \Walrus\Exception\NoPostsCreated();
-                    break;
-            }*/
         }
         $finder = new Finder();
         $this->iterator = $finder->files()->in($dir);

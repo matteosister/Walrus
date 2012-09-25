@@ -24,12 +24,9 @@ class PageCollectionTest extends WalrusTestCase
         $this->assertCount(3, $pageCollection);
     }
 
-    /**
-     * @expectedException Walrus\Exception\NoPagesCreated
-     */
     public function testEmptyDir()
     {
         $pageCollection = new PageCollection(Collection::TYPE_PAGES);
-        $pageCollection->load($this->playgroundDir.'/non-existent');
+        $this->assertNull($pageCollection->load($this->playgroundDir.'/non-existent'));
     }
 }

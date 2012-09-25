@@ -16,7 +16,7 @@ class WalrusExtensionTest extends WalrusTestCase
 {
     public function testConstructor()
     {
-        $ext = new WalrusExtension($this->getMockConfiguration());
+        $ext = new WalrusExtension($this->getMockConfiguration(), $this->getMockAssetCollection());
         $this->assertInstanceOf('\Twig_Extension', $ext);
     }
 }
