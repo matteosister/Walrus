@@ -45,6 +45,6 @@ class StartProjectCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $fs = new Filesystem();
-        $fs->copy(__DIR__.'/../Resources/defaults/config.yml', $this->configuration->get('root_dir'));
+
     }
 }
