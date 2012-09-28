@@ -17,8 +17,6 @@ use Walrus\Command\CreatePageCommand,
     Walrus\Command\GenerateSiteCommand,
     Walrus\Collection\Collection;
 
-require_once __DIR__ . '/../../../vendor/twig/twig/lib/Twig/Autoloader.php';
-
 /**
  * base test case
  */

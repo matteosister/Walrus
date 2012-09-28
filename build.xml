@@ -1,0 +1,24 @@
+<project name="Cargo" default="build" basedir=".">
+	<target name="build" depends="init, test">
+	</target>
+
+    <target name="init" depends="composer">
+    </target>
+
+    <target name="test">
+		<exec executable="phpunit" failonerror="true" />
+	</target>
+
+    <target name="composer" depends="composer-install">
+        <exec executable="php" failonerror="true">
+			<arg line="composer.phar install"/>
+		</exec>
+    </target>
+
+    <target name="composer-install">
+        <exec executable="bash" failonerror="true">
+            <arg value="-c" />
+            <arg value="curl -s https://getcomposer.org/installer | php"/>
+        </exec>
+    </target>
+</project>

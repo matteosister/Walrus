@@ -21,9 +21,6 @@ if (is_dir($vendor = __DIR__.'/../vendor')) {
     );
 }
 
-require_once $vendor.'/twig/twig/lib/Twig/Autoloader.php';
-Twig_Autoloader::register();
-
 $walrus = new Walrus\DI\WalrusProject(realpath($vendor.'/../'));
 $app = $walrus->getApplication();
 $app->run();
