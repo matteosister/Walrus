@@ -14,6 +14,7 @@ use Walrus\Asset\ProjectInterface,
 use CompassElephant\CompassProject;
 use Symfony\Component\Finder\Finder,
     Symfony\Component\Filesystem\Filesystem;
+use Assetic\Asset\FileAsset;
 
 /**
  * Compass project
@@ -63,15 +64,24 @@ class Compass extends AbstractProject implements ProjectInterface
     /**
      * publish the generate files to the final destination
      *
-     * @param null|string $to folder to publish to
+     * @param null|string                     $to     folder to publish to
+     * @param \Assetic\Filter\FilterInterface $filter assetic filter
      *
      * @return null
      */
-    public function publish($to = null)
+    public function publish($to = null, $filter = null)
     {
         $finder = new Finder();
         $iterator = $finder->files()->name('*.css')->in($this->getOutputFolder());
-        $this->filesystem->mirror($this->getOutputFolder(), $to, $iterator);
+        if (null !== $filter) {
+            foreach ($iterator as $file) {
+                $asset = new FileAsset($file->getPathName());
+                $outputFile = $to.'/'.$file->getRelativePathName();
+                file_put_contents($outputFile, $asset->dump($filter));
+            }
+        } else {
+            $this->filesystem->mirror($this->getOutputFolder(), $to, $iterator);
+        }
     }
 
     /**

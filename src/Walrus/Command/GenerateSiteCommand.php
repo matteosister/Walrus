@@ -9,12 +9,14 @@
 
 namespace Walrus\Command;
 
-use Walrus\Command\BaseCommand,
-    Walrus\MDObject\Page\Page,
+use Walrus\MDObject\Page\Page,
     Walrus\DI\Configuration,
     Walrus\Collection\PageCollection,
-    Walrus\Asset\AssetCollection;
-use Symfony\Component\Console\Input\InputInterface,
+    Walrus\Asset\AssetCollection,
+    Walrus\Asset\Project\AbstractProject,
+    Walrus\Command\OutputWriterTrait;
+use Symfony\Component\Console\Command\Command,
+    Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Finder\Finder,
@@ -23,8 +25,10 @@ use Symfony\Component\Console\Input\InputInterface,
 /**
  * generate:site command
  */
-class GenerateSiteCommand extends BaseCommand
+class GenerateSiteCommand extends Command
 {
+    use OutputWriterTrait;
+
     /**
      * @var \Walrus\DI\Configuration
      */
@@ -94,7 +98,7 @@ class GenerateSiteCommand extends BaseCommand
     {
         $this
             ->setName('generate:site')
-            ->addOption('watch', null, InputOption::VALUE_NONE, 'Check for changes every second')
+            ->addOption('watch', 'w', InputOption::VALUE_NONE, 'Check for changes every second')
             ->addOption('period', null, InputOption::VALUE_REQUIRED, 'Set the polling period in seconds (used with --watch)', 1)
             ->setDescription('Generate the website');
     }
@@ -121,6 +125,7 @@ class GenerateSiteCommand extends BaseCommand
     {
         $this->writeRuler($output);
         $this->cleanup($output);
+        $this->setup($output);
         $this->compileAssets($output);
         $this->parsePages($output);
     }
@@ -155,6 +160,16 @@ class GenerateSiteCommand extends BaseCommand
         $iterator = Finder::create()->files()->in($this->configuration->get('public_dir'));
         $fs = new Filesystem();
         $fs->remove($iterator);
+    }
+
+    private function setup(OutputInterface $output)
+    {
+        $output->writeln($this->getLine('warming up', 'public folder'));
+        $cssDir = $this->configuration->get('public_dir').'/'.AbstractProject::TYPE_CSS;
+        $jsDir = $this->configuration->get('public_dir').'/'.AbstractProject::TYPE_JS;
+        $fs = new Filesystem();
+        $fs->mkdir($cssDir);
+        $fs->mkdir($jsDir);
     }
 
     /**
@@ -198,12 +213,13 @@ class GenerateSiteCommand extends BaseCommand
     {
         if (count($this->assetProjectsCollection) > 0) {
             $output->writeln($this->getLine('compiling', 'static assets (js/css)'));
-            foreach ($this->assetProjectsCollection as $assetProject) {
+            $this->assetProjectsCollection->compile($output, $this->configuration);
+            /*foreach ($this->assetProjectsCollection as $assetProject) {
                 $assetProject->compile();
                 $output->writeln($this->getLine('compiling', sprintf('<comment>%s</comment> project', $assetProject->getName())));
                 $assetProject->publish($this->configuration->get('public_dir').'/'.$assetProject->getProjectType());
                 $output->writeln($this->getLine('publishing', sprintf('<comment>%s</comment> project', $assetProject->getName())));
-            }
+            }*/
         } else {
             $output->writeln('<comment>No assets to compile</comment>');
         }

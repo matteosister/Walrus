@@ -1,29 +1,20 @@
 <?php
 /**
  * User: matteo
- * Date: 27/08/12
- * Time: 23.26
+ * Date: 28/09/12
+ * Time: 16.15
  *
  * Just for fun...
  */
 
 namespace Walrus\Command;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * base class for commands
- */
-abstract class BaseCommand extends Command
+trait OutputWriterTrait
 {
-    const COMMAND_SECTION_PAD = 20;
-    const COMMAND_STRING_PAD = '.';
-
-    /**
-     * @var \Walrus\DI\Configuration
-     */
-    protected $configuration;
+    private $commandSectionPad = 20;
+    private $commandStringPad = '.';
 
     /**
      * write the console header
@@ -54,11 +45,6 @@ abstract class BaseCommand extends Command
     protected function getLine($section, $message, $comment = false)
     {
         $tpl = $comment ? '<info>%s</info> <comment>%s</comment>' : '<info>%s</info> %s';
-        return sprintf($tpl, str_pad($section, static::COMMAND_SECTION_PAD, static::COMMAND_STRING_PAD, STR_PAD_RIGHT), $message);
+        return sprintf($tpl, str_pad($section, $this->commandSectionPad, $this->commandStringPad, STR_PAD_RIGHT), $message);
     }
-/*
-    protected function getDone($section)
-    {
-        return sprintf('<info>%s</info> <comment>done</comment>', str_pad($section, static::COMMAND_SECTION_PAD, static::COMMAND_STRING_PAD, STR_PAD_RIGHT));
-    }*/
 }

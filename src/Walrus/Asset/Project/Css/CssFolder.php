@@ -60,7 +60,7 @@ class CssFolder extends AbstractProject implements ProjectInterface
      *
      * @return null
      */
-    public function publish($to = null)
+    public function publish($to = null, $filter = null)
     {
         $fs = new Filesystem();
         $fs->mirror($this->folder, $to);

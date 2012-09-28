@@ -9,10 +9,15 @@
 
 namespace Walrus\Asset;
 
-use Walrus\Asset\ProjectInterface;
+use Walrus\Asset\ProjectInterface,
+    Walrus\Command\OutputWriterTrait;
+use Assetic\Filter\FilterInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class AssetCollection implements \Countable, \ArrayAccess, \Iterator
 {
+    use OutputWriterTrait;
+
     /**
      * @var array
      */
@@ -24,11 +29,46 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
     private $position;
 
     /**
+     * @var \Assetic\Filter\FilterInterface
+     */
+    private $cssFilter;
+
+    /**
+     * @var \Assetic\Filter\FilterInterface
+     */
+    private $jsFilter;
+
+    /**
      * class constructor
      */
     public function __construct()
     {
         $this->projects = array();
+    }
+
+    /**
+     * add a yuiCssCompressor for compiling assets with assetic
+     *
+     * @param string                          $type   css or js
+     * @param \Assetic\Filter\FilterInterface $filter FilterIinterface instance
+     *
+     * @throws \RuntimeException
+     * @return void
+     * @internal param \Assetic\Filter\Yui\CssCompressorFilter $yuiCssCompressor
+     */
+    public function addFilter($type, FilterInterface $filter)
+    {
+        switch ($type) {
+            case 'css':
+                $this->cssFilter = $filter;
+                return;
+                break;
+            case 'js':
+                $this->jsFilter = $filter;
+                return;
+                break;
+        }
+        throw new \RuntimeException(sprintf('There is no %s filter type in asset collection', $type));
     }
 
     /**
@@ -39,6 +79,23 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
     public function addProject(ProjectInterface $project)
     {
         $this->projects[] = $project;
+    }
+
+    /**
+     * compile
+     */
+    public function compile(OutputInterface $output, \Walrus\DI\Configuration $configuration)
+    {
+        foreach ($this->projects as $project) {
+            $output->writeln($this->getLine('compiling', sprintf('<comment>%s</comment> project', $project->getName())));
+            $project->compile();
+            $output->writeln($this->getLine('publishing', sprintf('<comment>%s</comment> project', $project->getName())));
+            if ($project->getProjectType() == \Walrus\Asset\Project\AbstractProject::TYPE_CSS) {
+                $project->publish($configuration->get('public_dir').'/'.$project->getProjectType(), $this->cssFilter);
+            } else {
+                $project->publish($configuration->get('public_dir').'/'.$project->getProjectType(), $this->jsFilter);
+            }
+        }
     }
 
     /**
