@@ -1,8 +1,8 @@
 parameters:
   twig.loader.class: Twig_Loader_Filesystem
   twig.loader.string.class: Twig_Loader_String
-  twig.loader.tpl_path: %ROOT_PATH%/Walrus/src/Walrus/Resources/tpl
-  twig.loader.theme.tpl_path: %ROOT_PATH%/themes/cypress/templates
+  twig.loader.tpl_path: %WALRUS_PATH%/src/Walrus/Resources/tpl
+  twig.loader.theme.tpl_path: %WALRUS_PATH%/themes/cypress/templates
   twig.environment.class: Twig_Environment
   twig.cache: false
   twig.extension.walrus.class: Walrus\Twig\Extension\WalrusExtension

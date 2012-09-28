@@ -49,6 +49,7 @@ class WalrusProject
         $this->container = new ContainerBuilder();
         $this->container->addCompilerPass(new AssetCompilerPass());
         $this->container->setParameter("ROOT_PATH", realpath($rootPath));
+        $this->container->setParameter("WALRUS_PATH", realpath(__DIR__.'/../../../'));
         $this->container->setParameter("PUBLIC_PATH", $this->container->getParameter('ROOT_PATH').'/public');
 
         $this->container->setParameter('THEME_PATH', __DIR__.'/../../../themes/cypress');
