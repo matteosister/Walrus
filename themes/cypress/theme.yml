@@ -1,12 +1,7 @@
 theme:
   name: cypress
   assets:
-    - { name: bootstrap, type: less, source_file: css/bootstrap/less/bootstrap.less}
+    #- { name: bootstrap, type: less, source_file: css/bootstrap/less/bootstrap.less}
     - { name: my compass, type: compass, source_folder: css/compass }
     - { name: another css folder, type: css_source, source_folder: css/custom_css }
     - { name: a js folder, type: js_source, source_folder: js/custom_js }
-#    compass:
-#      source_folder: css
-#    less:
-#      source_file: bootstrap/less/bootstrap.less
-#    css_source: [ custom_css ]
