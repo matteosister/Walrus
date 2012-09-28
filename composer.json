@@ -24,5 +24,6 @@
         "kriswallsmith/assetic": "1.0.4",
         "nervo/yuicompressor": "@stable"
 	},
+	"bin": ["bin/walrus"],
 	"minimum-stability": "dev"
 }
