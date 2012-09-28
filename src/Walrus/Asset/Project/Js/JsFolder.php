@@ -7,7 +7,7 @@
  * Just for fun...
  */
 
-namespace Walrus\Asset\Project\Css;
+namespace Walrus\Asset\Project\Js;
 
 use Walrus\Asset\ProjectInterface,
     Walrus\Asset\Project\AbstractProject;
@@ -18,7 +18,7 @@ use Symfony\Component\Filesystem\Filesystem;
 /**
  * CssFolder project
  */
-class CssFolder extends AbstractProject implements ProjectInterface
+class JsFolder extends AbstractProject implements ProjectInterface
 {
     /**
      * @var string
@@ -28,7 +28,7 @@ class CssFolder extends AbstractProject implements ProjectInterface
     /**
      * @var string
      */
-    private $name = 'css folder';
+    private $name = 'js folder';
 
     /**
      * Class constructor
@@ -73,10 +73,10 @@ class CssFolder extends AbstractProject implements ProjectInterface
      */
     public function output()
     {
-        $iterator = Finder::create()->files()->name('*.css')->in($this->folder);
+        $iterator = Finder::create()->files()->name('*.js')->in($this->folder);
         $output = '';
         foreach ($iterator as $file) {
-            $output .= sprintf('<link rel="stylesheet" type="text/css" href="/%s/%s" media="screen, projection">', $this->getProjectType(), $file->getRelativePathName());
+            $output .= sprintf('<script type="text/javascript" src="/%s/%s"></script>', $this->getProjectType(), $file->getRelativePathName());
         }
 
         return $output;
@@ -97,6 +97,6 @@ class CssFolder extends AbstractProject implements ProjectInterface
      */
     function getProjectType()
     {
-        return static::TYPE_CSS;
+        return static::TYPE_JS;
     }
 }

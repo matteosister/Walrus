@@ -9,13 +9,14 @@
 
 namespace Walrus\Asset\Project\Css;
 
-use Walrus\Asset\ProjectInterface;
+use Walrus\Asset\ProjectInterface,
+    Walrus\Asset\Project\AbstractProject;
 use LessElephant\LessProject;
 
 /**
  * Less project
  */
-class Less implements ProjectInterface
+class Less extends AbstractProject implements ProjectInterface
 {
     /**
      * @var \LessElephant\LessProject
@@ -70,7 +71,7 @@ class Less implements ProjectInterface
     {
         $pathInfo = pathinfo($this->project->getDestination());
 
-        return sprintf('<link rel="stylesheet" type="text/css" href="/css/%s">', $pathInfo['basename']);
+        return sprintf('<link rel="stylesheet" type="text/css" href="/%s/%s">', $this->getProjectType(), $pathInfo['basename']);
     }
 
     /**
@@ -81,5 +82,13 @@ class Less implements ProjectInterface
     function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    function getProjectType()
+    {
+        return static::TYPE_CSS;
     }
 }

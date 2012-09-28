@@ -155,7 +155,6 @@ class GenerateSiteCommand extends BaseCommand
         $iterator = Finder::create()->files()->in($this->configuration->get('public_dir'));
         $fs = new Filesystem();
         $fs->remove($iterator);
-        //$output->writeln($this->getDone('cleaning'));
     }
 
     /**
@@ -190,7 +189,6 @@ class GenerateSiteCommand extends BaseCommand
                 )));
                 $output->writeln($this->getLine('generating page', sprintf('<comment>%s</comment>', $page->getMetadata()->getTitle())));
             }
-            //$output->writeln($this->getDone('generating pages'));
         } catch (\Walrus\Exception\NoPagesCreated $e) {
             $output->writeln('<info>no pages created</info>');
         }
@@ -203,7 +201,7 @@ class GenerateSiteCommand extends BaseCommand
             foreach ($this->assetProjectsCollection as $assetProject) {
                 $assetProject->compile();
                 $output->writeln($this->getLine('compiling', sprintf('<comment>%s</comment> project', $assetProject->getName())));
-                $assetProject->publish($this->configuration->get('public_dir').'/css');
+                $assetProject->publish($this->configuration->get('public_dir').'/'.$assetProject->getProjectType());
                 $output->writeln($this->getLine('publishing', sprintf('<comment>%s</comment> project', $assetProject->getName())));
             }
         } else {

@@ -9,7 +9,8 @@
 
 namespace Walrus\Asset\Project\Css;
 
-use Walrus\Asset\ProjectInterface;
+use Walrus\Asset\ProjectInterface,
+    Walrus\Asset\Project\AbstractProject;
 use CompassElephant\CompassProject;
 use Symfony\Component\Finder\Finder,
     Symfony\Component\Filesystem\Filesystem;
@@ -17,7 +18,7 @@ use Symfony\Component\Finder\Finder,
 /**
  * Compass project
  */
-class Compass implements ProjectInterface
+class Compass extends AbstractProject implements ProjectInterface
 {
     /**
      * @var CompassProject
@@ -83,7 +84,7 @@ class Compass implements ProjectInterface
         $iterator = Finder::create()->files()->name('*.css')->in($this->getOutputFolder());
         $output = '';
         foreach ($iterator as $file) {
-            $output .= sprintf('<link rel="stylesheet" type="text/css" href="/css/%s">', $file->getRelativePathName());
+            $output .= sprintf('<link rel="stylesheet" type="text/css" href="/%s/%s">', $this->getProjectType(), $file->getRelativePathName());
         }
 
         return $output;
@@ -107,5 +108,13 @@ class Compass implements ProjectInterface
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return string
+     */
+    function getProjectType()
+    {
+        return static::TYPE_CSS;
     }
 }

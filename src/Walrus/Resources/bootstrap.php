@@ -13,4 +13,4 @@ require_once __DIR__.'/../../../../vendor/twig/twig/lib/Twig/Autoloader.php';
 
 Twig_Autoloader::register();
 
-$walrus = new \Walrus\Walrus(__DIR__.'/../../../../');
+$walrus = new \Walrus\DI\WalrusProject(__DIR__.'/../../../../');

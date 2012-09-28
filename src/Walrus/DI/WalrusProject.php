@@ -7,7 +7,7 @@
  * Just for fun...
  */
 
-namespace Walrus;
+namespace Walrus\DI;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\Loader\YamlFileLoader,
@@ -21,12 +21,13 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
 
 use Walrus\DI\AssetCompilerPass,
     Walrus\Configuration\ThemeConfiguration,
-    Walrus\Asset\Project\Css\CssFolder;
+    Walrus\Asset\Project\Css\CssFolder,
+    Walrus\Asset\Project\AbstractProject;
 
 use LessElephant\LessProject;
 use CompassElephant\CompassProject;
 
-class Walrus
+class WalrusProject
 {
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
@@ -71,7 +72,7 @@ class Walrus
 
     private function loadWalrusDI()
     {
-        $loader = new YamlFileLoader($this->container, new FileLocator(array(__DIR__.'/Resources/config')));
+        $loader = new YamlFileLoader($this->container, new FileLocator(array(__DIR__.'/../Resources/config')));
         $loader->load('templating.yml');
         $loader->load('commands.yml');
         $loader->load('utilities.yml');
@@ -98,6 +99,9 @@ class Walrus
                 case 'css_source':
                     $this->cssFolderConfiguration($assetsConfiguration);
                     break;
+                case 'js_source':
+                    $this->jsFolderConfiguration($assetsConfiguration);
+                    break;
             }
         }
     }
@@ -122,7 +126,7 @@ class Walrus
             $pathParts = pathinfo($sourceFile);
             $dir = $pathParts['dirname'];
             $name = $pathParts['basename'];
-            $lessProject = new LessProject($dir, $name, $this->container->getParameter('PUBLIC_PATH').'/css/bootstrap.css');
+            $lessProject = new LessProject($dir, $name, $this->container->getParameter('PUBLIC_PATH').'/'.AbstractProject::TYPE_CSS.'/'.$pathParts['filename'].'.css');
             $def = new Definition('Walrus\Asset\Project\Css\Less', array($lessProject, $less['name']));
             $def->addTag('asset.project');
             $this->container->addDefinitions(array('walrus.asset.less.project' => $def));
@@ -138,5 +142,14 @@ class Walrus
         $def = new Definition('Walrus\Asset\Project\Css\CssFolder', array($fileFolder, $cssSource['name']));
         $def->addTag('asset.project');
         $this->container->addDefinitions(array('walrus.asset.css_folder.project' => $def));
+    }
+
+    private function jsFolderConfiguration($jsSource)
+    {
+        // TODO: validate folder paths
+        $fileFolder = $this->container->getParameter('THEME_PATH').'/'.$jsSource['source_folder'];
+        $def = new Definition('Walrus\Asset\Project\Js\JsFolder', array($fileFolder, $jsSource['name']));
+        $def->addTag('asset.project');
+        $this->container->addDefinitions(array('walrus.asset.js_folder.project' => $def));
     }
 }

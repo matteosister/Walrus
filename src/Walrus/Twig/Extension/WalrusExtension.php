@@ -63,7 +63,7 @@ class WalrusExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'stylesheets' => new \Twig_Function_Method($this, 'stylesheets', array('is_safe' => array('all')))
+            'assets' => new \Twig_Function_Method($this, 'assets', array('is_safe' => array('all')))
         );
     }
 
@@ -72,7 +72,7 @@ class WalrusExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function stylesheets()
+    public function assets()
     {
         $out = '';
         foreach ($this->assetCollection as $assetProject) {

@@ -33,7 +33,7 @@ class ThemeConfiguration implements ConfigurationInterface
                         ->scalarNode('name')->end()
                         ->scalarNode('type')
                             ->validate()
-                                ->ifNotInArray(array('compass', 'less', 'css_source'))
+                                ->ifNotInArray(array('compass', 'less', 'css_source', 'js_source'))
                                 ->thenInvalid('Invalid asset project name %s')
                             ->end()
                         ->end()
