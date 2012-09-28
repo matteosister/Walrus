@@ -7,6 +7,8 @@
  * Just for fun...
  */
 
+namespace Walrus\Command;
+
 use Symfony\Component\Console\Command\Command,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface,
@@ -18,7 +20,7 @@ use Walrus\Command\OutputWriterTrait,
     Walrus\DI\Configuration;
 
 
-class StartProjectCommand extends Command
+class StartupProjectCommand extends Command
 {
     use OutputWriterTrait;
 
@@ -38,13 +40,16 @@ class StartProjectCommand extends Command
     protected function configure()
     {
         return $this
-            ->setName('start:project')
+            ->setName('startup:project')
             ->setDescription('Create the project folder structure');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $fs = new Filesystem();
-
+        $root = $this->configuration->get('root_dir');
+        $pages = $root.'/drafting/pages';
+        $public = $root.'/public';
+        $fs->mkdir(array($pages, $public));
     }
 }

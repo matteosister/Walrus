@@ -10,6 +10,9 @@
 namespace Walrus\Command;
 
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Helper\DialogHelper;
+use Symfony\Component\Console\Input\ArrayInput;
 
 trait OutputWriterTrait
 {
@@ -46,5 +49,15 @@ trait OutputWriterTrait
     {
         $tpl = $comment ? '<info>%s</info> <comment>%s</comment>' : '<info>%s</info> %s';
         return sprintf($tpl, str_pad($section, $this->commandSectionPad, $this->commandStringPad, STR_PAD_RIGHT), $message);
+    }
+
+    protected function runProjectStartup(OutputInterface $output, Application $application)
+    {
+        $command = $application->find('startup:project');
+        $arguments = array(
+            'command' => 'startup:project'
+        );
+        $input = new ArrayInput($arguments);
+        return 0 === $command->run($input, $output);
     }
 }

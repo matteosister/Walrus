@@ -9,12 +9,12 @@
 
 namespace Walrus\Command;
 
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use Walrus\Command\BaseCommand,
-    Walrus\Utilities\Utilities,
+use Symfony\Component\Console\Input\InputArgument,
+    Symfony\Component\Console\Input\InputInterface,
+    Symfony\Component\Console\Input\InputOption,
+    Symfony\Component\Console\Output\OutputInterface,
+    Symfony\Component\Console\Command\Command;
+use Walrus\Utilities\Utilities,
     Walrus\DI\Configuration,
     Walrus\Collection\PageCollection,
     Walrus\Collection\Collection,
@@ -23,8 +23,10 @@ use Walrus\Command\BaseCommand,
 /**
  * create:page command
  */
-class CreatePageCommand extends BaseCommand
+class CreatePageCommand extends Command
 {
+    use OutputWriterTrait;
+
     const NAME = 'page';
 
     /**
@@ -92,18 +94,31 @@ class CreatePageCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->writeHeader($output);
+        if (!is_dir($this->pagesFolder)) {
+            $this->writeRuler($output);
+            $output->writeln('<error>looks like you didn\'t startup your project...</error>');
+            $output->writeln('You need to run the <info>startup:project</info> command');
+            $this->writeRuler($output);
+            $dialog = $this->getHelperSet()->get('dialog');
+            if (!$dialog->askConfirmation($output, '<question>Would you like to run it now? [y/n]</question>', false)) {
+                return;
+            } else {
+                $this->runProjectStartup($output, $this->getApplication());
+            }
+        }
         $date = $this->utilities->getDateFormatted();
         $title = $input->getArgument('title');
         $slug = $this->utilities->getUniqueSlug(array_map(function(Page $p) {
             return $p->getMetadata()->getUrl();
         }, $this->pageCollection->toArray()), $title);
-        $this->writeHeader($output);
         $template = $this->twigEnvironment->loadTemplate(static::NAME.'.md.twig');
+        $homepage = $input->getOption('homepage') ? true : false;
         $fileContent = $template->render(array(
             'title' => $title,
             'date' => $date,
             'url' => $input->getOption('homepage') ? '' : $slug,
-            'homepage' => $input->getOption('homepage') ? true : false
+            'homepage' => 0 === $this->pageCollection->count() ? true : $homepage
         ));
         $dir = $this->pagesFolder;
         if (!is_dir($dir)) {

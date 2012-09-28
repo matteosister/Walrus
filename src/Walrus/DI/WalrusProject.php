@@ -51,7 +51,6 @@ class WalrusProject
         $this->container->setParameter("ROOT_PATH", realpath($rootPath));
         $this->container->setParameter("WALRUS_PATH", realpath(__DIR__.'/../../../'));
         $this->container->setParameter("PUBLIC_PATH", $this->container->getParameter('ROOT_PATH').'/public');
-
         $this->container->setParameter('THEME_PATH', __DIR__.'/../../../themes/cypress');
         $this->loadWalrusDI();
         $this->loadThemeConfiguration();
@@ -62,6 +61,7 @@ class WalrusProject
     {
         if (null === $this->application) {
             $this->application = new Application();
+            $this->application->add($this->container->get('startup_project.command'));
             $this->application->add($this->container->get('create_page.command'));
             $this->application->add($this->container->get('generate_site.command'));
         }

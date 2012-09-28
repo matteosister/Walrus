@@ -1,4 +1,5 @@
 parameters:
+  startup_project.command.class: Walrus\Command\StartupProjectCommand
   create_page.command.class: Walrus\Command\CreatePageCommand
   generate_site.command.class: Walrus\Command\GenerateSiteCommand
 
@@ -20,3 +21,8 @@ services:
       - @twig.string
       - @asset.projects_collection
       - @walrus.collection.page
+
+  startup_project.command:
+    class: %startup_project.command.class%
+    arguments:
+      - @walrus.configuration
