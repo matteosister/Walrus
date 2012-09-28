@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Created by JetBrains PhpStorm.
+ * User: matteo
+ * Date: 26/08/12
+ * Time: 22.45
+ *
+ * Just for fun...
+ */
+
+require_once __DIR__.'/Walrus/src/Walrus/Resources/bootstrap.php';
+$app = $walrus->getApplication();
+$app->run();

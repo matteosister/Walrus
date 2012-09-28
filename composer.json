@@ -1,0 +1,28 @@
+{
+    "name": "cypresslab/walrus",
+    "autoload": {
+        "psr-0": {
+            "Walrus": [
+                "Walrus/src/",
+                "Walrus/tests/"
+            ]
+        }
+    },
+	"require": {
+        "php": "5.4.*",
+		"symfony/console": "2.1.*",
+		"symfony/config": "2.1.*",
+		"symfony/dependency-injection": "2.1.*",
+		"symfony/yaml": "2.1.*",
+		"symfony/finder": "2.1.*",
+		"symfony/templating": "2.1.*",
+		"symfony/filesystem": "2.1.*",
+		"twig/twig": "1.9.*",
+		"dflydev/markdown": "1.0.*",
+        "cypresslab/less-elephant": "0.2.*",
+        "cypresslab/compass-elephant": "0.2.*",
+        "kriswallsmith/assetic": "1.0.4",
+        "nervo/yuicompressor": "@stable"
+	},
+	"minimum-stability": "dev"
+}
