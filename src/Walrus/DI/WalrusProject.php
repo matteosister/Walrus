@@ -51,13 +51,7 @@ class WalrusProject
         $this->container->setParameter("ROOT_PATH", realpath($rootPath));
         $this->container->setParameter("PUBLIC_PATH", $this->container->getParameter('ROOT_PATH').'/public');
 
-        $values = array(
-            'walrus' => array(
-                'theme' => 'cypress'
-            )
-        );
-
-        $this->container->setParameter('THEME_PATH', $this->container->getParameter('ROOT_PATH').'/themes/'.$values['walrus']['theme']);
+        $this->container->setParameter('THEME_PATH', __DIR__.'/../../../themes/cypress');
         $this->loadWalrusDI();
         $this->loadThemeConfiguration();
         $this->container->compile();
