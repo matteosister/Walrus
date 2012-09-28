@@ -8,7 +8,22 @@
  *
  * Just for fun...
  */
+ 
+if (is_dir($vendor = __DIR__.'/../vendor')) {
+    require($vendor.'/autoload.php');
+} elseif (is_dir($vendor = __DIR__.'/../../../../vendor')) {
+    require($vendor.'/autoload.php');
+} else {
+    die(
+        'You must set up the project dependencies, run the following commands:'.PHP_EOL.
+        'curl -s http://getcomposer.org/installer | php'.PHP_EOL.
+        'php composer.phar install'.PHP_EOL
+    );
+}
 
-require_once __DIR__.'/Walrus/src/Walrus/Resources/bootstrap.php';
+require_once $vendor.'/twig/twig/lib/Twig/Autoloader.php';
+Twig_Autoloader::register();
+
+$walrus = new Walrus\DI\WalrusProject(realpath($vendor.'/../'));
 $app = $walrus->getApplication();
 $app->run();
