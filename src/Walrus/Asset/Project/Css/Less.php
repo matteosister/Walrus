@@ -12,6 +12,8 @@ namespace Walrus\Asset\Project\Css;
 use Walrus\Asset\ProjectInterface,
     Walrus\Asset\Project\AbstractProject;
 use LessElephant\LessProject;
+use Assetic\Asset\FileAsset;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Less project
@@ -59,7 +61,18 @@ class Less extends AbstractProject implements ProjectInterface
     public function publish($to = null, $filter = null)
     {
         // nothing to do here, less publish to the final destination
-        // TODO: assetic?
+        $filename = realpath($this->project->getDestination());
+        if (!is_file($filename)) {
+            return;
+        }
+        $outputFile = $to.'/'.pathinfo($filename)['basename'];
+        if (null !== $filter && $this->compress) {
+            $asset = new FileAsset($this->project->getDestination());
+            file_put_contents($outputFile, $asset->dump($filter));
+        } else {
+            $fs = new Filesystem();
+            $fs->copy($filename, $outputFile);
+        }
     }
 
     /**

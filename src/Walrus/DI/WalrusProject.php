@@ -104,12 +104,15 @@ class WalrusProject
         }
     }
 
-    private function compassConfiguration($compass)
+    private function compassConfiguration($conf)
     {
-        $sourceFolder = $this->container->getParameter('THEME_PATH').'/'.$compass['source_folder'];
+        $sourceFolder = $this->container->getParameter('THEME_PATH').'/'.$conf['source_folder'];
         if (is_dir($sourceFolder)) {
             $compassProject = new CompassProject($sourceFolder);
-            $def = new Definition('Walrus\Asset\Project\Css\Compass', array($compassProject, $compass['name']));
+            $def = new Definition('Walrus\Asset\Project\Css\Compass', array($compassProject, $conf['name']));
+            if ($conf['compress']) {
+                $def->addMethodCall('setCompress', array($conf['compress']));
+            }
             $def->addTag('asset.project');
             $this->container->addDefinitions(array('walrus.asset.compass.project' => $def));
         } else {
@@ -117,15 +120,19 @@ class WalrusProject
         }
     }
 
-    private function lessConfiguration($less)
+    private function lessConfiguration($conf)
     {
-        $sourceFile = $this->container->getParameter('THEME_PATH').'/'.$less['source_file'];
+        $sourceFile = $this->container->getParameter('THEME_PATH').'/'.$conf['source_file'];
+        $destFile = $this->container->getParameter('THEME_PATH').'/'.$conf['destination_file'];
         if (is_file($sourceFile)) {
             $pathParts = pathinfo($sourceFile);
             $dir = $pathParts['dirname'];
             $name = $pathParts['basename'];
-            $lessProject = new LessProject($dir, $name, $this->container->getParameter('PUBLIC_PATH').'/'.AbstractProject::TYPE_CSS.'/'.$pathParts['filename'].'.css');
-            $def = new Definition('Walrus\Asset\Project\Css\Less', array($lessProject, $less['name']));
+            $lessProject = new LessProject($dir, $name, $destFile);
+            $def = new Definition('Walrus\Asset\Project\Css\Less', array($lessProject, $conf['name']));
+            if ($conf['compress']) {
+                $def->addMethodCall('setCompress', array($conf['compress']));
+            }
             $def->addTag('asset.project');
             $this->container->addDefinitions(array('walrus.asset.less.project' => $def));
         } else {
@@ -133,20 +140,26 @@ class WalrusProject
         }
     }
 
-    private function cssFolderConfiguration($cssSource)
+    private function cssFolderConfiguration($conf)
     {
         // TODO: validate folder paths
-        $fileFolder = $this->container->getParameter('THEME_PATH').'/'.$cssSource['source_folder'];
-        $def = new Definition('Walrus\Asset\Project\Css\CssFolder', array($fileFolder, $cssSource['name']));
+        $fileFolder = $this->container->getParameter('THEME_PATH').'/'.$conf['source_folder'];
+        $def = new Definition('Walrus\Asset\Project\Css\CssFolder', array($fileFolder, $conf['name']));
+        if ($conf['compress']) {
+            $def->addMethodCall('setCompress', array($conf['compress']));
+        }
         $def->addTag('asset.project');
         $this->container->addDefinitions(array('walrus.asset.css_folder.project' => $def));
     }
 
-    private function jsFolderConfiguration($jsSource)
+    private function jsFolderConfiguration($conf)
     {
         // TODO: validate folder paths
-        $fileFolder = $this->container->getParameter('THEME_PATH').'/'.$jsSource['source_folder'];
-        $def = new Definition('Walrus\Asset\Project\Js\JsFolder', array($fileFolder, $jsSource['name']));
+        $fileFolder = $this->container->getParameter('THEME_PATH').'/'.$conf['source_folder'];
+        $def = new Definition('Walrus\Asset\Project\Js\JsFolder', array($fileFolder, $conf['name']));
+        if ($conf['compress']) {
+            $def->addMethodCall('setCompress', array($conf['compress']));
+        }
         $def->addTag('asset.project');
         $this->container->addDefinitions(array('walrus.asset.js_folder.project' => $def));
     }

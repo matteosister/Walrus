@@ -214,12 +214,6 @@ class GenerateSiteCommand extends Command
         if (count($this->assetProjectsCollection) > 0) {
             $output->writeln($this->getLine('compiling', 'static assets (js/css)'));
             $this->assetProjectsCollection->compile($output, $this->configuration);
-            /*foreach ($this->assetProjectsCollection as $assetProject) {
-                $assetProject->compile();
-                $output->writeln($this->getLine('compiling', sprintf('<comment>%s</comment> project', $assetProject->getName())));
-                $assetProject->publish($this->configuration->get('public_dir').'/'.$assetProject->getProjectType());
-                $output->writeln($this->getLine('publishing', sprintf('<comment>%s</comment> project', $assetProject->getName())));
-            }*/
         } else {
             $output->writeln('<comment>No assets to compile</comment>');
         }

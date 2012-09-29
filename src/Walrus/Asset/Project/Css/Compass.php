@@ -73,7 +73,7 @@ class Compass extends AbstractProject implements ProjectInterface
     {
         $finder = new Finder();
         $iterator = $finder->files()->name('*.css')->in($this->getOutputFolder());
-        if (null !== $filter) {
+        if (null !== $filter && $this->compress) {
             foreach ($iterator as $file) {
                 $asset = new FileAsset($file->getPathName());
                 $outputFile = $to.'/'.$file->getRelativePathName();

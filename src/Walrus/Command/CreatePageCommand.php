@@ -96,7 +96,7 @@ class CreatePageCommand extends Command
     {
         $this->writeHeader($output);
         if (!is_dir($this->pagesFolder)) {
-            $this->writeRuler($output);
+            /*$this->writeRuler($output);
             $output->writeln('<error>looks like you didn\'t startup your project...</error>');
             $output->writeln('You need to run the <info>startup:project</info> command');
             $this->writeRuler($output);
@@ -105,7 +105,8 @@ class CreatePageCommand extends Command
                 return;
             } else {
                 $this->runProjectStartup($output, $this->getApplication());
-            }
+            }*/
+            $this->runProjectStartup($output, $this->getApplication());
         }
         $date = $this->utilities->getDateFormatted();
         $title = $input->getArgument('title');

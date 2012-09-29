@@ -10,16 +10,20 @@
 namespace Walrus\Asset\Project\Css;
 
 use Walrus\Asset\ProjectInterface,
-    Walrus\Asset\Project\AbstractProject;
-
+    Walrus\Asset\Project\AbstractProject,
+    Walrus\Utilities\SlugifierTrait;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
+use Assetic\Asset\GlobAsset,
+    Assetic\Asset\AssetCollection;
 
 /**
  * CssFolder project
  */
 class CssFolder extends AbstractProject implements ProjectInterface
 {
+    use SlugifierTrait;
+
     /**
      * @var string
      */
@@ -62,8 +66,15 @@ class CssFolder extends AbstractProject implements ProjectInterface
      */
     public function publish($to = null, $filter = null)
     {
-        $fs = new Filesystem();
-        $fs->mirror($this->folder, $to);
+        $iterator = Finder::create()->files()->name('*.css')->in($this->folder);
+        $assetCollection = new AssetCollection();
+        foreach($iterator as $file) {
+            $assetCollection->add(new GlobAsset(realpath($file->getPathName())));
+        }
+        if (null !== $filter && $this->compress) {
+            $assetCollection->ensureFilter($filter);
+        }
+        file_put_contents($to.'/'.$this->slugify($this->name).'.css', $assetCollection->dump());
     }
 
     /**

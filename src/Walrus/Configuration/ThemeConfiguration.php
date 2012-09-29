@@ -30,7 +30,7 @@ class ThemeConfiguration implements ConfigurationInterface
                     //->useAttributeAsKey('type')
                     ->prototype('array')
                     ->children()
-                        ->scalarNode('name')->end()
+                        ->scalarNode('name')->isRequired()->end()
                         ->scalarNode('type')
                             ->validate()
                                 ->ifNotInArray(array('compass', 'less', 'css_source', 'js_source'))
@@ -39,6 +39,8 @@ class ThemeConfiguration implements ConfigurationInterface
                         ->end()
                         ->scalarNode('source_file')->defaultNull()->end()
                         ->scalarNode('source_folder')->defaultNull()->end()
+                        ->scalarNode('destination_file')->defaultNull()->end()
+                        ->scalarNode('compress')->defaultFalse()->end()
                     ->end()
                 ->end()
             ->end();
