@@ -50,7 +50,7 @@ class GenerateSiteCommand extends Command
     protected $stringEnvironment;
 
     /**
-     * @var \Walrus\Asset\Collection
+     * @var \Walrus\Asset\AssetCollection
      */
     protected $assetProjectsCollection;
 

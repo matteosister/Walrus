@@ -12,7 +12,6 @@ namespace Walrus\Twig\Extension;
 use Walrus\Collection\PageCollection,
     Walrus\MDObject\Page\Page,
     Walrus\Exception\UrlNotFoundException;
-use dflydev\markdown\IMarkdownParser;
 
 class MdContentExtension extends \Twig_Extension
 {
@@ -31,6 +30,11 @@ class MdContentExtension extends \Twig_Extension
         $this->pageCollection = $pageCollection;
     }
 
+    /**
+     * functions
+     *
+     * @return array
+     */
     public function getFunctions()
     {
         return array(
@@ -38,6 +42,8 @@ class MdContentExtension extends \Twig_Extension
             'link_to' => new \Twig_Function_Method($this, 'linkTo', array('is_safe' => array('all')))
         );
     }
+
+
 
     public function urlFor($slug)
     {

@@ -39,6 +39,16 @@ class Page extends BaseObject
     }
 
     /**
+     * toString
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->metadata->getTitle();
+    }
+
+    /**
      * Content setter
      *
      * @param \Walrus\MDObject\Page\Content $content la variabile content

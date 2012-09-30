@@ -16,7 +16,7 @@ use Walrus\DI\Configuration,
 use Symfony\Component\Finder\Finder;
 use dflydev\markdown\MarkdownParser;
 
-class WalrusExtension extends \Twig_Extension
+class ThemeExtension extends \Twig_Extension
 {
     /**
      * @var \Walrus\DI\Configuration
@@ -29,6 +29,11 @@ class WalrusExtension extends \Twig_Extension
     private $assetCollection;
 
     /**
+     * @var \Walrus\Collection\PageCollection
+     */
+    private $pageCollection;
+
+    /**
      * class constructor
      *
      * @param \Walrus\DI\Configuration      $configuration   configuration instance
@@ -36,11 +41,13 @@ class WalrusExtension extends \Twig_Extension
      */
     public function __construct(
         Configuration $configuration,
-        AssetCollection $assetCollection
+        AssetCollection $assetCollection,
+        PageCollection $pageCollection
     )
     {
         $this->configuration = $configuration;
         $this->assetCollection = $assetCollection;
+        $this->pageCollection = $pageCollection;
     }
 
     /**
@@ -66,6 +73,19 @@ class WalrusExtension extends \Twig_Extension
             'assets' => new \Twig_Function_Method($this, 'assets', array('is_safe' => array('all')))
         );
     }
+
+    /**
+     * globals
+     *
+     * @return array
+     */
+    public function getGlobals()
+    {
+        return array(
+            'pages' => $this->pageCollection
+        );
+    }
+
 
     /**
      * stylesheets

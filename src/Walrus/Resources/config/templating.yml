@@ -5,7 +5,7 @@ parameters:
   twig.loader.theme.tpl_path: %WALRUS_PATH%/themes/cypress/templates
   twig.environment.class: Twig_Environment
   twig.cache: false
-  twig.extension.walrus.class: Walrus\Twig\Extension\WalrusExtension
+  twig.extension.theme.class: Walrus\Twig\Extension\ThemeExtension
   md_content.extension.walrus.class: Walrus\Twig\Extension\MdContentExtension
 
 services:
@@ -25,11 +25,12 @@ services:
     class: %twig.loader.class%
     arguments: [%twig.loader.theme.tpl_path%]
 
-  twig.extension.walrus:
-    class: %twig.extension.walrus.class%
+  twig.extension.theme:
+    class: %twig.extension.theme.class%
     arguments:
       - @walrus.configuration
       - @asset.projects_collection
+      - @walrus.collection.page
 
   twig:
     class: %twig.environment.class%
@@ -51,4 +52,4 @@ services:
       - @twig.loader.theme
       - { cache: %twig.cache% }
     calls:
-      - [ addExtension, [ @twig.extension.walrus ]]
+      - [ addExtension, [ @twig.extension.theme ]]
