@@ -2,6 +2,7 @@ parameters:
   startup_project.command.class: Walrus\Command\StartupProjectCommand
   create_page.command.class: Walrus\Command\CreatePageCommand
   generate_site.command.class: Walrus\Command\GenerateSiteCommand
+  startup_server.command.class: Walrus\Command\StartupServerCommand
 
 services:
   create_page.command:
@@ -24,5 +25,10 @@ services:
 
   startup_project.command:
     class: %startup_project.command.class%
+    arguments:
+      - @walrus.configuration
+
+  startup_server.command:
+    class: %startup_server.command.class%
     arguments:
       - @walrus.configuration

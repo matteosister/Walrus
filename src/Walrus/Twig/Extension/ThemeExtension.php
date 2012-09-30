@@ -11,12 +11,13 @@ namespace Walrus\Twig\Extension;
 
 use Walrus\DI\Configuration,
     Walrus\Asset\AssetCollection,
-    Walrus\Collection\PageCollection;
+    Walrus\Collection\PageCollection,
+    Walrus\Twig\Extension\WalrusExtension;
 
 use Symfony\Component\Finder\Finder;
 use dflydev\markdown\MarkdownParser;
 
-class ThemeExtension extends \Twig_Extension
+class ThemeExtension extends WalrusExtension
 {
     /**
      * @var \Walrus\DI\Configuration
@@ -27,11 +28,6 @@ class ThemeExtension extends \Twig_Extension
      * @var \Walrus\Asset\AssetCollection
      */
     private $assetCollection;
-
-    /**
-     * @var \Walrus\Collection\PageCollection
-     */
-    private $pageCollection;
 
     /**
      * class constructor
@@ -69,9 +65,9 @@ class ThemeExtension extends \Twig_Extension
      */
     public function getFunctions()
     {
-        return array(
+        return array_merge(parent::getFunctions(), array(
             'assets' => new \Twig_Function_Method($this, 'assets', array('is_safe' => array('all')))
-        );
+        ));
     }
 
     /**

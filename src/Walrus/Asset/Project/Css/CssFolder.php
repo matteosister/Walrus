@@ -74,7 +74,7 @@ class CssFolder extends AbstractProject implements ProjectInterface
         if (null !== $filter && $this->compress) {
             $assetCollection->ensureFilter($filter);
         }
-        file_put_contents($to.'/'.$this->slugify($this->name).'.css', $assetCollection->dump());
+        file_put_contents($to.'/'.$this->getOutputFilename(), $assetCollection->dump());
     }
 
     /**
@@ -87,10 +87,15 @@ class CssFolder extends AbstractProject implements ProjectInterface
         $iterator = Finder::create()->files()->name('*.css')->in($this->folder);
         $output = '';
         foreach ($iterator as $file) {
-            $output .= sprintf('<link rel="stylesheet" type="text/css" href="/%s/%s" media="screen, projection">', $this->getProjectType(), $file->getRelativePathName());
+            $output .= sprintf('<link rel="stylesheet" type="text/css" href="/%s/%s" media="screen, projection">', $this->getProjectType(), $this->getOutputFilename());
         }
 
         return $output;
+    }
+
+    private function getOutputFilename()
+    {
+        return $this->slugify($this->name).'.css';
     }
 
     /**
