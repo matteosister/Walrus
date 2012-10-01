@@ -8,3 +8,4 @@ services:
       - [ set, [ "root_dir", "%ROOT_PATH%" ]]
       - [ set, [ "drafting_dir", "%ROOT_PATH%/drafting" ]]
       - [ set, [ "public_dir", "%ROOT_PATH%/public" ]]
+      - [ set, [ "theme_dir", "%THEME_PATH%" ]]

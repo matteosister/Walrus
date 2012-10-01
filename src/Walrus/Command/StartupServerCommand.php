@@ -42,12 +42,15 @@ class StartupServerCommand extends Command
         $this
             ->setName('startup:server')
             ->setDescription('Manage the php built-in web server')
-            ->addOption('port', 'p', InputOption::VALUE_OPTIONAL, 'the server port', '8000');
+            ->addOption('port', 'p', InputOption::VALUE_OPTIONAL, 'the server port', '8000')
+            ->addOption('no-header', null, InputOption::VALUE_NONE, 'do not show walrus header');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->writeHeader($output);
+        if (!$input->getOption('no-header')) {
+            $this->writeHeader($output);
+        }
         $cmd = sprintf('php -S localhost:%s', $input->getOption('port'));
         $builder = new ProcessBuilder();
         $builder->add('php');
@@ -56,7 +59,7 @@ class StartupServerCommand extends Command
         $builder->setWorkingDirectory($this->configuration->get('public_dir'));
         $builder->setTimeout(null);
         $process = $builder->getProcess();
-        $output->writeln(sprintf('<info>starting up walrus server, now open http://localhost:%s on your browser</info>', $input->getOption('port')));
+        $output->writeln(sprintf('<comment>Walrus</comment> <info>server</info> is up and running at <comment>http://localhost:%s</comment>', $input->getOption('port')));
         $process->run(function($type, $data) use ($output) {
             // [Mon Oct  1 00:31:20 2012] 127.0.0.1:50364 [200]: /
             if (preg_match('/\[(.+)\] (.+):(.+) \[(.+)\]: (.*)/', $data, $matches)) {

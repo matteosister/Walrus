@@ -19,6 +19,7 @@ use Symfony\Component\Console\Command\Command,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface,
     Symfony\Component\Console\Input\InputOption,
+    Symfony\Component\Console\Input\ArrayInput,
     Symfony\Component\Finder\Finder,
     Symfony\Component\Filesystem\Filesystem;
 
@@ -132,6 +133,7 @@ class GenerateSiteCommand extends Command
 
     private function watch(InputInterface $input, OutputInterface $output)
     {
+        $serverStarted = false;
         while (true) {
             $sha = $this->calculateSha();
             if ($sha !== $this->previosWatch) {
@@ -146,7 +148,12 @@ class GenerateSiteCommand extends Command
 
     private function calculateSha()
     {
-        $iterator = Finder::create()->files()->in($this->configuration->get('drafting_dir'));
+        $iterator = Finder::create()
+            ->files()
+            ->in(array(
+                realpath($this->configuration->get('drafting_dir')),
+                realpath($this->configuration->get('theme_dir'))
+            ));
         $content = '';
         foreach($iterator as $file) {
             $content .= $file->getContents();
