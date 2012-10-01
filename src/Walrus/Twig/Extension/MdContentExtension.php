@@ -9,21 +9,23 @@
 
 namespace Walrus\Twig\Extension;
 
-use Walrus\Collection\PageCollection,
-    Walrus\MDObject\Page\Page,
+use Walrus\MDObject\Page\Page,
     Walrus\Exception\UrlNotFoundException,
     Walrus\Twig\Extension\WalrusExtension;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class MdContentExtension extends WalrusExtension
 {
+    private $container;
+
     /**
      * class constructor
      *
-     * @param \Walrus\Collection\PageCollection $pageCollection
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
-    public function __construct(PageCollection $pageCollection)
+    public function __construct(ContainerInterface $container)
     {
-        $this->pageCollection = $pageCollection;
+        $this->container = $container;
     }
 
     /**

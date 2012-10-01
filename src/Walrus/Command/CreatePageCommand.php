@@ -13,36 +13,33 @@ use Symfony\Component\Console\Input\InputArgument,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface,
-    Symfony\Component\Console\Command\Command;
+    Symfony\Component\DependencyInjection\ContainerInterface;
 use Walrus\Utilities\Utilities,
     Walrus\DI\Configuration,
-    Walrus\Collection\PageCollection,
-    Walrus\Collection\Collection,
-    Walrus\MDObject\Page\Page;
+    Walrus\MDObject\Page\Page,
+    Walrus\Command\ContainerAwareCommand;
 
 /**
  * create:page command
  */
-class CreatePageCommand extends Command
+class CreatePageCommand extends ContainerAwareCommand
 {
     use OutputWriterTrait;
-
-    const NAME = 'page';
 
     /**
      * @var \Twig_Environment
      */
-    protected $twigEnvironment;
+    //protected $twigEnvironment;
 
     /**
      * @var \Walrus\Utilities\Utilities
      */
-    protected $utilities;
+    //protected $utilities;
 
     /**
      * @var string
      */
-    private $pagesFolder;
+    //private $pagesFolder;
 
     /**
      * @var
@@ -50,25 +47,13 @@ class CreatePageCommand extends Command
     private $pageCollection;
 
     /**
-     * constructor
+     * page folder getter
      *
-     * @param \Walrus\DI\Configuration    $configuration configuration
-     * @param \Twig_Environment           $environment   environment
-     * @param \Walrus\Utilities\Utilities $utilities     utilities
+     * @return string
      */
-    public function __construct(
-        Configuration $configuration,
-        \Twig_Environment $environment,
-        Utilities $utilities,
-        PageCollection $pageCollection
-    )
+    private function getPagesFolder()
     {
-        parent::__construct();
-        $this->configuration = $configuration;
-        $this->twigEnvironment = $environment;
-        $this->utilities = $utilities;
-        $this->pagesFolder = $this->configuration->get('drafting_dir').'/'.static::NAME.'s';
-        $this->pageCollection = $pageCollection;
+        return $this->getConfiguration()->get('drafting_dir').'/pages';
     }
 
     /**
@@ -95,7 +80,7 @@ class CreatePageCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->writeHeader($output);
-        if (!is_dir($this->pagesFolder)) {
+        if (!is_dir($this->getPagesFolder())) {
             /*$this->writeRuler($output);
             $output->writeln('<error>looks like you didn\'t startup your project...</error>');
             $output->writeln('You need to run the <info>startup:project</info> command');
@@ -108,12 +93,12 @@ class CreatePageCommand extends Command
             }*/
             $this->runProjectStartup($output, $this->getApplication());
         }
-        $date = $this->utilities->getDateFormatted();
+        $date = $this->getUtilities()->getDateFormatted();
         $title = $input->getArgument('title');
-        $slug = $this->utilities->getUniqueSlug(array_map(function(Page $p) {
+        $slug = $this->getUtilities()->getUniqueSlug(array_map(function(Page $p) {
             return $p->getMetadata()->getUrl();
-        }, $this->pageCollection->toArray()), $title);
-        $template = $this->twigEnvironment->loadTemplate(static::NAME.'.md.twig');
+        }, $this->container->get('walrus.collection.page')->toArray()), $title);
+        $template = $this->getTwig()->loadTemplate('page.md.twig');
         $homepage = $input->getOption('homepage') ? true : false;
         $fileContent = $template->render(array(
             'title' => $title,
@@ -121,11 +106,11 @@ class CreatePageCommand extends Command
             'url' => $input->getOption('homepage') ? '' : $slug,
             'homepage' => 0 === $this->pageCollection->count() ? true : $homepage
         ));
-        $dir = $this->pagesFolder;
+        $dir = $this->getPagesFolder();
         if (!is_dir($dir)) {
             mkdir($dir);
         }
-        $fileName = $dir.'/'.$date.'_'.static::NAME.'_'.$slug.'.md';
+        $fileName = $dir.'/'.$date.'_page_'.$slug.'.md';
         file_put_contents($fileName, $fileContent);
         $this->writeRuler($output);
         $output->writeln(sprintf('<info>Page</info> <comment>%s</comment> created', $title));

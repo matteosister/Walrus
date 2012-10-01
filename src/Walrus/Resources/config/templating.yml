@@ -19,7 +19,8 @@ services:
   md_content.extension.walrus:
     class: %md_content.extension.walrus.class%
     arguments:
-      - @walrus.collection.page
+      #- @walrus.collection.page
+      - @service_container
 
   twig.loader.theme:
     class: %twig.loader.class%
@@ -28,9 +29,10 @@ services:
   twig.extension.theme:
     class: %twig.extension.theme.class%
     arguments:
-      - @walrus.configuration
-      - @asset.projects_collection
-      - @walrus.collection.page
+      #- @walrus.configuration
+      #- @asset.projects_collection
+      #- @walrus.collection.page
+      - @service_container
 
   twig:
     class: %twig.environment.class%

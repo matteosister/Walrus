@@ -14,9 +14,9 @@ use Walrus\MDObject\Page\Page,
     Walrus\Collection\PageCollection,
     Walrus\Asset\AssetCollection,
     Walrus\Asset\Project\AbstractProject,
-    Walrus\Command\OutputWriterTrait;
-use Symfony\Component\Console\Command\Command,
-    Symfony\Component\Console\Input\InputInterface,
+    Walrus\Command\OutputWriterTrait,
+    Walrus\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Input\ArrayInput,
@@ -26,71 +26,14 @@ use Symfony\Component\Console\Command\Command,
 /**
  * generate:site command
  */
-class GenerateSiteCommand extends Command
+class GenerateSiteCommand extends ContainerAwareCommand
 {
     use OutputWriterTrait;
-
-    /**
-     * @var \Walrus\DI\Configuration
-     */
-    protected $configuration;
-
-    /**
-     * @var \Twig_Environment
-     */
-    protected $twigEnvironment;
-
-    /**
-     * @var \Twig_Environment
-     */
-    protected $themeEnvironment;
-
-    /**
-     * @var \Twig_Environment
-     */
-    protected $stringEnvironment;
-
-    /**
-     * @var \Walrus\Asset\AssetCollection
-     */
-    protected $assetProjectsCollection;
-
-    /**
-     * @var PageCollection
-     */
-    protected $pageCollection;
 
     /**
      * @var string
      */
     protected $previosWatch = null;
-
-    /**
-     * constructor
-     *
-     * @param \Walrus\DI\Configuration $configuration          configuration
-     * @param \Twig_Environment        $environment            twig environment
-     * @param \Twig_Environment        $themeEnvironment       twig environment for the theme
-     * @param \Twig_Environment        $stringEnvironment      twig environment from string
-     * @param \Walrus\Asset\Collection $assetProjectCollection less project
-     */
-    public function __construct(
-        Configuration $configuration,
-        \Twig_Environment $environment,
-        \Twig_Environment $themeEnvironment,
-        \Twig_Environment $stringEnvironment,
-        AssetCollection $assetProjectCollection,
-        PageCollection $pageCollection
-    )
-    {
-        parent::__construct();
-        $this->configuration = $configuration;
-        $this->twigEnvironment = $environment;
-        $this->themeEnvironment = $themeEnvironment;
-        $this->stringEnvironment = $stringEnvironment;
-        $this->assetProjectsCollection = $assetProjectCollection;
-        $this->pageCollection = $pageCollection;
-    }
 
     /**
      * configure
@@ -133,7 +76,6 @@ class GenerateSiteCommand extends Command
 
     private function watch(InputInterface $input, OutputInterface $output)
     {
-        $serverStarted = false;
         while (true) {
             $sha = $this->calculateSha();
             if ($sha !== $this->previosWatch) {
@@ -151,8 +93,8 @@ class GenerateSiteCommand extends Command
         $iterator = Finder::create()
             ->files()
             ->in(array(
-                realpath($this->configuration->get('drafting_dir')),
-                realpath($this->configuration->get('theme_dir'))
+                realpath($this->getConfiguration()->get('drafting_dir')),
+                realpath($this->getConfiguration()->get('theme_dir'))
             ));
         $content = '';
         foreach($iterator as $file) {
@@ -164,7 +106,7 @@ class GenerateSiteCommand extends Command
     private function cleanup(OutputInterface $output)
     {
         $output->writeln($this->getLine('cleaning', 'public folder'));
-        $iterator = Finder::create()->files()->in($this->configuration->get('public_dir'));
+        $iterator = Finder::create()->files()->in($this->getConfiguration()->get('public_dir'));
         $fs = new Filesystem();
         $fs->remove($iterator);
     }
@@ -172,8 +114,8 @@ class GenerateSiteCommand extends Command
     private function setup(OutputInterface $output)
     {
         $output->writeln($this->getLine('warming up', 'public folder'));
-        $cssDir = $this->configuration->get('public_dir').'/'.AbstractProject::TYPE_CSS;
-        $jsDir = $this->configuration->get('public_dir').'/'.AbstractProject::TYPE_JS;
+        $cssDir = $this->getConfiguration()->get('public_dir').'/'.AbstractProject::TYPE_CSS;
+        $jsDir = $this->getConfiguration()->get('public_dir').'/'.AbstractProject::TYPE_JS;
         $fs = new Filesystem();
         $fs->mkdir($cssDir);
         $fs->mkdir($jsDir);
@@ -189,33 +131,26 @@ class GenerateSiteCommand extends Command
     private function parsePages(OutputInterface $output)
     {
         try {
-            if (count($this->pageCollection) == 0) {
+            if (count($this->getPageCollection()) == 0) {
                 $output->writeln('<info>No pages to generate</info>');
 
                 return;
             }
-            $output->writeln($this->getLine('generating', sprintf('%s page/s', count($this->pageCollection))));
-            foreach ($this->pageCollection as $page) {
+            $output->writeln($this->getLine('generating', sprintf('%s page/s', count($this->getPageCollection()))));
+            foreach ($this->getPageCollection() as $page) {
                 if ($page->getMetadata()->getHomepage()) {
                     $url = 'index.html';
                 } else {
                     $url = $page->getMetadata()->getUrl().'.html';
                 }
-                $filename = $this->configuration->get('public_dir').'/'.$url;
+                $filename = $this->getConfiguration()->get('public_dir').'/'.$url;
                 if (file_exists($filename)) {
                     unlink($filename);
                 }
-                $generate[] = array(
-                    'filename' => $filename,
-                    'page' => $page
-                );
-            }
-            foreach ($generate as $gen) {
-                $page = $gen['page'];
                 $output->writeln($this->getLine('generating page', sprintf('<comment>%s</comment>', $page->getMetadata()->getTitle())));
-                file_put_contents($gen['filename'], $this->themeEnvironment->render('page.html.twig', array(
+                file_put_contents($filename, $this->getTwigTheme()->render('page.html.twig', array(
                     'page' => $page,
-                    'content' => $this->stringEnvironment->render($page->getContent())
+                    'content' => $this->getTwigString()->render($page->getContent())
                 )));
             }
         } catch (\Walrus\Exception\NoPagesCreated $e) {
@@ -225,9 +160,9 @@ class GenerateSiteCommand extends Command
 
     private function compileAssets(OutputInterface $output)
     {
-        if (count($this->assetProjectsCollection) > 0) {
+        if (count($this->getAssetCollection()) > 0) {
             $output->writeln($this->getLine('compiling', 'static assets (js/css)'));
-            $this->assetProjectsCollection->compile($output, $this->configuration);
+            $this->getAssetCollection()->compile($output, $this->getConfiguration());
         } else {
             $output->writeln('<comment>No assets to compile</comment>');
         }
