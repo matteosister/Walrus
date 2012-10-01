@@ -93,7 +93,7 @@ class CssFolder extends AbstractProject implements ProjectInterface
         return $output;
     }
 
-    private function getOutputFilename()
+    public function getOutputFilename()
     {
         return $this->slugify($this->name).'.css';
     }

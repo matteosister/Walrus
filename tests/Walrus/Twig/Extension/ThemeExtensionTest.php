@@ -9,17 +9,21 @@
 
 namespace Walrus\Twig\Extension;
 
-use Walrus\Twig\Extension\WalrusExtension,
+use Walrus\Twig\Extension\ThemeExtension,
     Walrus\WalrusTestCase;
 
-class WalrusExtensionTest extends WalrusTestCase
+class ThemeExtensionTest extends WalrusTestCase
 {
     /**
      * @group twig
      */
     public function testConstructor()
     {
-        $ext = new WalrusExtension($this->getMockConfiguration(), $this->getMockAssetCollection());
+        $ext = new ThemeExtension(
+            $this->getMockConfiguration(),
+            $this->getMockAssetCollection(),
+            $this->getMockPageCollection()
+        );
         $this->assertInstanceOf('\Twig_Extension', $ext);
     }
 }

@@ -26,6 +26,9 @@ class PageCollectionTest extends WalrusTestCase
         $this->assertInstanceOf('\Countable', $pageCollection);
         $this->assertInstanceOf('\Iterator', $pageCollection);
         $this->assertCount(3, $pageCollection);
+        foreach ($pageCollection as $page) {
+            $this->assertInstanceOf('Walrus\MDObject\Page\Page', $page);
+        }
         $this->assertInternalType('array', $pageCollection->toArray());
         $this->iteratorTest(new PageCollection(Collection::TYPE_PAGES));
     }

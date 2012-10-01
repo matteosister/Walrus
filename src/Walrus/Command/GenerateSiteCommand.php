@@ -198,11 +198,18 @@ class GenerateSiteCommand extends Command
                 if (file_exists($filename)) {
                     unlink($filename);
                 }
-                file_put_contents($filename, $this->themeEnvironment->render('page.html.twig', array(
+                $generate[] = array(
+                    'filename' => $filename,
+                    'page' => $page
+                );
+            }
+            foreach ($generate as $gen) {
+                $page = $gen['page'];
+                $output->writeln($this->getLine('generating page', sprintf('<comment>%s</comment>', $page->getMetadata()->getTitle())));
+                file_put_contents($gen['filename'], $this->themeEnvironment->render('page.html.twig', array(
                     'page' => $page,
                     'content' => $this->stringEnvironment->render($page->getContent())
                 )));
-                $output->writeln($this->getLine('generating page', sprintf('<comment>%s</comment>', $page->getMetadata()->getTitle())));
             }
         } catch (\Walrus\Exception\NoPagesCreated $e) {
             $output->writeln('<info>no pages created</info>');

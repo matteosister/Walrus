@@ -27,7 +27,7 @@ class CssFolderTest extends WalrusTestCase
         $p = new CssFolder($this->cssSourceProjectDir, 'cssfolder-test-project');
         $this->assertEquals('cssfolder-test-project', $p->getName());
         $p->publish($this->assetsProjectsPublishDir);
-        $this->assertFileExists($this->assetsProjectsPublishDir.'/main.css');
-        $this->assertEquals($fileContent, file_get_contents($this->assetsProjectsPublishDir.'/main.css'));
+        $this->assertFileExists($this->assetsProjectsPublishDir.'/'.$p->getOutputFilename());
+        $this->assertEquals($fileContent, file_get_contents($this->assetsProjectsPublishDir.'/'.$p->getOutputFilename()));
     }
 }
