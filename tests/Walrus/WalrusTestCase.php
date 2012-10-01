@@ -98,10 +98,46 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
         return new \Twig_Environment($loader, array('cache' => false));
     }
 
+    protected function getMockContainer()
+    {
+        $container = $this->getMock('Symfony\Component\DependencyInjection\Container', array('get'));
+        $container
+            ->expects($this->any())
+            ->method('get')
+            ->with($this->logicalOr(
+                $this->equalTo('utilities'),
+                $this->equalTo('walrus.configuration'),
+                $this->equalTo('walrus.collection.page'),
+                $this->equalTo('twig')
+            ))
+            ->will($this->returnCallback(array($this, 'containerGetCallback')));
+
+        return $container;
+    }
+
+    public function containerGetCallback($service)
+    {
+        switch ($service) {
+            case 'walrus.configuration':
+                return $this->getMockConfiguration();
+                break;
+            case 'utilities':
+                return $this->getMockUtilities();
+                break;
+            case 'walrus.collection.page':
+                return $this->getMockPageCollection();
+                break;
+            case 'twig':
+                return $this->getTwig();
+                break;
+        }
+    }
+
     protected function getMockConfiguration()
     {
         $configuration = $this->getMock('Walrus\DI\Configuration', array('get'));
-        $configuration->expects($this->any())
+        $configuration
+            ->expects($this->any())
             ->method('get')
             ->with($this->equalTo('drafting_dir'))
             ->will($this->returnValue(realpath(__DIR__.'/Playground/drafting')));
@@ -119,12 +155,14 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
     {
         $pageCollection = $this->getMock('Walrus\Collection\PageCollection', array(
             'toArray'
-        ), array(Collection::TYPE_PAGES));
+        ), array());
         $pageCollection->expects($this->any())
             ->method('toArray')
             ->will($this->returnValue(array()));
         return $pageCollection;
     }
+
+
 
     protected function getMockUtilities()
     {
@@ -146,7 +184,7 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
         $configuration = $this->getMockConfiguration();
         $twig = $this->getTwig();
         $utilities = $this->getMockUtilities();
-        $application->add(new CreatePageCommand($configuration, $twig, $utilities, $this->getMockPageCollection()));
+        $application->add(new CreatePageCommand($this->getMockContainer()));
 
         return $application;
     }

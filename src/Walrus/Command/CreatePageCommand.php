@@ -104,7 +104,7 @@ class CreatePageCommand extends ContainerAwareCommand
             'title' => $title,
             'date' => $date,
             'url' => $input->getOption('homepage') ? '' : $slug,
-            'homepage' => 0 === $this->pageCollection->count() ? true : $homepage
+            'homepage' => 0 === $this->getPageCollection()->count() ? true : $homepage
         ));
         $dir = $this->getPagesFolder();
         if (!is_dir($dir)) {

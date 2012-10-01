@@ -20,7 +20,7 @@ class PageCollectionTest extends WalrusTestCase
     public function testFullDir()
     {
         $this->addRandomPages(3);
-        $pageCollection = new PageCollection(Collection::TYPE_PAGES);
+        $pageCollection = new PageCollection();
         $pageCollection->load($this->pagesDir);
         $this->assertInstanceOf('\ArrayAccess', $pageCollection);
         $this->assertInstanceOf('\Countable', $pageCollection);
@@ -30,7 +30,7 @@ class PageCollectionTest extends WalrusTestCase
             $this->assertInstanceOf('Walrus\MDObject\Page\Page', $page);
         }
         $this->assertInternalType('array', $pageCollection->toArray());
-        $this->iteratorTest(new PageCollection(Collection::TYPE_PAGES));
+        $this->iteratorTest(new PageCollection());
     }
 
     /**
@@ -38,7 +38,7 @@ class PageCollectionTest extends WalrusTestCase
      */
     public function testEmptyDir()
     {
-        $pageCollection = new PageCollection(Collection::TYPE_PAGES);
+        $pageCollection = new PageCollection();
         $this->assertNull($pageCollection->load($this->playgroundDir.'/non-existent'));
     }
 }
