@@ -9,9 +9,10 @@
 
 namespace Walrus\Command;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\DependencyInjection\ContainerInterface,
+    Symfony\Component\Console\Command\Command,
+    Symfony\Component\Console\Output\OutputInterface,
+    Symfony\Component\Console\Input\ArrayInput;
 
 abstract class ContainerAwareCommand extends Command
 {
@@ -28,7 +29,7 @@ abstract class ContainerAwareCommand extends Command
         $this->container = $container;
     }
 
-    protected function runCommand($command, $output, $arguments = array())
+    protected function runCommand($command, OutputInterface $output, $arguments = array())
     {
         $command = $this->getApplication()->find($command);
         $input = new ArrayInput(array_merge(array('command' => $command), $arguments));

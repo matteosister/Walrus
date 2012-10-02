@@ -22,6 +22,8 @@ use Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Finder\Finder,
     Symfony\Component\Filesystem\Filesystem,
     Symfony\Component\Process\Process;
+use Spork\ProcessManager,
+    Spork\EventDispatcher\EventDispatcher;
 
 /**
  * generate:site command
@@ -76,15 +78,16 @@ class GenerateSiteCommand extends ContainerAwareCommand
 
     private function watch(InputInterface $input, OutputInterface $output)
     {
-        $p = new Process('php vendor/bin/walrus startup:server --no-header');
-        $p->setTimeout(null);
-        $p->run();
+        $manager = new ProcessManager(new EventDispatcher());
+        $manager->fork(function() use ($output) {
+            $this->runCommand('startup:server', $output, array('--no-header' => true));
+        });
         while (true) {
             $sha = $this->calculateSha();
             if ($sha !== $this->previosWatch) {
-                $this->previosWatch = $sha;
                 $this->doExecute($input, $output);
                 $this->writeRuler($output);
+                $this->previosWatch = $sha;
                 $output->writeln('<question>watching for changes...</question>');
             }
             sleep($input->getOption('period'));
