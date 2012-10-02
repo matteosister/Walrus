@@ -11,7 +11,6 @@ namespace Walrus\Command;
 
 use Walrus\MDObject\Page\Page,
     Walrus\DI\Configuration,
-    Walrus\Collection\PageCollection,
     Walrus\Asset\AssetCollection,
     Walrus\Asset\Project\AbstractProject,
     Walrus\Command\OutputWriterTrait,
@@ -21,7 +20,8 @@ use Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Input\ArrayInput,
     Symfony\Component\Finder\Finder,
-    Symfony\Component\Filesystem\Filesystem;
+    Symfony\Component\Filesystem\Filesystem,
+    Symfony\Component\Process\Process;
 
 /**
  * generate:site command
@@ -76,6 +76,9 @@ class GenerateSiteCommand extends ContainerAwareCommand
 
     private function watch(InputInterface $input, OutputInterface $output)
     {
+        $p = new Process('php vendor/bin/walrus startup:server --no-header');
+        $p->setTimeout(null);
+        $p->run();
         while (true) {
             $sha = $this->calculateSha();
             if ($sha !== $this->previosWatch) {

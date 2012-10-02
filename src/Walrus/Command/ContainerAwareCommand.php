@@ -11,6 +11,7 @@ namespace Walrus\Command;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
 
 abstract class ContainerAwareCommand extends Command
 {
@@ -25,6 +26,13 @@ abstract class ContainerAwareCommand extends Command
     {
         parent::__construct();
         $this->container = $container;
+    }
+
+    protected function runCommand($command, $output, $arguments = array())
+    {
+        $command = $this->getApplication()->find($command);
+        $input = new ArrayInput(array_merge(array('command' => $command), $arguments));
+        $command->run($input, $output);
     }
 
     /**
