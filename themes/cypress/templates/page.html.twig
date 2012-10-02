@@ -1,13 +1,15 @@
-<html>
+<html lang="en">
     {% include "_header.html.twig" %}
     <body>
-        <nav>
-            <ul>
-            {% for page in pages %}
-                <li><a href="{{ url_for(page) }}">{{ page }}</a></li>
-            {% endfor %}
-            </ul>
-        </nav>
+        <div class="row">
+            <nav>
+                <ul>
+                {% for page in pages %}
+                    <li><a href="{{ url_for(page) }}">{{ page }}</a></li>
+                {% endfor %}
+                </ul>
+            </nav>
+        </div>
         <h1>{{ page.metadata.title|title }}</h1>
         {{ content|md_to_html }}
         {% include "_footer.html.twig" %}

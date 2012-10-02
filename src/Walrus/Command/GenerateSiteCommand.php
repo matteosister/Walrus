@@ -23,7 +23,8 @@ use Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Filesystem\Filesystem,
     Symfony\Component\Process\Process;
 use Spork\ProcessManager,
-    Spork\EventDispatcher\EventDispatcher;
+    Spork\EventDispatcher\EventDispatcher,
+    Spork\Fork;
 
 /**
  * generate:site command
@@ -78,17 +79,19 @@ class GenerateSiteCommand extends ContainerAwareCommand
 
     private function watch(InputInterface $input, OutputInterface $output)
     {
-        $manager = new ProcessManager(new EventDispatcher());
-        $manager->fork(function() use ($output) {
-            $this->runCommand('startup:server', $output, array('--no-header' => true));
-        });
         while (true) {
             $sha = $this->calculateSha();
             if ($sha !== $this->previosWatch) {
                 $this->doExecute($input, $output);
                 $this->writeRuler($output);
-                $this->previosWatch = $sha;
                 $output->writeln('<question>watching for changes...</question>');
+                /*if (!$input->getOption('no-server') && null === $this->previosWatch) {
+                    $manager = new ProcessManager(new EventDispatcher());
+                    $manager->fork(function() use ($output) {
+                        $this->runCommand('startup:server', $output, array('--no-header' => true));
+                    });
+                }*/
+                $this->previosWatch = $sha;
             }
             sleep($input->getOption('period'));
         }
@@ -154,10 +157,15 @@ class GenerateSiteCommand extends ContainerAwareCommand
                     unlink($filename);
                 }
                 $output->writeln($this->getLine('generating page', sprintf('<comment>%s</comment>', $page->getMetadata()->getTitle())));
-                file_put_contents($filename, $this->getTwigTheme()->render('page.html.twig', array(
-                    'page' => $page,
-                    'content' => $this->getTwigString()->render($page->getContent())
-                )));
+                $twigMdContent = $this->getTwigMdContent();
+                $manager = new ProcessManager(new EventDispatcher());
+                $manager->fork(function() use($filename, $page, $twigMdContent) {
+                    $template = $this->getTwigTheme()->loadTemplate('page.html.twig');
+                    file_put_contents($filename, $template->render(array(
+                        'page' => $page,
+                        'content' => $twigMdContent->render($page->getContent())
+                    )));
+                });
             }
         } catch (\Walrus\Exception\NoPagesCreated $e) {
             $output->writeln('<info>no pages created</info>');

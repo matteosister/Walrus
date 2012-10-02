@@ -75,9 +75,9 @@ abstract class ContainerAwareCommand extends Command
     /**
      * @return \Twig_Environment
      */
-    protected function getTwigString()
+    protected function getTwigMdContent()
     {
-        return $this->get('twig.string');
+        return $this->get('twig.md_content');
     }
 
     /**

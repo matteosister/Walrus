@@ -9,8 +9,3 @@ services:
     scope: prototype
     calls:
       - [ load, [ %walrus.collection.page.dir% ]]
-
-#  walrus.collection.page.tpl:
-#    class: %walrus.collection.page.class%
-#    calls:
-#      - [ load, [ %walrus.collection.page.dir% ]]
