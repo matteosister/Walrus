@@ -1,17 +1,13 @@
 <html lang="en">
     {% include "_header.html.twig" %}
     <body>
-        <nav>
-            <ul>
-            {% for page in pages %}
-                <li><a href="{{ url_for(page) }}">{{ page }} pippo</a></li>
-            {% endfor %}
-            </ul>
-        </nav>
-        <div class="row-fluid">
-            <div class="span12"><h1>{{ page.metadata.title|title }}</h1></div>
+        {% include "includes/navbar.html.twig" %}
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="span12"><h1>{{ page.metadata.title|title }}</h1></div>
+            </div>
+            {{ content|md_to_html }}
+            {% include "_footer.html.twig" %}
         </div>
-        {{ content|md_to_html }}
-        {% include "_footer.html.twig" %}
     </body>
 </html>

@@ -46,9 +46,8 @@ abstract class WalrusExtension extends \Twig_Extension
         );
     }
 
-    public function urlFor(Page $page)
+    public function urlFor($slug)
     {
-        $slug = $page->getMetadata()->getUrl();
         $pages = array_filter($this->getPageCollection()->toArray(), function(Page $page) use ($slug) {
             return $page->getMetadata()->getUrl() == $slug;
         });
@@ -61,24 +60,6 @@ abstract class WalrusExtension extends \Twig_Extension
             return '/';
         } else {
             return '/'.$page->getMetadata()->getUrl().'.html';
-        }
-    }
-
-    public function linkTo(Page $page, $label = null, $title = null)
-    {
-        $url = $this->urlFor($page);
-        if (null == $label && null == $title) {
-            return sprintf('[%s](%s)', $url, $url);
-        } else {
-            if (null !== $label && null !== $title) {
-                return sprintf('[%s](%s "%s")', $label, $url, $title);
-            } else {
-                if (null !== $label) {
-                    return sprintf('[%s](%s)', $label, $url);
-                } else {
-                    return sprintf('[%s](%s "%s")', $url, $url, $title);
-                }
-            }
         }
     }
 

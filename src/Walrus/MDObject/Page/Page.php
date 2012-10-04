@@ -39,6 +39,14 @@ class Page extends BaseObject
     }
 
     /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->getMetadata()->getUrl();
+    }
+
+    /**
      * toString
      *
      * @return string

@@ -16,6 +16,24 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class MdContentExtension extends WalrusExtension
 {
+    public function linkTo(Page $page, $label = null, $title = null)
+    {
+        $url = $this->urlFor($page);
+        if (null == $label && null == $title) {
+            return sprintf('[%s](%s)', $url, $url);
+        } else {
+            if (null !== $label && null !== $title) {
+                return sprintf('[%s](%s "%s")', $label, $url, $title);
+            } else {
+                if (null !== $label) {
+                    return sprintf('[%s](%s)', $label, $url);
+                } else {
+                    return sprintf('[%s](%s "%s")', $url, $url, $title);
+                }
+            }
+        }
+    }
+
     /**
      * Returns the name of the extension.
      *

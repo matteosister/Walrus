@@ -74,10 +74,11 @@ class GenerateSiteCommand extends ContainerAwareCommand
         $fs = new Filesystem();
         $fs->mkdir($tmpFolder);
         $this->writeRuler($output);
-        //$this->cleanup($output);
         $this->setup($output, $tmpFolder);
         $this->compileAssets($output, $tmpFolder);
         $this->parsePages($output, $tmpFolder);
+        $this->cleanup($output);
+        $output->writeln($this->getLine('publishing', 'public folder'));
         $fs->mirror($tmpFolder, $this->getConfiguration()->get('public_dir'));
     }
 
@@ -86,6 +87,7 @@ class GenerateSiteCommand extends ContainerAwareCommand
         while (true) {
             $sha = $this->calculateSha();
             if ($sha !== $this->previosWatch) {
+                $output->writeln(date('Y/m/d H:i:s'));
                 $this->doExecute($input, $output);
                 $this->writeRuler($output);
                 $output->writeln('<question>watching for changes...</question>');
@@ -157,13 +159,20 @@ class GenerateSiteCommand extends ContainerAwareCommand
                 $output->writeln($this->getLine('generating page', sprintf('<comment>%s</comment>', $page->getMetadata()->getTitle())));
                 $twigMdContent = $this->getTwigMdContent();
                 $manager = new ProcessManager(new EventDispatcher());
-                $manager->fork(function() use($filename, $page, $twigMdContent) {
+                $template = $this->getTwigTheme()->loadTemplate('page.html.twig');
+                file_put_contents($filename, $template->render(array(
+                    'page' => $page,
+                    'content' => $twigMdContent->render($page->getContent())
+                )));
+                /*$manager->fork(function() use($filename, $page, $twigMdContent) {
                     $template = $this->getTwigTheme()->loadTemplate('page.html.twig');
                     file_put_contents($filename, $template->render(array(
                         'page' => $page,
                         'content' => $twigMdContent->render($page->getContent())
                     )));
-                });
+                })->then(function($out) {
+                    printf('Parent %d forked child %d!', posix_getpid(), $out);
+                });*/
             }
         } catch (\Walrus\Exception\NoPagesCreated $e) {
             $output->writeln('<info>no pages created</info>');

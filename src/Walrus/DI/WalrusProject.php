@@ -18,15 +18,16 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Finder\Finder,
     Symfony\Component\Config\Definition\Processor,
     Symfony\Component\Yaml\Yaml;
-
 use Walrus\DI\AssetCompilerPass,
     Walrus\Configuration\ThemeConfiguration;
-
 use LessElephant\LessProject;
 use CompassElephant\CompassProject;
+use Walrus\Utilities\SlugifierTrait;
 
 class WalrusProject
 {
+    use SlugifierTrait;
+
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
@@ -113,7 +114,7 @@ class WalrusProject
                 $def->addMethodCall('setCompress', array($conf['compress']));
             }
             $def->addTag('asset.project');
-            $this->container->addDefinitions(array('walrus.asset.compass.project' => $def));
+            $this->container->addDefinitions(array(sprintf('walrus.asset.compass.project.%s', $this->slugify($conf['name'])) => $def));
         } else {
             throw new \RuntimeException(sprintf('the folder %s do not exists, the compass project couldn\'t be initalized', $sourceFolder));
         }
@@ -133,7 +134,7 @@ class WalrusProject
                 $def->addMethodCall('setCompress', array($conf['compress']));
             }
             $def->addTag('asset.project');
-            $this->container->addDefinitions(array('walrus.asset.less.project' => $def));
+            $this->container->addDefinitions(array(sprintf('walrus.asset.less.project.%s', $this->slugify($name)) => $def));
         } else {
             throw new \RuntimeException(sprintf('the file %s do not exists, the less project could not be initialized', $sourceFile));
         }
@@ -148,7 +149,7 @@ class WalrusProject
             $def->addMethodCall('setCompress', array($conf['compress']));
         }
         $def->addTag('asset.project');
-        $this->container->addDefinitions(array('walrus.asset.css_folder.project' => $def));
+        $this->container->addDefinitions(array(sprintf('walrus.asset.css_folder.project.%s', $conf['name']) => $def));
     }
 
     private function jsFolderConfiguration($conf)
@@ -160,6 +161,6 @@ class WalrusProject
             $def->addMethodCall('setCompress', array($conf['compress']));
         }
         $def->addTag('asset.project');
-        $this->container->addDefinitions(array('walrus.asset.js_folder.project' => $def));
+        $this->container->addDefinitions(array(sprintf('walrus.asset.js_folder.project.%s', $conf['name']) => $def));
     }
 }

@@ -2,6 +2,7 @@ theme:
   name: cypress
   assets:
     - { name: bootstrap, type: less, source_file: css/bootstrap/less/bootstrap.less, destination_file: css/bootstrap/bootstrap.css, compress: false }
+    - { name: bootstrap_responsive, type: less, source_file: css/bootstrap/less/responsive.less, destination_file: css/bootstrap/bootstrap-responsive.css, compress: false }
     - { name: my compass, type: compass, source_folder: css/compass, compress: false }
     - { name: another css folder, type: css_source, source_folder: css/custom_css, compress: false }
     - { name: a js folder, type: js_source, source_folder: js/custom_js, compress: false }

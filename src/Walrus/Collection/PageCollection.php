@@ -77,6 +77,38 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
     }
 
     /**
+     * get the homepage
+     *
+     * @return null|Page
+     */
+    public function getHomepage()
+    {
+        foreach ($this->objects as $page) {
+            if ($page->getMetadata()->getHomepage()) {
+                return $page;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * get a page by it's url
+     *
+     * @param string $url the url
+     *
+     * @return null|Page
+     */
+    public function findOneByUrl($url)
+    {
+        foreach ($this->objects as $page) {
+            if ($url === $page->getMetadata()->getUrl()) {
+                return $page;
+            }
+        }
+        return null;
+    }
+
+    /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Whether a offset exists
      * @link http://php.net/manual/en/arrayaccess.offsetexists.php

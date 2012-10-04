@@ -1,0 +1,12 @@
+<div class="navbar navbar-static-top">
+    <div class="navbar-inner">
+        {% if pages.homepage is not null %}
+            <a class="brand" href="{{ url_for(pages.homepage.url) }}">Title aaaa</a>
+        {% endif %}
+        <ul class="nav">
+            {% for thePage in pages if not thePage.metadata.homepage %}
+                <li class="{{ thePage == page ? 'active' : '' }}"><a href="{{ url_for(thePage.url) }}">{{ thePage }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
