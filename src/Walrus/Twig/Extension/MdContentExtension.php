@@ -16,18 +16,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class MdContentExtension extends WalrusExtension
 {
-    private $container;
-
-    /**
-     * class constructor
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
-
     /**
      * Returns the name of the extension.
      *

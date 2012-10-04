@@ -20,32 +20,6 @@ use dflydev\markdown\MarkdownParser;
 class ThemeExtension extends WalrusExtension
 {
     /**
-     * @var \Walrus\DI\Configuration
-     */
-    #private $configuration;
-
-    /**
-     * @var \Walrus\Asset\AssetCollection
-     */
-    #private $assetCollection;
-
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
-    private $container;
-
-    /**
-     * class constructor
-     *
-     * @param \Walrus\DI\Configuration      $configuration   configuration instance
-     * @param \Walrus\Asset\AssetCollection $assetCollection assets collection
-     */
-    public function __construct(ContainerInterface $container)
-    {
-        $this->container = $container;
-    }
-
-    /**
      * filters
      *
      * @return array
@@ -77,7 +51,7 @@ class ThemeExtension extends WalrusExtension
     public function getGlobals()
     {
         return array(
-            'pages' => $this->pageCollection
+            'pages' => $this->container->get('walrus.collection.page')
         );
     }
 

@@ -70,11 +70,15 @@ class GenerateSiteCommand extends ContainerAwareCommand
 
     private function doExecute(InputInterface $input, OutputInterface $output)
     {
+        $tmpFolder = sys_get_temp_dir().'/walrus_'.sha1(uniqid());
+        $fs = new Filesystem();
+        $fs->mkdir($tmpFolder);
         $this->writeRuler($output);
-        $this->cleanup($output);
-        $this->setup($output);
-        $this->compileAssets($output);
-        $this->parsePages($output);
+        //$this->cleanup($output);
+        $this->setup($output, $tmpFolder);
+        $this->compileAssets($output, $tmpFolder);
+        $this->parsePages($output, $tmpFolder);
+        $fs->mirror($tmpFolder, $this->getConfiguration()->get('public_dir'));
     }
 
     private function watch(InputInterface $input, OutputInterface $output)
@@ -85,12 +89,6 @@ class GenerateSiteCommand extends ContainerAwareCommand
                 $this->doExecute($input, $output);
                 $this->writeRuler($output);
                 $output->writeln('<question>watching for changes...</question>');
-                /*if (!$input->getOption('no-server') && null === $this->previosWatch) {
-                    $manager = new ProcessManager(new EventDispatcher());
-                    $manager->fork(function() use ($output) {
-                        $this->runCommand('startup:server', $output, array('--no-header' => true));
-                    });
-                }*/
                 $this->previosWatch = $sha;
             }
             sleep($input->getOption('period'));
@@ -120,11 +118,11 @@ class GenerateSiteCommand extends ContainerAwareCommand
         $fs->remove($iterator);
     }
 
-    private function setup(OutputInterface $output)
+    private function setup(OutputInterface $output, $dir)
     {
         $output->writeln($this->getLine('warming up', 'public folder'));
-        $cssDir = $this->getConfiguration()->get('public_dir').'/'.AbstractProject::TYPE_CSS;
-        $jsDir = $this->getConfiguration()->get('public_dir').'/'.AbstractProject::TYPE_JS;
+        $cssDir = $dir.'/'.AbstractProject::TYPE_CSS;
+        $jsDir = $dir.'/'.AbstractProject::TYPE_JS;
         $fs = new Filesystem();
         $fs->mkdir($cssDir);
         $fs->mkdir($jsDir);
@@ -137,7 +135,7 @@ class GenerateSiteCommand extends ContainerAwareCommand
      *
      * @return void
      */
-    private function parsePages(OutputInterface $output)
+    private function parsePages(OutputInterface $output, $dir)
     {
         try {
             if (count($this->getPageCollection()) == 0) {
@@ -152,7 +150,7 @@ class GenerateSiteCommand extends ContainerAwareCommand
                 } else {
                     $url = $page->getMetadata()->getUrl().'.html';
                 }
-                $filename = $this->getConfiguration()->get('public_dir').'/'.$url;
+                $filename = $dir.'/'.$url;
                 if (file_exists($filename)) {
                     unlink($filename);
                 }
@@ -172,11 +170,11 @@ class GenerateSiteCommand extends ContainerAwareCommand
         }
     }
 
-    private function compileAssets(OutputInterface $output)
+    private function compileAssets(OutputInterface $output, $dir)
     {
         if (count($this->getAssetCollection()) > 0) {
             $output->writeln($this->getLine('compiling', 'static assets (js/css)'));
-            $this->getAssetCollection()->compile($output, $this->getConfiguration());
+            $this->getAssetCollection()->compile($output, $dir);
         } else {
             $output->writeln('<comment>No assets to compile</comment>');
         }

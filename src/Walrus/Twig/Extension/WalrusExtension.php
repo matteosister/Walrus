@@ -11,6 +11,7 @@ namespace Walrus\Twig\Extension;
 
 use Walrus\Exception\UrlNotFoundException,
     Walrus\MDObject\Page\Page;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * generic extension
@@ -18,9 +19,19 @@ use Walrus\Exception\UrlNotFoundException,
 abstract class WalrusExtension extends \Twig_Extension
 {
     /**
-     * @var \Walrus\Collection\PageCollection
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
-    protected $pageCollection;
+    protected $container;
+
+    /**
+     * class constructor
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     */
+    public function __construct(ContainerInterface $container)
+    {
+        $this->container = $container;
+    }
 
     /**
      * functions
@@ -38,7 +49,7 @@ abstract class WalrusExtension extends \Twig_Extension
     public function urlFor(Page $page)
     {
         $slug = $page->getMetadata()->getUrl();
-        $pages = array_filter($this->pageCollection->toArray(), function(Page $page) use ($slug) {
+        $pages = array_filter($this->getPageCollection()->toArray(), function(Page $page) use ($slug) {
             return $page->getMetadata()->getUrl() == $slug;
         });
         if (count($pages) == 0) {
@@ -69,5 +80,13 @@ abstract class WalrusExtension extends \Twig_Extension
                 }
             }
         }
+    }
+
+    /**
+     * @return \Walrus\Collection\PageCollection
+     */
+    protected function getPageCollection()
+    {
+        return $this->container->get('walrus.collection.page');
     }
 }

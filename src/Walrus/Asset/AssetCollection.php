@@ -84,16 +84,16 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
     /**
      * compile
      */
-    public function compile(OutputInterface $output, \Walrus\DI\Configuration $configuration)
+    public function compile(OutputInterface $output, $to)
     {
         foreach ($this->projects as $project) {
             $output->writeln($this->getLine('compiling', sprintf('<comment>%s</comment> project', $project->getName())));
             $project->compile();
             $output->writeln($this->getLine('publishing', sprintf('<comment>%s</comment> project', $project->getName())));
             if ($project->getProjectType() == \Walrus\Asset\Project\AbstractProject::TYPE_CSS) {
-                $project->publish($configuration->get('public_dir').'/'.$project->getProjectType(), $this->cssFilter);
+                $project->publish($to.'/'.$project->getProjectType(), $this->cssFilter);
             } else {
-                $project->publish($configuration->get('public_dir').'/'.$project->getProjectType(), $this->jsFilter);
+                $project->publish($to.'/'.$project->getProjectType(), $this->jsFilter);
             }
         }
     }
