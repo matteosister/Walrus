@@ -116,7 +116,7 @@ class WalrusProject
             $def->addTag('asset.project');
             $this->container->addDefinitions(array(sprintf('walrus.asset.compass.project.%s', $this->slugify($conf['name'])) => $def));
         } else {
-            throw new \RuntimeException(sprintf('the folder %s do not exists, the compass project couldn\'t be initalized', $sourceFolder));
+            throw new \RuntimeException(sprintf('the folder %s do not exists, the compass project couldn\'t be initialized', $sourceFolder));
         }
     }
 

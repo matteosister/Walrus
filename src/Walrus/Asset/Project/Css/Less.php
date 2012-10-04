@@ -54,7 +54,8 @@ class Less extends AbstractProject implements ProjectInterface
     /**
      * publish the generate files to the final destination
      *
-     * @param null $to publish to
+     * @param null $to     publish to
+     * @param null $filter
      *
      * @return null
      */
