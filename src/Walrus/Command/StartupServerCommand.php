@@ -50,6 +50,8 @@ class StartupServerCommand extends Command
     {
         if (!$input->getOption('no-header')) {
             $this->writeHeader($output);
+        } else {
+            $this->writeRuler($output);
         }
         $cmd = sprintf('php -S localhost:%s', $input->getOption('port'));
         $builder = new ProcessBuilder();

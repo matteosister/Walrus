@@ -6,31 +6,12 @@ parameters:
   twig.environment.class: Twig_Environment
   twig.cache: false
   twig.extension.theme.class: Walrus\Twig\Extension\ThemeExtension
-  md_content.extension.walrus.class: Walrus\Twig\Extension\MdContentExtension
+  twig.extension.md_content.class: Walrus\Twig\Extension\MdContentExtension
 
 services:
   twig.loader:
     class: %twig.loader.class%
     arguments: [%twig.loader.tpl_path%]
-
-  twig.loader.string:
-    class: %twig.loader.string.class%
-
-  md_content.extension.walrus:
-    class: %md_content.extension.walrus.class%
-    arguments:
-      - @walrus.collection.page
-
-  twig.loader.theme:
-    class: %twig.loader.class%
-    arguments: [%twig.loader.theme.tpl_path%]
-
-  twig.extension.theme:
-    class: %twig.extension.theme.class%
-    arguments:
-      - @walrus.configuration
-      - @asset.projects_collection
-      - @walrus.collection.page
 
   twig:
     class: %twig.environment.class%
@@ -38,13 +19,30 @@ services:
       - @twig.loader
       - { cache: %twig.cache% }
 
-  twig.string:
+  twig.extension.md_content:
+    class: %twig.extension.md_content.class%
+    arguments:
+      - @service_container
+
+  twig.loader.md_content:
+    class: %twig.loader.string.class%
+
+  twig.md_content:
     class: %twig.environment.class%
     arguments:
-      - @twig.loader.string
+      - @twig.loader.md_content
       - { cache: %twig.cache% }
     calls:
-      - [ addExtension, [ @md_content.extension.walrus ]]
+      - [ addExtension, [ @twig.extension.md_content ]]
+
+  twig.extension.theme:
+    class: %twig.extension.theme.class%
+    arguments:
+      - @service_container
+
+  twig.loader.theme:
+    class: %twig.loader.class%
+    arguments: [%twig.loader.theme.tpl_path%]
 
   twig.theme:
     class: %twig.environment.class%

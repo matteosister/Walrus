@@ -13,8 +13,8 @@ use Walrus\DI\Configuration,
     Walrus\Asset\AssetCollection,
     Walrus\Collection\PageCollection,
     Walrus\Twig\Extension\WalrusExtension;
-
-use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\Finder,
+    Symfony\Component\DependencyInjection\ContainerInterface;
 use dflydev\markdown\MarkdownParser;
 
 class ThemeExtension extends WalrusExtension
@@ -22,12 +22,17 @@ class ThemeExtension extends WalrusExtension
     /**
      * @var \Walrus\DI\Configuration
      */
-    private $configuration;
+    #private $configuration;
 
     /**
      * @var \Walrus\Asset\AssetCollection
      */
-    private $assetCollection;
+    #private $assetCollection;
+
+    /**
+     * @var \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    private $container;
 
     /**
      * class constructor
@@ -35,15 +40,9 @@ class ThemeExtension extends WalrusExtension
      * @param \Walrus\DI\Configuration      $configuration   configuration instance
      * @param \Walrus\Asset\AssetCollection $assetCollection assets collection
      */
-    public function __construct(
-        Configuration $configuration,
-        AssetCollection $assetCollection,
-        PageCollection $pageCollection
-    )
+    public function __construct(ContainerInterface $container)
     {
-        $this->configuration = $configuration;
-        $this->assetCollection = $assetCollection;
-        $this->pageCollection = $pageCollection;
+        $this->container = $container;
     }
 
     /**
@@ -91,7 +90,7 @@ class ThemeExtension extends WalrusExtension
     public function assets()
     {
         $out = '';
-        foreach ($this->assetCollection as $assetProject) {
+        foreach ($this->container->get('asset.projects_collection') as $assetProject) {
             $out .= $assetProject->output();
         }
 

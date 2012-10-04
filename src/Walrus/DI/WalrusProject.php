@@ -20,9 +20,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\Yaml\Yaml;
 
 use Walrus\DI\AssetCompilerPass,
-    Walrus\Configuration\ThemeConfiguration,
-    Walrus\Asset\Project\Css\CssFolder,
-    Walrus\Asset\Project\AbstractProject;
+    Walrus\Configuration\ThemeConfiguration;
 
 use LessElephant\LessProject;
 use CompassElephant\CompassProject;
