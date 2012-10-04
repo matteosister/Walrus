@@ -16,9 +16,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class MdContentExtension extends WalrusExtension
 {
-    public function linkTo(Page $page, $label = null, $title = null)
+    public function linkTo($slug, $label = null, $title = null)
     {
-        $url = $this->urlFor($page);
+        $url = $this->urlFor($slug);
         if (null == $label && null == $title) {
             return sprintf('[%s](%s)', $url, $url);
         } else {

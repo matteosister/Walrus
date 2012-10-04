@@ -23,6 +23,7 @@ use Walrus\DI\AssetCompilerPass,
 use LessElephant\LessProject;
 use CompassElephant\CompassProject;
 use Walrus\Utilities\SlugifierTrait;
+use Symfony\Component\Filesystem\Filesystem;
 
 class WalrusProject
 {
@@ -123,7 +124,10 @@ class WalrusProject
     private function lessConfiguration($conf)
     {
         $sourceFile = $this->container->getParameter('THEME_PATH').'/'.$conf['source_file'];
-        $destFile = $this->container->getParameter('THEME_PATH').'/'.$conf['destination_file'];
+        $filename = sys_get_temp_dir().'/less_'.sha1(uniqid()).'.css';
+        //$fs = new Filesystem();
+        //$fs->touch($filename);
+        $destFile = $filename;
         if (is_file($sourceFile)) {
             $pathParts = pathinfo($sourceFile);
             $dir = $pathParts['dirname'];
