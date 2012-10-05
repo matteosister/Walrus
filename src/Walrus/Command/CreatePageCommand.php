@@ -27,26 +27,6 @@ class CreatePageCommand extends ContainerAwareCommand
     use OutputWriterTrait;
 
     /**
-     * @var \Twig_Environment
-     */
-    //protected $twigEnvironment;
-
-    /**
-     * @var \Walrus\Utilities\Utilities
-     */
-    //protected $utilities;
-
-    /**
-     * @var string
-     */
-    //private $pagesFolder;
-
-    /**
-     * @var
-     */
-    private $pageCollection;
-
-    /**
      * page folder getter
      *
      * @return string

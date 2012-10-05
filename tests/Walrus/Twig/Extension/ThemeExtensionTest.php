@@ -19,11 +19,7 @@ class ThemeExtensionTest extends WalrusTestCase
      */
     public function testConstructor()
     {
-        $ext = new ThemeExtension(
-            $this->getMockConfiguration(),
-            $this->getMockAssetCollection(),
-            $this->getMockPageCollection()
-        );
+        $ext = new ThemeExtension($this->getMockContainer());
         $this->assertInstanceOf('\Twig_Extension', $ext);
     }
 }

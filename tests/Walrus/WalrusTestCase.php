@@ -167,10 +167,10 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
     protected function getMockUtilities()
     {
         $utilities = $this->getMock('Walrus\Utilities\Utilities', array('slugify', 'getDateFormatted'));
-        $utilities->expects($this->once())
+        $utilities->expects($this->any())
             ->method('getDateFormatted')
             ->will($this->returnValue('2012-01-01_10:00:00'));
-        $utilities->expects($this->once())
+        $utilities->expects($this->any())
             ->method('slugify')
             ->will($this->returnValue('test'));
 
