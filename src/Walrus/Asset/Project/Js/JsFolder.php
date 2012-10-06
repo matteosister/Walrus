@@ -10,16 +10,20 @@
 namespace Walrus\Asset\Project\Js;
 
 use Walrus\Asset\ProjectInterface,
-    Walrus\Asset\Project\AbstractProject;
-
+    Walrus\Asset\Project\AbstractProject,
+    Walrus\Utilities\SlugifierTrait;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
+use Assetic\Asset\AssetCollection,
+    Assetic\Asset\GlobAsset;
 
 /**
  * CssFolder project
  */
 class JsFolder extends AbstractProject implements ProjectInterface
 {
+    use SlugifierTrait;
+
     /**
      * @var string
      */
@@ -62,8 +66,15 @@ class JsFolder extends AbstractProject implements ProjectInterface
      */
     public function publish($to = null, $filter = null)
     {
-        $fs = new Filesystem();
-        $fs->mirror($this->folder, $to);
+        $iterator = Finder::create()->files()->name('*.js')->in($this->folder);
+        $assetCollection = new AssetCollection();
+        foreach($iterator as $file) {
+            $assetCollection->add(new GlobAsset(realpath($file->getPathName())));
+        }
+        if (null !== $filter && $this->compress) {
+            $assetCollection->ensureFilter($filter);
+        }
+        file_put_contents($to.'/'.$this->getOutputFilename(), $assetCollection->dump());
     }
 
     /**
@@ -76,10 +87,15 @@ class JsFolder extends AbstractProject implements ProjectInterface
         $iterator = Finder::create()->files()->name('*.js')->in($this->folder);
         $output = '';
         foreach ($iterator as $file) {
-            $output .= sprintf('<script type="text/javascript" src="/%s/%s"></script>', $this->getProjectType(), $file->getRelativePathName());
+            $output .= sprintf('<script type="text/javascript" src="/%s/%s"></script>', $this->getProjectType(), $this->getOutputFilename());
         }
 
         return $output;
+    }
+
+    public function getOutputFilename()
+    {
+        return $this->slugify($this->name).'.js';
     }
 
     /**

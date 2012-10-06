@@ -40,12 +40,18 @@ class WalrusProject
     private $application;
 
     /**
+     * @var bool
+     */
+    private $compress;
+
+    /**
      * class constructor
      *
      * @param string $rootPath root of the project
      */
     public function __construct($rootPath)
     {
+        $this->compress = true;
         $this->container = new ContainerBuilder();
         $this->container->addCompilerPass(new AssetCompilerPass());
         $this->container->setParameter("ROOT_PATH", realpath($rootPath));
@@ -111,8 +117,8 @@ class WalrusProject
         if (is_dir($sourceFolder)) {
             $compassProject = new CompassProject($sourceFolder);
             $def = new Definition('Walrus\Asset\Project\Css\Compass', array($compassProject, $conf['name']));
-            if ($conf['compress']) {
-                $def->addMethodCall('setCompress', array($conf['compress']));
+            if ($this->compress) {
+                $def->addMethodCall('setCompress', array(true));
             }
             $def->addTag('asset.project');
             $this->container->addDefinitions(array(sprintf('walrus.asset.compass.project.%s', $this->slugify($conf['name'])) => $def));
@@ -134,8 +140,8 @@ class WalrusProject
             $name = $pathParts['basename'];
             $lessProject = new LessProject($dir, $name, $destFile);
             $def = new Definition('Walrus\Asset\Project\Css\Less', array($lessProject, $conf['name']));
-            if ($conf['compress']) {
-                $def->addMethodCall('setCompress', array($conf['compress']));
+            if ($this->compress) {
+                $def->addMethodCall('setCompress', array(true));
             }
             $def->addTag('asset.project');
             $this->container->addDefinitions(array(sprintf('walrus.asset.less.project.%s', $this->slugify($name)) => $def));
@@ -149,8 +155,8 @@ class WalrusProject
         // TODO: validate folder paths
         $fileFolder = $this->container->getParameter('THEME_PATH').'/'.$conf['source_folder'];
         $def = new Definition('Walrus\Asset\Project\Css\CssFolder', array($fileFolder, $conf['name']));
-        if ($conf['compress']) {
-            $def->addMethodCall('setCompress', array($conf['compress']));
+        if ($this->compress) {
+            $def->addMethodCall('setCompress', array(true));
         }
         $def->addTag('asset.project');
         $this->container->addDefinitions(array(sprintf('walrus.asset.css_folder.project.%s', $conf['name']) => $def));
@@ -161,8 +167,8 @@ class WalrusProject
         // TODO: validate folder paths
         $fileFolder = $this->container->getParameter('THEME_PATH').'/'.$conf['source_folder'];
         $def = new Definition('Walrus\Asset\Project\Js\JsFolder', array($fileFolder, $conf['name']));
-        if ($conf['compress']) {
-            $def->addMethodCall('setCompress', array($conf['compress']));
+        if ($this->compress) {
+            $def->addMethodCall('setCompress', array(true));
         }
         $def->addTag('asset.project');
         $this->container->addDefinitions(array(sprintf('walrus.asset.js_folder.project.%s', $conf['name']) => $def));

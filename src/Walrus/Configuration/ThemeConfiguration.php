@@ -40,7 +40,6 @@ class ThemeConfiguration implements ConfigurationInterface
                         ->scalarNode('source_file')->defaultNull()->end()
                         ->scalarNode('source_folder')->defaultNull()->end()
                         ->scalarNode('destination_file')->defaultNull()->end()
-                        ->scalarNode('compress')->defaultFalse()->end()
                     ->end()
                 ->end()
             ->end();
