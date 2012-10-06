@@ -61,19 +61,26 @@ class Less extends AbstractProject implements ProjectInterface
      */
     public function publish($to = null, $filter = null)
     {
-        // nothing to do here, less publish to the final destination
         $filename = realpath($this->project->getDestination());
         if (!is_file($filename)) {
             return;
         }
-        if (null !== $filter && $this->compress) {
-            $asset = new FileAsset($this->project->getDestination());
-            file_put_contents($this->getFileName($to), $asset->dump($filter));
-        } else {
-            $fs = new Filesystem();
-            $fs->copy($filename, $this->getFileName($to));
-        }
+        file_put_contents($this->getFileName($to), $this->getStream($filter));
     }
+
+    /**
+     * get the output stream
+     *
+     * @param null $filter FilterInterface
+     *
+     * @return string
+     */
+    function getStream($filter = null)
+    {
+        $asset = new FileAsset($this->project->getDestination());
+        return $asset->dump($filter);
+    }
+
 
     private function getFileName($folder = null)
     {

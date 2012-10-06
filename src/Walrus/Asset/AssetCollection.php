@@ -10,7 +10,8 @@
 namespace Walrus\Asset;
 
 use Walrus\Asset\ProjectInterface,
-    Walrus\Command\OutputWriterTrait;
+    Walrus\Command\OutputWriterTrait,
+    Walrus\Asset\Project\AbstractProject;
 use Assetic\Filter\FilterInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -39,11 +40,17 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
     private $jsFilter;
 
     /**
+     * @var bool
+     */
+    private $groupAssets;
+
+    /**
      * class constructor
      */
-    public function __construct()
+    public function __construct($groupAssets)
     {
         $this->projects = array();
+        $this->groupAssets = $groupAssets;
     }
 
     /**
@@ -86,6 +93,10 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
      */
     public function compile(OutputInterface $output, $to)
     {
+        if ($this->groupAssets) {
+            $this->compileGrouped($output, $to);
+            return;
+        }
         foreach ($this->projects as $project) {
             $output->writeln($this->getLine('compiling', sprintf('<comment>%s</comment> project', $project->getName())));
             $project->compile();
@@ -96,6 +107,64 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
                 $project->publish($to.'/'.$project->getProjectType(), $this->jsFilter);
             }
         }
+    }
+
+    /**
+     * compile assets grouped by type
+     *
+     * @param \Symfony\Component\Console\Output\OutputInterface $output OutputInterface
+     * @param                                                   $to     folder
+     */
+    private function compileGrouped(OutputInterface $output, $to)
+    {
+        $css = '';
+        $js = '';
+        $output->writeln($this->getLine('loading', sprintf('stylesheets (%s)', implode(', ', array_map(function($project) {
+            return '<comment>'.$project->getName().'</comment>';
+        }, $this->getStylesheetProjects())))));
+        foreach ($this->getStylesheetProjects() as $project) {
+            $output->writeln($this->getLine('compiling', sprintf('<comment>%s</comment>', $project->getName())));
+            $project->compile();
+            $css .= sprintf("/* %s*/\n%s\n", $project->getName(), $project->getStream($this->cssFilter));
+        }
+        $output->writeln($this->getLine('loading', sprintf('javascripts (%s)', implode(', ', array_map(function($project) {
+            return '<comment>'.$project->getName().'</comment>';
+        }, $this->getJavascriptProjects())))));
+        foreach ($this->getJavascriptProjects() as $project) {
+            $output->writeln($this->getLine('compiling', sprintf('<comment>%s</comment>', $project->getName())));
+            $project->compile();
+            $js .= sprintf("/* %s */\n%s\n", $project->getName(), $project->getStream($this->jsFilter));
+        }
+        file_put_contents($to.'/stylesheets/all.css', $css);
+        file_put_contents($to.'/javascripts/all.js', $js);
+    }
+
+    public function output()
+    {
+        $out = '';
+        if ($this->groupAssets) {
+            $out .= '<link rel="stylesheet" type="text/css" href="/stylesheets/all.css">'."\n";
+            $out .= '<script type="text/javascript" src="/javascripts/all.js"></script>'."\n";
+        } else {
+            foreach ($this->projects as $project) {
+                $out .= $project->output();
+            }
+        }
+        return $out;
+    }
+
+    private function getStylesheetProjects()
+    {
+        return array_filter($this->projects, function(AbstractProject $project) {
+            return $project->getProjectType() == AbstractProject::TYPE_CSS;
+        });
+    }
+
+    private function getJavascriptProjects()
+    {
+        return array_filter($this->projects, function(AbstractProject $project) {
+            return $project->getProjectType() == AbstractProject::TYPE_JS;
+        });
     }
 
     /**

@@ -22,7 +22,7 @@ interface ProjectInterface
     function compile();
 
     /**
-     * publish the generate files to the final destination
+     * publish the generated files to the final destination
      *
      * @param null $to     publish to
      * @param null $filter FilterInterface
@@ -30,6 +30,15 @@ interface ProjectInterface
      * @return null
      */
     function publish($to = null, $filter = null);
+
+    /**
+     * get the output stream
+     *
+     * @param null $filter FilterInterface
+     *
+     * @return string
+     */
+    function getStream($filter = null);
 
     /**
      * get the output for the header of the page

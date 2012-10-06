@@ -2,10 +2,13 @@ parameters:
   asset.projects_collection.class: Walrus\Asset\AssetCollection
   yui_compressor.css.class: Assetic\Filter\Yui\CssCompressorFilter
   yui_compressor.js.class: Assetic\Filter\Yui\JsCompressorFilter
+  walrus.group_assets: false
 
 services:
   asset.projects_collection:
     class: %asset.projects_collection.class%
+    arguments:
+      - %walrus.group_assets%
     calls:
       - [ addFilter, [ css, @yui_compressor.css ]]
       - [ addFilter, [ js, @yui_compressor.js ]]

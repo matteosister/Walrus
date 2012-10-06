@@ -66,6 +66,19 @@ class CssFolder extends AbstractProject implements ProjectInterface
      */
     public function publish($to = null, $filter = null)
     {
+
+        file_put_contents($to.'/'.$this->getOutputFilename(), $this->getStream($filter));
+    }
+
+    /**
+     * get the output stream
+     *
+     * @param null $filter FilterInterface
+     *
+     * @return string
+     */
+    function getStream($filter = null)
+    {
         $iterator = Finder::create()->files()->name('*.css')->in($this->folder);
         $assetCollection = new AssetCollection();
         foreach($iterator as $file) {
@@ -74,8 +87,9 @@ class CssFolder extends AbstractProject implements ProjectInterface
         if (null !== $filter && $this->compress) {
             $assetCollection->ensureFilter($filter);
         }
-        file_put_contents($to.'/'.$this->getOutputFilename(), $assetCollection->dump());
+        return $assetCollection->dump();
     }
+
 
     /**
      * get the output for the header of the page

@@ -10,17 +10,21 @@
 namespace Walrus\Asset\Project\Css;
 
 use Walrus\Asset\ProjectInterface,
-    Walrus\Asset\Project\AbstractProject;
+    Walrus\Asset\Project\AbstractProject,
+    Walrus\Utilities\SlugifierTrait;
 use CompassElephant\CompassProject;
 use Symfony\Component\Finder\Finder,
     Symfony\Component\Filesystem\Filesystem;
-use Assetic\Asset\FileAsset;
+use Assetic\Asset\GlobAsset,
+    Assetic\Asset\AssetCollection;
 
 /**
  * Compass project
  */
 class Compass extends AbstractProject implements ProjectInterface
 {
+    use SlugifierTrait;
+
     /**
      * @var CompassProject
      */
@@ -71,18 +75,29 @@ class Compass extends AbstractProject implements ProjectInterface
      */
     public function publish($to = null, $filter = null)
     {
-        $finder = new Finder();
-        $iterator = $finder->files()->name('*.css')->in($this->getOutputFolder());
-        if (null !== $filter && $this->compress) {
-            foreach ($iterator as $file) {
-                $asset = new FileAsset($file->getPathName());
-                $outputFile = $to.'/'.$file->getRelativePathName();
-                file_put_contents($outputFile, $asset->dump($filter));
-            }
-        } else {
-            $this->filesystem->mirror($this->getOutputFolder(), $to, $iterator);
-        }
+        file_put_contents($to.'/'.$this->getOutputFilename(), $this->getStream($filter));
     }
+
+    /**
+     * get the output stream
+     *
+     * @param null $filter FilterInterface
+     *
+     * @return string
+     */
+    function getStream($filter = null)
+    {
+        $iterator = Finder::create()->files()->name('*.css')->in($this->getOutputFolder());
+        $assetCollection = new AssetCollection();
+        foreach ($iterator as $file) {
+            $assetCollection->add(new GlobAsset($file->getPathName()));
+        }
+        if (null !== $filter) {
+            $assetCollection->ensureFilter($filter);
+        }
+        return $assetCollection->dump();
+    }
+
 
     /**
      * get the output for the header of the page
@@ -94,10 +109,15 @@ class Compass extends AbstractProject implements ProjectInterface
         $iterator = Finder::create()->files()->name('*.css')->in($this->getOutputFolder());
         $output = '';
         foreach ($iterator as $file) {
-            $output .= sprintf('<link rel="stylesheet" type="text/css" href="/%s/%s">', $this->getProjectType(), $file->getRelativePathName());
+            $output .= sprintf('<link rel="stylesheet" type="text/css" href="/%s/%s">', $this->getProjectType(), $this->getOutputFilename());
         }
 
         return $output;
+    }
+
+    public function getOutputFilename()
+    {
+        return $this->slugify($this->name).'.css';
     }
 
     /**
