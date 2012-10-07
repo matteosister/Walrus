@@ -44,11 +44,6 @@ class Metadata extends BaseMetadata
     protected $homepage;
 
     /**
-     * @var string
-     */
-    protected $type;
-
-    /**
      * constructor
      *
      * @param string $md the raw content from the .md file
@@ -157,25 +152,5 @@ class Metadata extends BaseMetadata
     public function getParent()
     {
         return $this->parent;
-    }
-
-    /**
-     * Type setter
-     *
-     * @param string $type la variabile type
-     */
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * Type getter
-     *
-     * @return string
-     */
-    public function getType()
-    {
-        return $this->type;
     }
 }

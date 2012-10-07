@@ -9,13 +9,17 @@
 
 namespace Walrus\MDObject\Page;
 
-use Walrus\MDObject\BaseObject;
+use Walrus\MDObject\BaseObject,
+    Walrus\Utilities\CamelCaseTrait,
+    Walrus\Exception\MetadataMissing;
 
 /**
  * Page Object
  */
 class Page extends BaseObject
 {
+    use CamelCaseTrait;
+
     /**
      * @var Metadata
      */
@@ -45,6 +49,26 @@ class Page extends BaseObject
     {
         return $this->getMetadata()->getUrl();
     }
+
+    /**
+     * try to call method on the metadata. Useful for twig
+     *
+     * @param string $name      method name
+     * @param string $arguments method argument
+     *
+     * @throws \Walrus\Exception\MetadataMissing
+     * @return mixed
+     */
+    function __call($name, $arguments)
+    {
+        $methodName = 'get'.$this->toCamelCase($name, true);
+        if (is_callable(array($this->metadata, $methodName))) {
+            return $this->metadata->$methodName($arguments);
+        } else {
+            throw new MetadataMissing();
+        }
+    }
+
 
     /**
      * toString

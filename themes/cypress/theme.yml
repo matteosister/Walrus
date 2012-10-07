@@ -3,8 +3,8 @@ theme:
   assets:
     - { name: bootstrap, type: less, source_file: css/bootstrap/less/bootstrap.less }
     - { name: bootstrap_responsive, type: less, source_file: css/bootstrap/less/responsive.less }
-    - { name: my compass, type: compass, source_folder: css/compass }
-    - { name: another css folder, type: css_source, source_folder: css/custom_css }
+    - { name: compass project, type: compass, source_folder: css/compass }
+    - { name: a css folder, type: css_source, source_folder: css/custom_css }
     - { name: jquery, type: js_source, source_folder: js/jquery }
     - { name: modernizr, type: js_source, source_folder: js/modernizr }
     - { name: boilerplate, type: js_source, source_folder: js/boilerplate }

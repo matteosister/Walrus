@@ -25,9 +25,10 @@
         {% include "includes/navbar.html.twig" %}
         <div class="container-fluid">
             <div class="row-fluid">
-                <div class="span12"><h1>{{ page.metadata.title|title }}</h1></div>
+                <div class="span12"><h1>{{ page.title|title }}</h1></div>
             </div>
             {{ content|md_to_html }}
+            {{ page.date }}
             {% include "partials/footer.html.twig" %}
         </div>
 

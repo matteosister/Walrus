@@ -51,7 +51,7 @@ class WalrusProject
      */
     public function __construct($rootPath)
     {
-        $this->compress = true;
+        $this->compress = false;
         $this->container = new ContainerBuilder();
         $this->container->addCompilerPass(new AssetCompilerPass());
         $this->container->setParameter("ROOT_PATH", realpath($rootPath));
