@@ -32,7 +32,7 @@ class AssetCollectionTest extends WalrusTestCase
     public function testAddProject()
     {
         $ac = new AssetCollection(false);
-        $mockProject = $this->getMock('Walrus\Asset\Project\Css\CssFolder', array(), array(''));
+        $mockProject = $this->getMockCssFolder();
         $ac->addProject($mockProject);
         $this->assertCount(1, $ac);
         $this->assertEquals($mockProject, $ac[0]);
@@ -45,10 +45,27 @@ class AssetCollectionTest extends WalrusTestCase
         $this->assertCount(1, $ac);
     }
 
-    public function testGroupAssets()
+    public function testGetStylesheets()
     {
         $ac = new AssetCollection(true);
-        $mockCss = $this->getMock('Walrus\Asset\Project\Css\CssFolder', array(), array(''));
-        $mockJs = $this->getMock('Walrus\Asset\Project\Js\JsFolder', array(), array(''));
+        $this->assertCount(0, $ac->getStylesheetProjects());
+        $mockCss = $this->getMockCssFolder();
+        $ac->addProject($mockCss);
+        $this->assertCount(1, $ac->getStylesheetProjects());
+        $mockCss2 = $this->getMockCssFolder();
+        $ac->addProject($mockCss2);
+        $this->assertCount(2, $ac->getStylesheetProjects());
+    }
+
+    public function testGetJavascripts()
+    {
+        $ac = new AssetCollection(true);
+        $this->assertCount(0, $ac->getJavascriptProjects());
+        $mockJs = $this->getMockJsFolder();
+        $ac->addProject($mockJs);
+        $this->assertCount(1, $ac->getJavascriptProjects());
+        $mockJs2 = $this->getMockJsFolder();
+        $ac->addProject($mockJs2);
+        $this->assertCount(2, $ac->getJavascriptProjects());
     }
 }

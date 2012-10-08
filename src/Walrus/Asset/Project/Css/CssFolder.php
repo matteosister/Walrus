@@ -60,13 +60,13 @@ class CssFolder extends AbstractProject implements ProjectInterface
     /**
      * publish the generate files to the final destination
      *
-     * @param null $to publish to
+     * @param null $to     publish to
+     * @param null $filter filter
      *
      * @return null
      */
     public function publish($to = null, $filter = null)
     {
-
         file_put_contents($to.'/'.$this->getOutputFilename(), $this->getStream($filter));
     }
 

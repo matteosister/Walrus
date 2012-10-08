@@ -12,10 +12,7 @@ namespace Walrus;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Filesystem\Filesystem;
-use Walrus\Command\CreatePageCommand,
-    Walrus\Command\CreatePostCommand,
-    Walrus\Command\GenerateSiteCommand,
-    Walrus\Collection\Collection;
+use Walrus\Command\CreatePageCommand;
 
 /**
  * base test case
@@ -175,6 +172,24 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('test'));
 
         return $utilities;
+    }
+
+    protected function getMockCssFolder()
+    {
+        $cssFolder = $this->getMock('Walrus\Asset\Project\Css\CssFolder', array('getProjectType'), array(''));
+        $cssFolder->expects($this->any())
+            ->method('getProjectType')
+            ->will($this->returnValue(\Walrus\Asset\Project\Css\CssFolder::TYPE_CSS));
+        return $cssFolder;
+    }
+
+    protected function getMockJsFolder()
+    {
+        $jsFolder = $this->getMock('Walrus\Asset\Project\Js\JsFolder', array('getProjectType'), array(''));
+        $jsFolder->expects($this->any())
+            ->method('getProjectType')
+            ->will($this->returnValue(\Walrus\Asset\Project\Css\CssFolder::TYPE_JS));
+        return $jsFolder;
     }
 
     protected function getApplication()

@@ -153,14 +153,24 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
         return $out;
     }
 
-    private function getStylesheetProjects()
+    /**
+     * get stylesheet projects
+     *
+     * @return array
+     */
+    public function getStylesheetProjects()
     {
         return array_filter($this->projects, function(AbstractProject $project) {
             return $project->getProjectType() == AbstractProject::TYPE_CSS;
         });
     }
 
-    private function getJavascriptProjects()
+    /**
+     * get javascript projects
+     *
+     * @return array
+     */
+    public function getJavascriptProjects()
     {
         return array_filter($this->projects, function(AbstractProject $project) {
             return $project->getProjectType() == AbstractProject::TYPE_JS;
