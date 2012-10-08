@@ -23,9 +23,6 @@ use Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Finder\Finder,
     Symfony\Component\Filesystem\Filesystem,
     Symfony\Component\Process\Process;
-use Spork\ProcessManager,
-    Spork\EventDispatcher\EventDispatcher,
-    Spork\Fork;
 
 /**
  * generate:site command
