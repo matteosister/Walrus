@@ -19,7 +19,7 @@ class AssetCollectionTest extends WalrusTestCase
      */
     public function testConstruct()
     {
-        $ac = new AssetCollection();
+        $ac = new AssetCollection(false);
         $this->assertInstanceOf('\Countable', $ac);
         $this->assertInstanceOf('\ArrayAccess', $ac);
         $this->assertInstanceOf('\Iterator', $ac);
@@ -31,7 +31,7 @@ class AssetCollectionTest extends WalrusTestCase
      */
     public function testAddProject()
     {
-        $ac = new AssetCollection();
+        $ac = new AssetCollection(false);
         $mockProject = $this->getMock('Walrus\Asset\Project\Css\CssFolder', array(), array(''));
         $ac->addProject($mockProject);
         $this->assertCount(1, $ac);
@@ -43,5 +43,12 @@ class AssetCollectionTest extends WalrusTestCase
         $this->assertEquals(null, $ac[0]);
         $ac[] = $mockProject;
         $this->assertCount(1, $ac);
+    }
+
+    public function testGroupAssets()
+    {
+        $ac = new AssetCollection(true);
+        $mockCss = $this->getMock('Walrus\Asset\Project\Css\CssFolder', array(), array(''));
+        $mockJs = $this->getMock('Walrus\Asset\Project\Js\JsFolder', array(), array(''));
     }
 }

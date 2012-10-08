@@ -26,6 +26,9 @@
         "kriswallsmith/spork": "dev-master",
         "nervo/yuicompressor": "@stable"
 	},
+	"require-dev": {
+	    "phpunit/phpunit": "3.7.*@stable"
+	},
 	"bin": ["bin/walrus"],
 	"minimum-stability": "dev"
 }

@@ -29,7 +29,6 @@ class PageTest extends WalrusTestCase
         $this->assertEquals(static::PAGE_DATE, $metadata->getDate()->format(static::DATE_FORMAT));
         $this->assertEquals(static::PAGE_HOMEPAGE, $metadata->getHomepage());
         $this->assertEquals(static::PAGE_URL, $metadata->getUrl());
-        $this->assertEquals(static::PAGE_TYPE, $metadata->getType());
         $this->assertEquals(static::PAGE_CONTENT, $content->getMd());
     }
 }
