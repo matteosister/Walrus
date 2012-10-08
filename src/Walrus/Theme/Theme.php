@@ -7,7 +7,7 @@
  * Just for fun...
  */
 
-namespace Walrus\Configuration;
+namespace Walrus\Theme;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Config\Definition\Processor,
@@ -59,7 +59,7 @@ class Theme
         $pc = $processor->processConfiguration($conf, $config);
         $this->assetProjects = new AssetCollection(true);
         $this->name = $pc['name'];
-        $this->images = $pc['images'];
+        $this->images = $this->themePath.'/'.$pc['images'];
         $this->compressAssets = $pc['compress_assets'];
         foreach($pc['assets'] as $assetsConfiguration) {
             switch($assetsConfiguration['type']) {

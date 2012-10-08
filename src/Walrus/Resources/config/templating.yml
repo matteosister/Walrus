@@ -7,25 +7,41 @@ parameters:
   twig.cache: false
   twig.extension.theme.class: Walrus\Twig\Extension\ThemeExtension
   twig.extension.md_content.class: Walrus\Twig\Extension\MdContentExtension
+  twig.extension.gist.class: Dflydev\Twig\Extension\GitHubGist\GistTwigExtension
 
 services:
+  # loaders
   twig.loader:
     class: %twig.loader.class%
     arguments: [%twig.loader.tpl_path%]
 
-  twig:
-    class: %twig.environment.class%
-    arguments:
-      - @twig.loader
-      - { cache: %twig.cache% }
+  twig.loader.md_content:
+    class: %twig.loader.string.class%
 
+  twig.loader.theme:
+    class: %twig.loader.class%
+    arguments: [%twig.loader.theme.tpl_path%]
+
+  # extensions
   twig.extension.md_content:
     class: %twig.extension.md_content.class%
     arguments:
       - @service_container
 
-  twig.loader.md_content:
-    class: %twig.loader.string.class%
+  twig.extension.theme:
+    class: %twig.extension.theme.class%
+    arguments:
+      - @service_container
+
+  twig.extension.gist:
+    class: %twig.extension.gist.class%
+
+  # environments
+  twig:
+    class: %twig.environment.class%
+    arguments:
+      - @twig.loader
+      - { cache: %twig.cache% }
 
   twig.md_content:
     class: %twig.environment.class%
@@ -34,15 +50,7 @@ services:
       - { cache: %twig.cache% }
     calls:
       - [ addExtension, [ @twig.extension.md_content ]]
-
-  twig.extension.theme:
-    class: %twig.extension.theme.class%
-    arguments:
-      - @service_container
-
-  twig.loader.theme:
-    class: %twig.loader.class%
-    arguments: [%twig.loader.theme.tpl_path%]
+      - [ addExtension, [ @twig.extension.gist ]]
 
   twig.theme:
     class: %twig.environment.class%

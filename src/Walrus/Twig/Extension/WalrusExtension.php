@@ -46,6 +46,18 @@ abstract class WalrusExtension extends \Twig_Extension
         );
     }
 
+    /**
+     * globals
+     *
+     * @return array
+     */
+    public function getGlobals()
+    {
+        return array(
+            'project' => $this->container->get('walrus.project')
+        );
+    }
+
     public function urlFor($slug)
     {
         $pages = array_filter($this->getPageCollection()->toArray(), function(Page $page) use ($slug) {

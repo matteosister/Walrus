@@ -1,0 +1,8 @@
+parameters:
+  project.class: Walrus\Project\Project
+
+services:
+  walrus.project:
+    class: %project.class%
+    arguments:
+      - %ROOT_PATH%

@@ -1,4 +1,10 @@
 /* line 1, ../sass/screen.scss */
-body {
-  background-color: #FFF;
+.hero-unit.walrus {
+  position: relative;
+}
+/* line 3, ../sass/screen.scss */
+.hero-unit.walrus img {
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }

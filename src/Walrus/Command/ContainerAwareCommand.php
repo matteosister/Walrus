@@ -97,7 +97,7 @@ abstract class ContainerAwareCommand extends Command
     }
 
     /**
-     * @return \Walrus\Configuration\Theme
+     * @return \Walrus\Theme\Theme
      */
     protected function getTheme()
     {

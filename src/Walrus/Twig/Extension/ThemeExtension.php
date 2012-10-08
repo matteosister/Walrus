@@ -50,9 +50,9 @@ class ThemeExtension extends WalrusExtension
      */
     public function getGlobals()
     {
-        return array(
+        return array_merge(parent::getGlobals(), array(
             'pages' => $this->container->get('walrus.collection.page')
-        );
+        ));
     }
 
 

@@ -11,20 +11,13 @@ namespace Walrus\DI;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\Loader\YamlFileLoader,
-    Symfony\Component\DependencyInjection\Definition,
     Symfony\Component\Config\FileLocator,
     Symfony\Component\Console\Application,
-    Symfony\Component\Yaml\Parser,
     Symfony\Component\Finder\Finder,
     Symfony\Component\Config\Definition\Processor,
     Symfony\Component\Yaml\Yaml;
-use Walrus\DI\AssetCompilerPass,
-    Walrus\Configuration\ThemeConfiguration,
-    Walrus\Configuration\Theme;
-use LessElephant\LessProject;
-use CompassElephant\CompassProject;
+use Walrus\Configuration\MainConfiguration;
 use Walrus\Utilities\SlugifierTrait;
-use Symfony\Component\Filesystem\Filesystem;
 
 class WalrusProject
 {
@@ -58,7 +51,7 @@ class WalrusProject
         $this->container->setParameter("WALRUS_PATH", realpath(__DIR__.'/../../../'));
         $this->container->setParameter("PUBLIC_PATH", $this->container->getParameter('ROOT_PATH').'/public');
         $this->container->setParameter("DRAFTING_PATH", $this->container->getParameter('ROOT_PATH').'/drafting');
-        $this->container->setParameter('THEME_PATH', __DIR__.'/../../../themes/cypress');
+        $this->container->setParameter('THEME_PATH', $this->container->getParameter('WALRUS_PATH').'/themes/cypress');
         $this->loadWalrusDI();
         $this->container->compile();
     }
@@ -85,5 +78,6 @@ class WalrusProject
         $loader->load('collections.yml');
         $loader->load('markdown.yml');
         $loader->load('theme.yml');
+        $loader->load('project.yml');
     }
 }

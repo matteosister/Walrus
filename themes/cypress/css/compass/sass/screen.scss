@@ -1,3 +1,8 @@
-body {
-    background-color: #FFF;
+.hero-unit.walrus {
+    position: relative;
+    img {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+    }
 }

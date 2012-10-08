@@ -1,5 +1,5 @@
 parameters:
-  theme.class: Walrus\Configuration\Theme
+  theme.class: Walrus\Theme\Theme
 
 services:
   walrus.theme:

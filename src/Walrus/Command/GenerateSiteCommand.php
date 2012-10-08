@@ -74,6 +74,7 @@ class GenerateSiteCommand extends ContainerAwareCommand
         $this->writeRuler($output);
         $this->setup($output, $tmpFolder);
         $this->compileAssets($output, $tmpFolder);
+        $this->publishImages($output, $tmpFolder);
         $this->parsePages($output, $tmpFolder);
         $this->cleanup($output);
         $output->writeln($this->getLine('publishing', 'public folder'));
@@ -156,21 +157,11 @@ class GenerateSiteCommand extends ContainerAwareCommand
                 }
                 $output->writeln($this->getLine('generating page', sprintf('<comment>%s</comment>', $page->getMetadata()->getTitle())));
                 $twigMdContent = $this->getTwigMdContent();
-                $manager = new ProcessManager(new EventDispatcher());
                 $template = $this->getTwigTheme()->loadTemplate('page.html.twig');
                 file_put_contents($filename, $template->render(array(
                     'page' => $page,
                     'content' => $twigMdContent->render($page->getContent())
                 )));
-                /*$manager->fork(function() use($filename, $page, $twigMdContent) {
-                    $template = $this->getTwigTheme()->loadTemplate('page.html.twig');
-                    file_put_contents($filename, $template->render(array(
-                        'page' => $page,
-                        'content' => $twigMdContent->render($page->getContent())
-                    )));
-                })->then(function($out) {
-                    printf('Parent %d forked child %d!', posix_getpid(), $out);
-                });*/
             }
         } catch (NoPagesCreated $e) {
             $output->writeln('<info>no pages created</info>');
@@ -189,6 +180,10 @@ class GenerateSiteCommand extends ContainerAwareCommand
 
     private function publishImages(OutputInterface $output, $dir)
     {
-        //$this->container->
+        $images = $this->getTheme()->getImages();
+        $iterator = Finder::create()->files()->in($images);
+        $fs = new Filesystem();
+        $output->writeln($this->getLine('mirroring', 'images'));
+        $fs->mirror($images, $dir, $iterator);
     }
 }
