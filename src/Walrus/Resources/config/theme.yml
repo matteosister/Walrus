@@ -1,0 +1,8 @@
+parameters:
+  theme.class: Walrus\Configuration\Theme
+
+services:
+  walrus.theme:
+    class: %theme.class%
+    arguments:
+      - %THEME_PATH%

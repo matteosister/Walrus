@@ -26,8 +26,9 @@ class ThemeConfiguration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('name')->isRequired()->end()
+                ->scalarNode('images')->defaultNull()->end()
+                ->scalarNode('compress_assets')->defaultNull()->end()
                 ->arrayNode('assets')
-                    //->useAttributeAsKey('type')
                     ->prototype('array')
                     ->children()
                         ->scalarNode('name')->isRequired()->end()

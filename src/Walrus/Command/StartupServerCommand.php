@@ -9,33 +9,20 @@
 
 namespace Walrus\Command;
 
-use Symfony\Component\Console\Command\Command,
-    Symfony\Component\Console\Input\InputInterface,
+use Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Process\Process,
     Symfony\Component\Process\ProcessBuilder;
-
 use Walrus\Command\OutputWriterTrait,
-    Walrus\DI\Configuration;
+    Walrus\Command\ContainerAwareCommand;
 
 /**
  * startup php server
  */
-class StartupServerCommand extends Command
+class StartupServerCommand extends ContainerAwareCommand
 {
     use OutputWriterTrait;
-
-    /**
-     * @var \Walrus\DI\Configuration
-     */
-    private $configuration;
-
-    public function __construct(Configuration $configuration)
-    {
-        parent::__construct();
-        $this->configuration = $configuration;
-    }
 
     public function configure()
     {
@@ -58,7 +45,7 @@ class StartupServerCommand extends Command
         $builder->add('php');
         $builder->add('-S');
         $builder->add(sprintf('localhost:%s', $input->getOption('port')));
-        $builder->setWorkingDirectory($this->configuration->get('public_dir'));
+        $builder->setWorkingDirectory($this->container->getParameter('PUBLIC_PATH'));
         $builder->setTimeout(null);
         $process = $builder->getProcess();
         $output->writeln(sprintf('<comment>Walrus</comment> <info>server</info> is up and running at <comment>http://localhost:%s</comment>', $input->getOption('port')));
@@ -87,7 +74,7 @@ class StartupServerCommand extends Command
                 //var_dump($date, $ip, $port, $response, $resource);
                 $output->writeln(sprintf('<comment>%s</comment> [<%s>%s</%s>]: %s', $date, $type, $response, $type, $resource));
             } else {
-                $output->write($data);
+                $output->write(sprintf('<error>%s</error>', $data));
             }
         });
         if (!$process->isSuccessful()) {

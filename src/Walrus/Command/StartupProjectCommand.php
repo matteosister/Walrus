@@ -9,33 +9,18 @@
 
 namespace Walrus\Command;
 
-use Symfony\Component\Console\Command\Command,
-    Symfony\Component\Console\Input\InputInterface,
+use Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Finder\Finder,
     Symfony\Component\Filesystem\Filesystem;
-
 use Walrus\Command\OutputWriterTrait,
-    Walrus\DI\Configuration;
+    Walrus\Command\ContainerAwareCommand;
 
 
-class StartupProjectCommand extends Command
+class StartupProjectCommand extends ContainerAwareCommand
 {
     use OutputWriterTrait;
-
-    /**
-     * @var \Walrus\DI\Configuration
-     */
-    protected $configuration;
-
-    public function __construct(
-        Configuration $configuration
-    )
-    {
-        parent::__construct();
-        $this->configuration = $configuration;
-    }
 
     protected function configure()
     {
@@ -47,9 +32,9 @@ class StartupProjectCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $fs = new Filesystem();
-        $root = $this->configuration->get('root_dir');
-        $pages = $root.'/drafting/pages';
-        $public = $root.'/public';
+        $root = $this->container->getParameter('ROOT_PATH');
+        $pages = $this->container->getParameter('DRAFTING_PATH').'/pages';
+        $public = $this->container->getParameter('PUBLIC_PATH');
         $fs->mkdir(array($pages, $public));
     }
 }

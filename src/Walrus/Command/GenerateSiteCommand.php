@@ -14,7 +14,8 @@ use Walrus\MDObject\Page\Page,
     Walrus\Asset\AssetCollection,
     Walrus\Asset\Project\AbstractProject,
     Walrus\Command\OutputWriterTrait,
-    Walrus\Command\ContainerAwareCommand;
+    Walrus\Command\ContainerAwareCommand,
+    Walrus\Exception\NoPagesCreated;
 use Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface,
     Symfony\Component\Console\Input\InputOption,
@@ -79,7 +80,7 @@ class GenerateSiteCommand extends ContainerAwareCommand
         $this->parsePages($output, $tmpFolder);
         $this->cleanup($output);
         $output->writeln($this->getLine('publishing', 'public folder'));
-        $fs->mirror($tmpFolder, $this->getConfiguration()->get('public_dir'));
+        $fs->mirror($tmpFolder, $this->container->getParameter('PUBLIC_PATH'));
     }
 
     private function watch(InputInterface $input, OutputInterface $output)
@@ -102,8 +103,8 @@ class GenerateSiteCommand extends ContainerAwareCommand
         $iterator = Finder::create()
             ->files()
             ->in(array(
-                realpath($this->getConfiguration()->get('drafting_dir')),
-                realpath($this->getConfiguration()->get('theme_dir'))
+                realpath($this->container->getParameter('DRAFTING_DIR')),
+                realpath($this->container->getParameter('THEME_PATH'))
             ));
         $content = '';
         foreach($iterator as $file) {
@@ -115,7 +116,7 @@ class GenerateSiteCommand extends ContainerAwareCommand
     private function cleanup(OutputInterface $output)
     {
         $output->writeln($this->getLine('cleaning', 'public folder'));
-        $iterator = Finder::create()->files()->in($this->getConfiguration()->get('public_dir'));
+        $iterator = Finder::create()->files()->in($this->container->getParameter('PUBLIC_PATH'));
         $fs = new Filesystem();
         $fs->remove($iterator);
     }
@@ -174,7 +175,7 @@ class GenerateSiteCommand extends ContainerAwareCommand
                     printf('Parent %d forked child %d!', posix_getpid(), $out);
                 });*/
             }
-        } catch (\Walrus\Exception\NoPagesCreated $e) {
+        } catch (NoPagesCreated $e) {
             $output->writeln('<info>no pages created</info>');
         }
     }
@@ -187,5 +188,10 @@ class GenerateSiteCommand extends ContainerAwareCommand
         } else {
             $output->writeln('<comment>No assets to compile</comment>');
         }
+    }
+
+    private function publishImages(OutputInterface $output, $dir)
+    {
+        //$this->container->
     }
 }
