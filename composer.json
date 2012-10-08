@@ -27,8 +27,8 @@
         "nervo/yuicompressor": "@stable"
 	},
 	"require-dev": {
-	    "phpunit/phpunit": "3.7.*@stable"
+	    "phpunit/phpunit": "3.7.*"
 	},
 	"bin": ["bin/walrus"],
-	"minimum-stability": "dev"
+	"minimum-stability": "stable"
 }
