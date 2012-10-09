@@ -84,7 +84,7 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
     public function getHomepage()
     {
         foreach ($this->objects as $page) {
-            if ($page->getMetadata()->getHomepage()) {
+            if ($page->homepage) {
                 return $page;
             }
         }

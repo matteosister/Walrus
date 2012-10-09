@@ -81,14 +81,6 @@ abstract class ContainerAwareCommand extends Command
     }
 
     /**
-     * @return \Walrus\DI\Configuration
-     */
-    protected function getConfiguration()
-    {
-        return $this->get('walrus.configuration');
-    }
-
-    /**
      * @return \Walrus\Asset\AssetCollection
      */
     protected function getAssetCollection()

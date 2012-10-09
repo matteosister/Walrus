@@ -48,6 +48,6 @@ class Utilities
      */
     public function getDateFormatted($format = 'Y-m-d_H:i')
     {
-        return date($format);
+        return (string) date($format);
     }
 }

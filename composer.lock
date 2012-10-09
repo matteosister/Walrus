@@ -297,7 +297,6 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1349363877",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -324,7 +323,8 @@
                 }
             ],
             "description": "Symfony Config Component",
-            "homepage": "http://symfony.com"
+            "homepage": "http://symfony.com",
+            "time": "1349363877"
         },
         {
             "name": "symfony/console",
@@ -344,7 +344,6 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1349363877",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -371,7 +370,8 @@
                 }
             ],
             "description": "Symfony Console Component",
-            "homepage": "http://symfony.com"
+            "homepage": "http://symfony.com",
+            "time": "1349363877"
         },
         {
             "name": "symfony/dependency-injection",
@@ -399,7 +399,6 @@
                 "symfony/yaml": "2.1.*",
                 "symfony/config": "2.1.*"
             },
-            "time": "1349363877",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -426,7 +425,8 @@
                 }
             ],
             "description": "Symfony DependencyInjection Component",
-            "homepage": "http://symfony.com"
+            "homepage": "http://symfony.com",
+            "time": "1349363877"
         },
         {
             "name": "symfony/filesystem",
@@ -446,7 +446,6 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1349363877",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -473,7 +472,8 @@
                 }
             ],
             "description": "Symfony Filesystem Component",
-            "homepage": "http://symfony.com"
+            "homepage": "http://symfony.com",
+            "time": "1349363877"
         },
         {
             "name": "symfony/finder",
@@ -493,7 +493,6 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1349363877",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -520,7 +519,8 @@
                 }
             ],
             "description": "Symfony Finder Component",
-            "homepage": "http://symfony.com"
+            "homepage": "http://symfony.com",
+            "time": "1349363877"
         },
         {
             "name": "symfony/process",
@@ -587,7 +587,6 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1349363877",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -614,7 +613,8 @@
                 }
             ],
             "description": "Symfony Templating Component",
-            "homepage": "http://symfony.com"
+            "homepage": "http://symfony.com",
+            "time": "1349363877"
         },
         {
             "name": "symfony/yaml",
@@ -634,7 +634,6 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1349363877",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -661,7 +660,8 @@
                 }
             ],
             "description": "Symfony Yaml Component",
-            "homepage": "http://symfony.com"
+            "homepage": "http://symfony.com",
+            "time": "1349363877"
         },
         {
             "name": "twig/twig",

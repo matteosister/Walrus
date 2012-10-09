@@ -10,6 +10,7 @@
 namespace Walrus\MDObject\Page;
 
 use Walrus\MDObject\BaseMetadata;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Metadata class
@@ -50,7 +51,11 @@ class Metadata extends BaseMetadata
      */
     public function __construct($md)
     {
-        $this->parseLines(preg_split('/\n/', trim($md)));
+        $options = Yaml::parse($md);
+        foreach ($options as $prop => $option) {
+            $this->$prop = $option;
+        }
+        //$this->parseLines(preg_split('/\n/', trim($md)));
         $this->date = \DateTime::createFromFormat('Y-m-d_H:i:s', $this->date);
     }
 

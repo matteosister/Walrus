@@ -1,8 +1,5 @@
 ***
-title: {{ title }}
-date: {{ date }}
-url: {{ url }}
-parent: {{ parent|default(false) }}
-homepage: {{ homepage|default(false) }}
+{{ options|trim|raw }}
 ***
-Page content **here**!
+
+**{{ title }}** page content

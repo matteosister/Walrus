@@ -13,12 +13,15 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Filesystem\Filesystem;
 use Walrus\Command\CreatePageCommand;
+use Walrus\Utilities\SlugifierTrait;
 
 /**
  * base test case
  */
 class WalrusTestCase extends \PHPUnit_Framework_TestCase
 {
+    use SlugifierTrait;
+
     /**
      * @var Filesystem
      */
@@ -30,8 +33,10 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
     protected $assetsProjectsDir;
     protected $assetsProjectsPublishDir;
     protected $cssSourceProjectDir;
+    protected $generatedPages;
 
     const DATE_FORMAT = 'Y-m-d_H:i:s';
+    const DATE_DEFAULT = '2012-01-01_10:00:00';
     const PAGE_TITLE = 'The Test Title';
     const PAGE_DATE = '2012-01-01_10:00:00';
     const PAGE_URL = 'the-test-title';
@@ -55,6 +60,7 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
         $this->createFolderIfNotExists($this->assetsProjectsPublishDir);
         $this->cssSourceProjectDir = $this->assetsProjectsDir.'/css_source';
         $this->createFolderIfNotExists($this->cssSourceProjectDir);
+        $this->generatedPages = array();
     }
 
     protected function tearDown()
@@ -70,6 +76,7 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
         $this->filesystem->remove($this->postsDir);
         $this->filesystem->remove($this->draftingDir);
         $this->filesystem->remove($this->assetsProjectsDir);
+        $this->generatedPages = array();
     }
 
     private function createFolderIfNotExists($folder)
@@ -97,7 +104,7 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
 
     protected function getMockContainer()
     {
-        $container = $this->getMock('Symfony\Component\DependencyInjection\Container', array('get'));
+        $container = $this->getMock('Symfony\Component\DependencyInjection\Container', array('get', 'getParameter'));
         $container
             ->expects($this->any())
             ->method('get')
@@ -108,6 +115,14 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
                 $this->equalTo('twig')
             ))
             ->will($this->returnCallback(array($this, 'containerGetCallback')));
+        $container
+            ->expects($this->any())
+            ->method('getParameter')
+            ->with($this->logicalOr(
+                $this->equalTo('DRAFTING_PATH'),
+                $this->equalTo('ROOT_PATH')
+            ))
+            ->will($this->returnCallback(array($this, 'containerGetParameterCallback')));
 
         return $container;
     }
@@ -126,6 +141,18 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
                 break;
             case 'twig':
                 return $this->getTwig();
+                break;
+        }
+    }
+
+    public function containerGetParameterCallback($name)
+    {
+        switch ($name) {
+            case 'DRAFTING_PATH':
+                return $this->draftingDir;
+                break;
+            case 'ROOT_PATH':
+                return $this->playgroundDir;
                 break;
         }
     }
@@ -150,28 +177,36 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
 
     protected function getMockPageCollection()
     {
-        $pageCollection = $this->getMock('Walrus\Collection\PageCollection', array(
-            'toArray'
-        ), array());
+        $pageCollection = $this->getMock('Walrus\Collection\PageCollection', array('toArray', 'count'), array());
         $pageCollection->expects($this->any())
             ->method('toArray')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue($this->generatedPages));
+        $pageCollection->expects($this->any())
+            ->method('count')
+            ->will($this->returnValue(count($this->generatedPages)));
         return $pageCollection;
     }
 
-
-
     protected function getMockUtilities()
     {
-        $utilities = $this->getMock('Walrus\Utilities\Utilities', array('slugify', 'getDateFormatted'));
+        $utilities = $this->getMock('Walrus\Utilities\Utilities', array('slugify', 'getDateFormatted', 'getUniqueSlug'));
         $utilities->expects($this->any())
             ->method('getDateFormatted')
-            ->will($this->returnValue('2012-01-01_10:00:00'));
+            ->will($this->returnValue(static::DATE_DEFAULT));
         $utilities->expects($this->any())
             ->method('slugify')
             ->will($this->returnValue('test'));
+        $utilities->expects($this->any())
+            ->method('getUniqueSlug')
+            ->will($this->returnCallback(array($this, 'callbackUniqueUrl')));
 
         return $utilities;
+    }
+
+    public function callbackUniqueUrl()
+    {
+        $args = func_get_args();
+        return $this->slugify($args[1]);
     }
 
     protected function getMockCssFolder()
@@ -196,9 +231,6 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
     {
         $kernel = $this->getMock('Kernel');
         $application = new Application($kernel);
-        $configuration = $this->getMockConfiguration();
-        $twig = $this->getTwig();
-        $utilities = $this->getMockUtilities();
         $application->add(new CreatePageCommand($this->getMockContainer()));
 
         return $application;
@@ -245,5 +277,10 @@ type: %s
         $iterator[0] = $object;
         $this->assertCount(1, $iterator);
         $this->assertTrue(isset($iterator[0]));
+    }
+
+    protected function pageFileExists($slug)
+    {
+        $this->assertFileExists($this->pagesDir.'/'.static::DATE_DEFAULT.sprintf('_page_%s.md', $slug), sprintf('The page file %s has not been created', $slug));
     }
 }

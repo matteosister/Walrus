@@ -54,16 +54,15 @@ class Page extends BaseObject
      * try to call method on the metadata. Useful for twig
      *
      * @param string $name      method name
-     * @param string $arguments method argument
      *
      * @throws \Walrus\Exception\MetadataMissing
      * @return mixed
      */
-    function __call($name, $arguments)
+    function __get($name)
     {
         $methodName = 'get'.$this->toCamelCase($name, true);
         if (is_callable(array($this->metadata, $methodName))) {
-            return $this->metadata->$methodName($arguments);
+            return $this->metadata->$methodName();
         } else {
             throw new MetadataMissing();
         }
