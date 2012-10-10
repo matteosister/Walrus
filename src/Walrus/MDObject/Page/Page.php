@@ -43,14 +43,6 @@ class Page extends BaseObject
     }
 
     /**
-     * @return string
-     */
-    public function getUrl()
-    {
-        return $this->getMetadata()->getUrl();
-    }
-
-    /**
      * try to call method on the metadata. Useful for twig
      *
      * @param string $name      method name
@@ -66,6 +58,14 @@ class Page extends BaseObject
         } else {
             throw new MetadataMissing();
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->getMetadata()->getUrl();
     }
 
 

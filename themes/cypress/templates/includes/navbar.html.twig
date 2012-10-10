@@ -3,9 +3,16 @@
         {% if pages.homepage is not null %}
             <a class="brand" href="{{ url_for(pages.homepage.url) }}">{{ project.siteName }}</a>
         {% endif %}
-        <ul class="nav">
-            {% for thePage in pages if not thePage.metadata.homepage %}
-                <li class="{{ thePage == page ? 'active' : '' }}"><a href="{{ url_for(thePage.url) }}">{{ thePage }}</a></li>
+        <ul class="nav" role="navigation">
+            {% for thePage in pages.mainNavigation %}
+                <li class="{{ thePage == page ? 'active' : '' }} dropdown">
+                    <a href="{{ url_for(thePage.url) }}" class="dropdown-toggle" data-target="#" role="button" data-toggle="dropdown">{{ thePage }} <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        {% for children in pages.getChildrenOf(thePage.url) %}
+                            <li><a href="{{ url_for(children.url) }}" class="{{ children == page ? 'active' : '' }}">{{ children }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </li>
             {% endfor %}
         </ul>
     </div>

@@ -1,38 +1,36 @@
 <?php
 /**
  * User: matteo
- * Date: 18/09/12
- * Time: 23.17
+ * Date: 10/10/12
+ * Time: 21.58
  *
  * Just for fun...
  */
 
 namespace Walrus\Asset\Project\Js;
 
-use Walrus\Asset\ProjectInterface,
-    Walrus\Asset\Project\AbstractProject,
-    Walrus\Utilities\SlugifierTrait;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Filesystem\Filesystem;
-use Assetic\Asset\AssetCollection,
-    Assetic\Asset\GlobAsset;
+use Walrus\Asset\Project\AbstractProject,
+    Walrus\Asset\ProjectInterface,
+    Walrus\Utilities\SlugifierTrait,
+    Walrus\Exception\FileNotFoundException;
+use Assetic\Asset\GlobAsset;
 
 /**
- * CssFolder project
+ * JsFile project
  */
-class JsFolder extends AbstractProject implements ProjectInterface
+class JsFile extends AbstractProject implements ProjectInterface
 {
     use SlugifierTrait;
 
     /**
-     * @var string
+     * @var null|string
      */
-    private $folder;
+    private $name = 'js file';
 
     /**
      * @var string
      */
-    private $name = 'js folder';
+    private $file;
 
     /**
      * Class constructor
@@ -40,12 +38,23 @@ class JsFolder extends AbstractProject implements ProjectInterface
      * @param string $folder folder
      * @param null   $name   project name
      */
-    public function __construct($folder, $name = null)
+    public function __construct($file, $name = null)
     {
-        $this->folder = $folder;
+        if (!is_file($file)) {
+            throw new FileNotFoundException();
+        }
+        $this->file = $file;
         if (null !== $name) {
             $this->name = $name;
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getProjectType()
+    {
+        return static::TYPE_JS;
     }
 
     /**
@@ -58,10 +67,10 @@ class JsFolder extends AbstractProject implements ProjectInterface
     }
 
     /**
-     * publish the generate files to the final destination
+     * publish the generated files to the final destination
      *
      * @param null $to     publish to
-     * @param null $filter filter
+     * @param null $filter FilterInterface
      *
      * @return null
      */
@@ -77,17 +86,13 @@ class JsFolder extends AbstractProject implements ProjectInterface
      *
      * @return string
      */
-    function getStream($filter = null)
+    public function getStream($filter = null)
     {
-        $iterator = Finder::create()->files()->name('*.js')->in($this->folder)->depth('== 0');
-        $assetCollection = new AssetCollection();
-        foreach($iterator as $file) {
-            $assetCollection->add(new GlobAsset(realpath($file->getPathName())));
-        }
+        $asset = new GlobAsset(realpath($this->file));
         if (null !== $filter && $this->compress) {
-            $assetCollection->ensureFilter($filter);
+            $asset->ensureFilter($filter);
         }
-        return $assetCollection->dump();
+        return $asset->dump();
     }
 
     /**
@@ -113,16 +118,8 @@ class JsFolder extends AbstractProject implements ProjectInterface
      *
      * @return string
      */
-    function getName()
+    public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    function getProjectType()
-    {
-        return static::TYPE_JS;
     }
 }

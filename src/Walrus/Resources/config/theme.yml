@@ -6,3 +6,4 @@ services:
     class: %theme.class%
     arguments:
       - %THEME_PATH%
+      - @asset.projects_collection

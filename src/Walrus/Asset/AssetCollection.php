@@ -14,6 +14,7 @@ use Walrus\Asset\ProjectInterface,
     Walrus\Asset\Project\AbstractProject;
 use Assetic\Filter\FilterInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Walrus\Theme\Theme;
 
 class AssetCollection implements \Countable, \ArrayAccess, \Iterator
 {
@@ -47,10 +48,9 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
     /**
      * class constructor
      */
-    public function __construct($groupAssets)
+    public function __construct()
     {
         $this->projects = array();
-        $this->groupAssets = $groupAssets;
     }
 
     /**
@@ -101,7 +101,7 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
             $output->writeln($this->getLine('compiling', sprintf('<comment>%s</comment> project', $project->getName())));
             $project->compile();
             $output->writeln($this->getLine('publishing', sprintf('<comment>%s</comment> project', $project->getName())));
-            if ($project->getProjectType() == \Walrus\Asset\Project\AbstractProject::TYPE_CSS) {
+            if ($project->getProjectType() == AbstractProject::TYPE_CSS) {
                 $project->publish($to.'/'.$project->getProjectType(), $this->cssFilter);
             } else {
                 $project->publish($to.'/'.$project->getProjectType(), $this->jsFilter);
@@ -175,6 +175,66 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
         return array_filter($this->projects, function(AbstractProject $project) {
             return $project->getProjectType() == AbstractProject::TYPE_JS;
         });
+    }
+
+    /**
+     * GroupAssets setter
+     *
+     * @param boolean $groupAssets la variabile groupAssets
+     */
+    public function setGroupAssets($groupAssets)
+    {
+        $this->groupAssets = $groupAssets;
+    }
+
+    /**
+     * GroupAssets getter
+     *
+     * @return boolean
+     */
+    public function getGroupAssets()
+    {
+        return $this->groupAssets;
+    }
+
+    /**
+     * CssFilter setter
+     *
+     * @param \Assetic\Filter\FilterInterface $cssFilter la variabile cssFilter
+     */
+    public function setCssFilter($cssFilter)
+    {
+        $this->cssFilter = $cssFilter;
+    }
+
+    /**
+     * CssFilter getter
+     *
+     * @return \Assetic\Filter\FilterInterface
+     */
+    public function getCssFilter()
+    {
+        return $this->cssFilter;
+    }
+
+    /**
+     * JsFilter setter
+     *
+     * @param \Assetic\Filter\FilterInterface $jsFilter la variabile jsFilter
+     */
+    public function setJsFilter($jsFilter)
+    {
+        $this->jsFilter = $jsFilter;
+    }
+
+    /**
+     * JsFilter getter
+     *
+     * @return \Assetic\Filter\FilterInterface
+     */
+    public function getJsFilter()
+    {
+        return $this->jsFilter;
     }
 
     /**

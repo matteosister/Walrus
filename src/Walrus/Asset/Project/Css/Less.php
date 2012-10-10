@@ -78,7 +78,10 @@ class Less extends AbstractProject implements ProjectInterface
     function getStream($filter = null)
     {
         $asset = new FileAsset($this->project->getDestination());
-        return $asset->dump($filter);
+        if ($this->compress && null !== $filter) {
+            $asset->ensureFilter($filter);
+        }
+        return $asset->dump();
     }
 
 

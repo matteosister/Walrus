@@ -77,6 +77,35 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
     }
 
     /**
+     * get all the pages children of homepage
+     *
+     * @return array
+     */
+    public function getMainNavigation()
+    {
+        $homepage = $this->getHomepage();
+        if (null == $homepage) {
+            return array();
+        }
+        $homepageUrl = $homepage->getUrl();
+        return $this->getChildrenOf($homepageUrl);
+    }
+
+    /**
+     * get children of a page by url
+     *
+     * @param string $url url
+     *
+     * @return array
+     */
+    public function getChildrenOf($url)
+    {
+        return array_filter($this->objects, function(Page $page) use ($url) {
+            return $page->parent == $url;
+        });
+    }
+
+    /**
      * get the homepage
      *
      * @return null|Page
