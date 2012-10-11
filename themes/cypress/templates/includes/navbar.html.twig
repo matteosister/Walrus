@@ -1,15 +1,15 @@
 <div class="navbar navbar-inverse">
     <div class="navbar-inner">
         {% if pages.homepage is not null %}
-            <a class="brand" href="{{ url_for(pages.homepage.url) }}">{{ project.siteName }}</a>
+            <a class="brand" href="{{ url_for(pages.homepage.metadata.url) }}">{{ project.siteName }}</a>
         {% endif %}
         <ul class="nav" role="navigation">
             {% for thePage in pages.mainNavigation %}
                 <li class="{{ thePage == page ? 'active' : '' }} dropdown">
-                    <a href="{{ url_for(thePage.url) }}" class="dropdown-toggle" data-target="#" role="button" data-toggle="dropdown">{{ thePage }} <b class="caret"></b></a>
+                    <a href="{{ url_for(thePage.metadata.url) }}" class="dropdown-toggle" data-target="#" role="button" data-toggle="dropdown">{{ thePage }} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        {% for children in pages.getChildrenOf(thePage.url) %}
-                            <li><a href="{{ url_for(children.url) }}" class="{{ children == page ? 'active' : '' }}">{{ children }}</a></li>
+                        {% for children in pages.getChildrenOf(thePage.metadata.url) %}
+                            <li><a href="{{ url_for(children.metadata.url) }}" class="{{ children == page ? 'active' : '' }}">{{ children }}</a></li>
                         {% endfor %}
                     </ul>
                 </li>

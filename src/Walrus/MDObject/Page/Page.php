@@ -31,6 +31,11 @@ class Page extends BaseObject
     private $content;
 
     /**
+     * @var string
+     */
+    private $url;
+
+    /**
      * constructor
      *
      * @param string $md the markdown content
@@ -61,13 +66,24 @@ class Page extends BaseObject
     }
 
     /**
+     * Url setter
+     *
+     * @param string $url la variabile url
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    }
+
+    /**
+     * Url getter
+     *
      * @return string
      */
     public function getUrl()
     {
-        return $this->getMetadata()->getUrl();
+        return $this->url;
     }
-
 
     /**
      * toString
@@ -117,5 +133,25 @@ class Page extends BaseObject
     public function getMetadata()
     {
         return $this->metadata;
+    }
+
+    /**
+     * Folder setter
+     *
+     * @param string $folder la variabile folder
+     */
+    public function setFolder($folder)
+    {
+        $this->folder = $folder;
+    }
+
+    /**
+     * Folder getter
+     *
+     * @return string
+     */
+    public function getFolder()
+    {
+        return $this->folder;
     }
 }

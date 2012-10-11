@@ -74,6 +74,9 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
             $md = file_get_contents($md->getRealPath());
             $this->objects[] = new Page($md);
         }
+        foreach ($this->objects as $page) {
+            $page->setUrl($this->generateFullUrl($page->getMetadata()->getUrl()));
+        }
     }
 
     /**
@@ -87,7 +90,7 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
         if (null == $homepage) {
             return array();
         }
-        $homepageUrl = $homepage->getUrl();
+        $homepageUrl = $homepage->getMetadata()->getUrl();
         return $this->getChildrenOf($homepageUrl);
     }
 
@@ -135,6 +138,25 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
             }
         }
         return null;
+    }
+
+    /**
+     * full url
+     */
+    public function generateFullUrl($url)
+    {
+        $page = $this->findOneByUrl($url);
+        while (null !== $page) {
+            $page = $this->findOneByUrl($page->parent);
+            if (null === $page) {
+                break;
+            }
+            if ($page->getMetadata()->getHomepage()) {
+                break;
+            }
+            $url = $page->getMetadata()->getUrl().'/'.$url;
+        }
+        return $url.'.html';
     }
 
     /**

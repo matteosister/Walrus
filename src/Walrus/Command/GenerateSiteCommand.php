@@ -149,9 +149,12 @@ class GenerateSiteCommand extends ContainerAwareCommand
                 if ($page->getMetadata()->getHomepage()) {
                     $url = 'index.html';
                 } else {
-                    $url = $page->getMetadata()->getUrl().'.html';
+                    $url = $page->getUrl();
                 }
                 $filename = $dir.'/'.$url;
+                $pathinfo = pathinfo($filename);
+                $fs = new Filesystem();
+                $fs->mkdir($pathinfo['dirname']);
                 if (file_exists($filename)) {
                     unlink($filename);
                 }

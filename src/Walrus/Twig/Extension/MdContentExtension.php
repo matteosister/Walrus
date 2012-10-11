@@ -10,7 +10,6 @@
 namespace Walrus\Twig\Extension;
 
 use Walrus\MDObject\Page\Page,
-    Walrus\Exception\UrlNotFoundException,
     Walrus\Twig\Extension\WalrusExtension;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
