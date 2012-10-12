@@ -1,7 +1,7 @@
 theme:
   name: cypress
   images: images
-  compress_assets: true
+  compress_assets: false
   group_assets: true
   assets:
     - { name: bootstrap, type: less, source_file: css/bootstrap/less/bootstrap.less }
