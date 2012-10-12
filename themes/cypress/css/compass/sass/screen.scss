@@ -1,8 +1,17 @@
+@import "variables";
+@import "imports";
+
 .hero-unit.walrus {
     position: relative;
     img {
         position: absolute;
         right: 0;
         bottom: 0;
+    }
+}
+
+.container.page {
+    h1 {
+        color: $purple;
     }
 }

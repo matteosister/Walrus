@@ -71,7 +71,7 @@ abstract class WalrusExtension extends \Twig_Extension
         if ($page->getMetadata()->getHomepage()) {
             return '/';
         }
-        return $page->getUrl();
+        return '/'.$page->getUrl();
     }
 
     /**

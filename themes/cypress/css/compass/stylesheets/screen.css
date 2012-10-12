@@ -1,10 +1,15 @@
-/* line 1, ../sass/screen.scss */
+/* line 4, ../sass/screen.scss */
 .hero-unit.walrus {
   position: relative;
 }
-/* line 3, ../sass/screen.scss */
+/* line 6, ../sass/screen.scss */
 .hero-unit.walrus img {
   position: absolute;
   right: 0;
   bottom: 0;
+}
+
+/* line 14, ../sass/screen.scss */
+.container.page h1 {
+  color: #772953;
 }

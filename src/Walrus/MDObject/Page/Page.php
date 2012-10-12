@@ -36,6 +36,11 @@ class Page extends BaseObject
     private $url;
 
     /**
+     * @var bool
+     */
+    private $hasChildren;
+
+    /**
      * constructor
      *
      * @param string $md the markdown content
@@ -128,7 +133,7 @@ class Page extends BaseObject
     /**
      * Metadata getter
      *
-     * @return \Walrus\MDObject\Page\Metadata
+     * @return Metadata
      */
     public function getMetadata()
     {
@@ -136,22 +141,22 @@ class Page extends BaseObject
     }
 
     /**
-     * Folder setter
+     * HasChildren setter
      *
-     * @param string $folder la variabile folder
+     * @param boolean $hasChildren la variabile hasChildren
      */
-    public function setFolder($folder)
+    public function setHasChildren($hasChildren)
     {
-        $this->folder = $folder;
+        $this->hasChildren = $hasChildren;
     }
 
     /**
-     * Folder getter
+     * HasChildren getter
      *
-     * @return string
+     * @return boolean
      */
-    public function getFolder()
+    public function getHasChildren()
     {
-        return $this->folder;
+        return $this->hasChildren;
     }
 }

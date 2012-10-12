@@ -76,6 +76,7 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
         }
         foreach ($this->objects as $page) {
             $page->setUrl($this->generateFullUrl($page->getMetadata()->getUrl()));
+            $page->setHasChildren(0 !== count($this->getChildrenOf($page->getMetadata()->getUrl())));
         }
     }
 
@@ -92,6 +93,17 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
         }
         $homepageUrl = $homepage->getMetadata()->getUrl();
         return $this->getChildrenOf($homepageUrl);
+    }
+
+    public function getBreadcrumbs($url)
+    {
+        $page = $this->findOneByUrl($url);
+        $output[] = $page;
+        while (null !== $page->getMetadata()->getParent()) {
+            $page = $this->findOneByUrl($page->getMetadata()->getParent());
+            $output[] = $page;
+        }
+        return array_reverse($output);
     }
 
     /**
