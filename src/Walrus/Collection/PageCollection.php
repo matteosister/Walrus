@@ -44,6 +44,7 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
      */
     public function __construct()
     {
+        $this->objects = array();
         $this->position = 0;
     }
 
