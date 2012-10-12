@@ -74,7 +74,7 @@ class CreatePageCommand extends ContainerAwareCommand
             $homepage = true;
             $url = '';
         } else {
-            $parent = $input->getArgument('parent') ? $input->getArgument('parent') : $this->getPageCollection()->getHomepage()->getUrl();
+            $parent = $input->getArgument('parent') ? $input->getArgument('parent') : $this->getPageCollection()->getHomepage()->getMetadata()->getUrl();
             $homepage = false;
             $url =  $slug;
         }
