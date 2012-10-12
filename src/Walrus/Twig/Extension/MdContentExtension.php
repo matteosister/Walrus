@@ -12,12 +12,17 @@ namespace Walrus\Twig\Extension;
 use Walrus\MDObject\Page\Page,
     Walrus\Twig\Extension\WalrusExtension;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Walrus\Exception\UrlNotFoundException;
 
 class MdContentExtension extends WalrusExtension
 {
     public function linkTo($slug, $label = null, $title = null)
     {
-        $url = $this->urlFor($slug);
+        try {
+            $url = $this->urlFor($slug);
+        } catch (UrlNotFoundException $e) {
+            $url = $slug;
+        }
         if (null == $label && null == $title) {
             return sprintf('[%s](%s)', $url, $url);
         } else {

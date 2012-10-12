@@ -46,10 +46,16 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
     private $groupAssets;
 
     /**
+     * @var bool
+     */
+    private $forceAssetCompression;
+
+    /**
      * class constructor
      */
     public function __construct()
     {
+        $this->forceAssetCompression = false;
         $this->projects = array();
     }
 
@@ -98,6 +104,9 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
             return;
         }
         foreach ($this->projects as $project) {
+            if ($this->getForceAssetCompression()) {
+                $project->setCompress(true);
+            }
             $output->writeln($this->getLine('compiling', sprintf('<comment>%s</comment> project', $project->getName())));
             $project->compile();
             $output->writeln($this->getLine('publishing', sprintf('<comment>%s</comment> project', $project->getName())));
@@ -124,6 +133,9 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
         }, $this->getStylesheetProjects())))));
         foreach ($this->getStylesheetProjects() as $project) {
             $output->writeln($this->getLine('compiling', sprintf('<comment>%s</comment>', $project->getName())));
+            if ($this->getForceAssetCompression()) {
+                $project->setCompress(true);
+            }
             $project->compile();
             $css .= sprintf("/* %s*/\n%s\n", $project->getName(), $project->getStream($this->cssFilter));
         }
@@ -132,6 +144,9 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
         }, $this->getJavascriptProjects())))));
         foreach ($this->getJavascriptProjects() as $project) {
             $output->writeln($this->getLine('compiling', sprintf('<comment>%s</comment>', $project->getName())));
+            if ($this->getForceAssetCompression()) {
+                $project->setCompress(true);
+            }
             $project->compile();
             $js .= sprintf("/* %s */\n%s\n", $project->getName(), $project->getStream($this->jsFilter));
         }
@@ -195,6 +210,26 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
     public function getGroupAssets()
     {
         return $this->groupAssets;
+    }
+
+    /**
+     * ForceAssetCompression setter
+     *
+     * @param boolean $forceAssetCompression la variabile forceAssetCompression
+     */
+    public function setForceAssetCompression($forceAssetCompression)
+    {
+        $this->forceAssetCompression = $forceAssetCompression;
+    }
+
+    /**
+     * ForceAssetCompression getter
+     *
+     * @return boolean
+     */
+    public function getForceAssetCompression()
+    {
+        return $this->forceAssetCompression;
     }
 
     /**

@@ -43,9 +43,9 @@ class GenerateSiteCommand extends ContainerAwareCommand
     {
         $this
             ->setName('generate:site')
-            ->addOption('watch', 'w', InputOption::VALUE_NONE, 'Check for changes every second')
-            ->addOption('period', null, InputOption::VALUE_REQUIRED, 'Set the polling period in seconds (used with --watch)', 1)
-            ->setDescription('Generate the website');
+            ->setDescription('Generate the website')
+            ->addOption('compress-assets', null, InputOption::VALUE_NONE, 'compress the assets')
+            ->addOption('group-assets', null, InputOption::VALUE_NONE, 'group the assets');
     }
 
     /**
@@ -59,21 +59,12 @@ class GenerateSiteCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->writeHeader($output);
-        if ($input->getOption('watch')) {
-            $this->watch($input, $output, true);
-        } else {
-            $this->doExecute($input, $output);
-        }
-    }
-
-    private function doExecute(InputInterface $input, OutputInterface $output)
-    {
         $tmpFolder = sys_get_temp_dir().'/walrus_'.sha1(uniqid());
         $fs = new Filesystem();
         $fs->mkdir($tmpFolder);
         $this->writeRuler($output);
         $this->setup($output, $tmpFolder);
-        $this->compileAssets($output, $tmpFolder);
+        $this->compileAssets($input, $output, $tmpFolder);
         $this->publishImages($output, $tmpFolder);
         $this->parsePages($output, $tmpFolder);
         $this->cleanup($output);
@@ -81,36 +72,11 @@ class GenerateSiteCommand extends ContainerAwareCommand
         $fs->mirror($tmpFolder, $this->container->getParameter('PUBLIC_PATH'));
     }
 
-    private function watch(InputInterface $input, OutputInterface $output)
-    {
-        while (true) {
-            $sha = $this->calculateSha();
-            if ($sha !== $this->previosWatch) {
-                $output->writeln(date('Y/m/d H:i:s'));
-                $this->doExecute($input, $output);
-                $this->writeRuler($output);
-                $output->writeln('<question>watching for changes...</question>');
-                $this->previosWatch = $sha;
-            }
-            sleep($input->getOption('period'));
-        }
-    }
-
-    private function calculateSha()
-    {
-        $iterator = Finder::create()
-            ->files()
-            ->in(array(
-                realpath($this->container->getParameter('DRAFTING_DIR')),
-                realpath($this->container->getParameter('THEME_PATH'))
-            ));
-        $content = '';
-        foreach($iterator as $file) {
-            $content .= $file->getContents();
-        }
-        return sha1($content);
-    }
-
+    /**
+     * cleanup public folder
+     *
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
     private function cleanup(OutputInterface $output)
     {
         $output->writeln($this->getLine('cleaning', 'public folder'));
@@ -119,6 +85,10 @@ class GenerateSiteCommand extends ContainerAwareCommand
         $fs->remove($iterator);
     }
 
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output OutputInterface
+     * @param                                                   $dir    folder
+     */
     private function setup(OutputInterface $output, $dir)
     {
         $output->writeln($this->getLine('warming up', 'public folder'));
@@ -133,6 +103,7 @@ class GenerateSiteCommand extends ContainerAwareCommand
      * parse pages
      *
      * @param \Symfony\Component\Console\Output\OutputInterface $output output
+     * @param string                                            $dir    folder
      *
      * @return void
      */
@@ -171,8 +142,23 @@ class GenerateSiteCommand extends ContainerAwareCommand
         }
     }
 
-    private function compileAssets(OutputInterface $output, $dir)
+    /**
+     * compile assets
+     *
+     * @param \Symfony\Component\Console\Input\InputInterface   $input  input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output output
+     * @param                                                   $dir    folder
+     *
+     * @return void
+     */
+    private function compileAssets(InputInterface $input, OutputInterface $output, $dir)
     {
+        if ($input->getOption('group-assets')) {
+            $this->getAssetCollection()->setGroupAssets(true);
+        }
+        if ($input->getOption('compress-assets')) {
+            $this->getAssetCollection()->setForceAssetCompression(true);
+        }
         if (count($this->getAssetCollection()) > 0) {
             $output->writeln($this->getLine('compiling', 'static assets (js/css)'));
             $this->getAssetCollection()->compile($output, $dir);
@@ -181,6 +167,12 @@ class GenerateSiteCommand extends ContainerAwareCommand
         }
     }
 
+    /**
+     * public images folder
+     *
+     * @param \Symfony\Component\Console\Output\OutputInterface $output output
+     * @param                                                   $dir    folder
+     */
     private function publishImages(OutputInterface $output, $dir)
     {
         $images = $this->getTheme()->getImages();
