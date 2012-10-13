@@ -3,6 +3,7 @@ parameters:
   create_page.command.class: Walrus\Command\CreatePageCommand
   generate_site.command.class: Walrus\Command\GenerateSiteCommand
   startup_server.command.class: Walrus\Command\StartupServerCommand
+  project_watch.command.class: Walrus\Command\ProjectWatchCommand
 
 services:
   create_page.command:
@@ -24,3 +25,9 @@ services:
     class: %startup_server.command.class%
     arguments:
       - @service_container
+
+  project_watch.command:
+    class: %project_watch.command.class%
+    arguments:
+      - @service_container
+

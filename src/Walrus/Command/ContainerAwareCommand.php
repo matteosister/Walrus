@@ -29,10 +29,18 @@ abstract class ContainerAwareCommand extends Command
         $this->container = $container;
     }
 
+    /**
+     * run a command
+     *
+     * @param string                                            $command   command to run
+     * @param \Symfony\Component\Console\Output\OutputInterface $output    output
+     * @param array                                             $arguments args
+     */
     protected function runCommand($command, OutputInterface $output, $arguments = array())
     {
         $command = $this->getApplication()->find($command);
         $input = new ArrayInput(array_merge(array('command' => $command), $arguments));
+        var_dump($input);
         $command->run($input, $output);
     }
 

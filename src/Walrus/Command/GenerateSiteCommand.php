@@ -45,7 +45,8 @@ class GenerateSiteCommand extends ContainerAwareCommand
             ->setName('generate:site')
             ->setDescription('Generate the website')
             ->addOption('compress-assets', null, InputOption::VALUE_NONE, 'compress the assets')
-            ->addOption('group-assets', null, InputOption::VALUE_NONE, 'group the assets');
+            ->addOption('group-assets', null, InputOption::VALUE_NONE, 'group the assets')
+            ->addOption('no-header', null, InputOption::VALUE_NONE, 'do not display walrus header');
     }
 
     /**
@@ -58,7 +59,9 @@ class GenerateSiteCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->writeHeader($output);
+        if ($input->getOption('no-header')) {
+            $this->writeHeader($output);
+        }
         $tmpFolder = sys_get_temp_dir().'/walrus_'.sha1(uniqid());
         $fs = new Filesystem();
         $fs->mkdir($tmpFolder);

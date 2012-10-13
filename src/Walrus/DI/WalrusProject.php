@@ -64,6 +64,7 @@ class WalrusProject
             $this->application->add($this->container->get('create_page.command'));
             $this->application->add($this->container->get('generate_site.command'));
             $this->application->add($this->container->get('startup_server.command'));
+            $this->application->add($this->container->get('project_watch.command'));
         }
         return $this->application;
     }
