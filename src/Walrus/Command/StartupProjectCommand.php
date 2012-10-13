@@ -34,12 +34,17 @@ class StartupProjectCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->writeHeader($output);
         $fs = new Filesystem();
         $root = $this->container->getParameter('ROOT_PATH');
         $pages = $this->container->getParameter('DRAFTING_PATH').'/pages';
         $public = $this->container->getParameter('PUBLIC_PATH');
-        $output->writeln($this->getLine('creating', 'base folders'));
-        $fs->mkdir(array($pages, $public));
+        foreach (array($pages, $public) as $folder) {
+            if (!is_dir($folder)) {
+                $output->writeln($this->getLine('creating', $folder.' folder'));
+                $fs->mkdir($folder);
+            }
+        }
         $file = $root.'/walrus.yml';
         if (!file_exists($file)) {
             $output->writeln($this->getLine('creating', 'base config file <comment>walrus.yml</comment>'));
@@ -50,8 +55,12 @@ class StartupProjectCommand extends ContainerAwareCommand
             $processor = new Processor();
             $conf = new MainConfiguration();
             $processor->processConfiguration($conf, $config);
-            $output->writeln('<comment>DONE!</comment>');
         }
+        if (file_exists($root.'/vendor/bin/walrus') && !is_file($root.'/w')) {
+            $output->writeln($this->getLine('symlink', 'walrus executable to root project as "w"'));
+            $fs->symlink($root.'/vendor/bin/walrus', $root.'/w');
+        }
+        $output->writeln('<comment>Project ready!</comment>');
     }
 
     private function getDefaultConfiguration()
