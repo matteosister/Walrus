@@ -2,20 +2,23 @@ $logoBigW: 150px;
 $logoBigH: 150px;
 
 .js.borderradius {
-    .logo-big {
+    .logo.big {
         @include logo;
     }
-    .logo-small {
+    .logo.medium {
+        @include logo(80px);
+    }
+    .logo.small {
         @include logo(40px);
     }
 }
 
 .no-js {
-    .logo-big:after {
+    .logo.big:after {
         content: image-url('images/logo_120.png');
     }
 
-    .logo-small {
+    .logo.small {
         display: none;
     }
 }

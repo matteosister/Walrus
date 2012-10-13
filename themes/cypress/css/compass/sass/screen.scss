@@ -2,11 +2,10 @@
 @import "imports";
 @import "mixins";
 @import "logo";
-@import url(http://fonts.googleapis.com/css?family=Ubuntu:400,700);
 
 .hero-unit {
     position: relative;
-    .logo-big {
+    .logo {
         position: absolute;
         right: 1em;
         bottom: 1em;
