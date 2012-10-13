@@ -333,17 +333,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console",
-                "reference": "1b4f8c7fb257aebf9abd52093e720a3e73458877"
+                "reference": "79b6ad67caee9ff7bac1be620a58e9164d317c58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Console/zipball/1b4f8c7fb257aebf9abd52093e720a3e73458877",
-                "reference": "1b4f8c7fb257aebf9abd52093e720a3e73458877",
+                "url": "https://github.com/symfony/Console/zipball/79b6ad67caee9ff7bac1be620a58e9164d317c58",
+                "reference": "79b6ad67caee9ff7bac1be620a58e9164d317c58",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
+            "time": "1349963062",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -370,8 +371,7 @@
                 }
             ],
             "description": "Symfony Console Component",
-            "homepage": "http://symfony.com",
-            "time": "1349363877"
+            "homepage": "http://symfony.com"
         },
         {
             "name": "symfony/dependency-injection",
