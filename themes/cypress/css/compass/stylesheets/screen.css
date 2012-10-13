@@ -1,15 +1,119 @@
-/* line 4, ../sass/screen.scss */
-.hero-unit.walrus {
-  position: relative;
+@import url(http://fonts.googleapis.com/css?family=Ubuntu:400,700);
+/* line 5, ../sass/_logo.scss */
+.js.borderradius .logo-big {
+  display: block;
+  width: 120px;
+  height: 120px;
+  background-color: #772953;
+  -webkit-border-radius: 60px;
+  -moz-border-radius: 60px;
+  -ms-border-radius: 60px;
+  -o-border-radius: 60px;
+  border-radius: 60px;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #772953), color-stop(100%, #aa5c86));
+  background: -webkit-linear-gradient(top, #772953, #aa5c86);
+  background: -moz-linear-gradient(top, #772953, #aa5c86);
+  background: -o-linear-gradient(top, #772953, #aa5c86);
+  background: linear-gradient(top, #772953, #aa5c86);
+  -webkit-box-shadow: 0px 0px 1em #dd4814;
+  -moz-box-shadow: 0px 0px 1em #dd4814;
+  box-shadow: 0px 0px 1em #dd4814;
 }
-/* line 6, ../sass/screen.scss */
-.hero-unit.walrus img {
-  position: absolute;
-  right: 0;
-  bottom: 0;
+/* line 14, ../sass/_mixins.scss */
+.js.borderradius .logo-big:after {
+  content: 'W';
+  color: white;
+  font-size: 96px;
+  line-height: 120px;
+  display: block;
+  text-align: center;
+  font-style: normal;
+  font-family: 'Ubuntu';
+}
+/* line 8, ../sass/_logo.scss */
+.js.borderradius .logo-small {
+  display: block;
+  width: 40px;
+  height: 40px;
+  background-color: #772953;
+  -webkit-border-radius: 20px;
+  -moz-border-radius: 20px;
+  -ms-border-radius: 20px;
+  -o-border-radius: 20px;
+  border-radius: 20px;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #772953), color-stop(100%, #aa5c86));
+  background: -webkit-linear-gradient(top, #772953, #aa5c86);
+  background: -moz-linear-gradient(top, #772953, #aa5c86);
+  background: -o-linear-gradient(top, #772953, #aa5c86);
+  background: linear-gradient(top, #772953, #aa5c86);
+  -webkit-box-shadow: 0px 0px 1em #dd4814;
+  -moz-box-shadow: 0px 0px 1em #dd4814;
+  box-shadow: 0px 0px 1em #dd4814;
+}
+/* line 14, ../sass/_mixins.scss */
+.js.borderradius .logo-small:after {
+  content: 'W';
+  color: white;
+  font-size: 32px;
+  line-height: 40px;
+  display: block;
+  text-align: center;
+  font-style: normal;
+  font-family: 'Ubuntu';
 }
 
-/* line 14, ../sass/screen.scss */
+/* line 14, ../sass/_logo.scss */
+.no-js .logo-big:after {
+  content: url('/images/logo_120.png');
+}
+/* line 18, ../sass/_logo.scss */
+.no-js .logo-small {
+  display: none;
+}
+
+/* line 7, ../sass/screen.scss */
+.hero-unit {
+  position: relative;
+}
+/* line 9, ../sass/screen.scss */
+.hero-unit .logo-big {
+  position: absolute;
+  right: 1em;
+  bottom: 1em;
+}
+
+/* line 17, ../sass/screen.scss */
 .container.page h1 {
   color: #772953;
+}
+/* line 20, ../sass/screen.scss */
+.container.page .logo {
+  display: block;
+  width: 30px;
+  height: 30px;
+  background-color: #772953;
+  -webkit-border-radius: 15px;
+  -moz-border-radius: 15px;
+  -ms-border-radius: 15px;
+  -o-border-radius: 15px;
+  border-radius: 15px;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #772953), color-stop(100%, #aa5c86));
+  background: -webkit-linear-gradient(top, #772953, #aa5c86);
+  background: -moz-linear-gradient(top, #772953, #aa5c86);
+  background: -o-linear-gradient(top, #772953, #aa5c86);
+  background: linear-gradient(top, #772953, #aa5c86);
+  -webkit-box-shadow: 0px 0px 1em #dd4814;
+  -moz-box-shadow: 0px 0px 1em #dd4814;
+  box-shadow: 0px 0px 1em #dd4814;
+}
+/* line 14, ../sass/_mixins.scss */
+.container.page .logo:after {
+  content: 'W';
+  color: white;
+  font-size: 24px;
+  line-height: 30px;
+  display: block;
+  text-align: center;
+  font-style: normal;
+  font-family: 'Ubuntu';
 }

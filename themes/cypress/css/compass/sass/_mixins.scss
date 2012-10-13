@@ -1,0 +1,24 @@
+@import "compass/css3/border-radius";
+@import "compass/css3/images";
+@import "compass/css3/box-shadow";
+@import "compass/css3/text-shadow";
+
+@mixin logo($size: 120px, $bgColor: #772953, $frontColor: #FFF) {
+    display: block;
+    width: $size;
+    height: $size;
+    background-color: $bgColor;
+    @include border-radius($size/2);
+    @include background(linear-gradient(top, $bgColor, $bgColor + #333));
+    @include single-box-shadow;
+    &:after {
+        content: 'W';
+        color: $frontColor;
+        font-size: $size * 0.8;
+        line-height: $size;
+        display: block;
+        text-align: center;
+        font-style: normal;
+        font-family: 'Ubuntu';
+    }
+}

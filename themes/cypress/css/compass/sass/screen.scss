@@ -1,17 +1,23 @@
 @import "variables";
 @import "imports";
+@import "mixins";
+@import "logo";
+@import url(http://fonts.googleapis.com/css?family=Ubuntu:400,700);
 
-.hero-unit.walrus {
+.hero-unit {
     position: relative;
-    img {
+    .logo-big {
         position: absolute;
-        right: 0;
-        bottom: 0;
+        right: 1em;
+        bottom: 1em;
     }
 }
 
 .container.page {
     h1 {
         color: $purple;
+    }
+    .logo {
+        @include logo(30px);
     }
 }

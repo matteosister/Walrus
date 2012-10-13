@@ -1,0 +1,21 @@
+$logoBigW: 150px;
+$logoBigH: 150px;
+
+.js.borderradius {
+    .logo-big {
+        @include logo;
+    }
+    .logo-small {
+        @include logo(40px);
+    }
+}
+
+.no-js {
+    .logo-big:after {
+        content: image-url('images/logo_120.png');
+    }
+
+    .logo-small {
+        display: none;
+    }
+}
