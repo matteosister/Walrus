@@ -11,14 +11,15 @@ namespace Walrus\Theme;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Config\Definition\Processor,
-    Walrus\Configuration\ThemeConfiguration,
-    Symfony\Component\Yaml\Yaml;
+    Symfony\Component\Yaml\Yaml,
+    Symfony\Component\Config\FileLocator;
 use Walrus\Asset\AssetCollection,
     Walrus\Asset\Project\Css\CssFolder,
     Walrus\Asset\Project\Css\Compass,
     Walrus\Asset\Project\Css\Less,
     Walrus\Asset\Project\Js\JsFolder,
-    Walrus\Asset\Project\Js\JsFile;
+    Walrus\Asset\Project\Js\JsFile,
+    Walrus\Configuration\ThemeConfiguration;
 use CompassElephant\CompassProject;
 use LessElephant\LessProject;
 
@@ -55,7 +56,8 @@ class Theme
     {
         $this->themePath = realpath($themePath);
         $this->assetCollection = $assetCollection;
-        $config = Yaml::parse($themePath.'/theme.yml');
+        $locator = new FileLocator($themePath);
+        $config = Yaml::parse($locator->locate('theme.yml'));
         $processor = new Processor();
         $conf = new ThemeConfiguration();
         $pc = $processor->processConfiguration($conf, $config);
