@@ -40,7 +40,6 @@ abstract class ContainerAwareCommand extends Command
     {
         $command = $this->getApplication()->find($command);
         $input = new ArrayInput(array_merge(array('command' => $command), $arguments));
-        var_dump($input);
         $command->run($input, $output);
     }
 

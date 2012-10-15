@@ -31,6 +31,8 @@ class ProjectWatchCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->writeHeader($output);
+        $output->writeln($this->getLine('starting up', 'server'));
+        $this->runCommand('startup:server', $output);
         $output->writeln($this->getLine('watching', 'project for changes'));
         $this->writeRuler($output);
         $actualSha = '';
