@@ -71,9 +71,8 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
         }
         $finder = new Finder();
         $this->iterator = $finder->files()->name('*.md')->in($dir);
-        foreach ($this->iterator as $md) {
-            $md = file_get_contents($md->getRealPath());
-            $this->objects[] = new Page($md);
+        foreach ($this->iterator as $mdFile) {
+            $this->objects[] = new Page($mdFile->getRealPath());
         }
         foreach ($this->objects as $page) {
             $page->setUrl($this->generateFullUrl($page->getMetadata()->getUrl()));
@@ -93,7 +92,6 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
             return array();
         }
         $homepageUrl = $homepage->getMetadata()->getUrl();
-        var_dump($homepageUrl);die;
         return $this->getChildrenOf($homepageUrl);
     }
 

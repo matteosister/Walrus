@@ -41,12 +41,19 @@ class Page extends BaseObject
     private $hasChildren;
 
     /**
+     * @var string
+     */
+    private $mdPath;
+
+    /**
      * constructor
      *
-     * @param string $md the markdown content
+     * @param string $mdPath the .md full file path
      */
-    public function __construct($md)
+    public function __construct($mdPath)
     {
+        $this->mdPath = $mdPath;
+        $md = file_get_contents($mdPath);
         $this->checkPage($md);
         $this->metadata = $this->parseMetadata($md, 'Walrus\MDObject\Page\Metadata');
         $this->content = $this->parseContent($md, 'Walrus\MDObject\Page\Content');
@@ -158,5 +165,25 @@ class Page extends BaseObject
     public function getHasChildren()
     {
         return $this->hasChildren;
+    }
+
+    /**
+     * MdPath setter
+     *
+     * @param string $mdPath la variabile mdPath
+     */
+    public function setMdPath($mdPath)
+    {
+        $this->mdPath = $mdPath;
+    }
+
+    /**
+     * MdPath getter
+     *
+     * @return string
+     */
+    public function getMdPath()
+    {
+        return $this->mdPath;
     }
 }

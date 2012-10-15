@@ -71,7 +71,6 @@ class StartupServerCommand extends ContainerAwareCommand
                         break;
                 }
                 $resource = $matches[5];
-                //var_dump($date, $ip, $port, $response, $resource);
                 $output->writeln(sprintf('<comment>%s</comment> [<%s>%s</%s>]: %s', $date, $type, $response, $type, $resource));
             } else {
                 $output->write(sprintf('<error>%s</error>', $data));

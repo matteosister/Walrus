@@ -147,3 +147,24 @@
   font-style: normal;
   font-family: 'Ubuntu';
 }
+
+/* line 24, ../sass/screen.scss */
+code {
+  display: block;
+  padding: 0.6em 40px 0.6em 1em;
+  margin: 1em 0 2em;
+  font-size: 1.05em;
+  color: #772953;
+  font-family: 'Ubuntu mono', Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-weight: bold;
+  position: relative;
+}
+/* line 33, ../sass/screen.scss */
+code:after {
+  content: url('/images/logo_code_40.png');
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  right: 10px;
+  bottom: -20px;
+}

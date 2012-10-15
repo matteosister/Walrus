@@ -19,7 +19,7 @@ class PageTest extends WalrusTestCase
      */
     public function testConstructor()
     {
-        $page = new Page($this->getMDPageContent());
+        $page = new Page($this->getFixtureFile('homepage.md'));
         $metadata = $page->getMetadata();
         $content = $page->getContent();
         $this->assertInstanceOf('Walrus\MDObject\Page\Metadata', $metadata);

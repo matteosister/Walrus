@@ -28,6 +28,7 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
      */
     protected $filesystem;
     protected $playgroundDir;
+    protected $fixturesDir;
     protected $draftingDir;
     protected $pagesDir;
     protected $postsDir;
@@ -48,7 +49,8 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->filesystem = new Filesystem();
-        $this->playgroundDir = __DIR__.'/Playground';
+        $this->playgroundDir = realpath(__DIR__.'/../playground');
+        $this->fixturesDir = realpath(__DIR__.'/../fixtures');
         $this->draftingDir = $this->playgroundDir.'/drafting';
         $this->assetsProjectsDir= $this->playgroundDir.'/assets_projects';
         $this->createFolderIfNotExists($this->draftingDir);
@@ -236,6 +238,11 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
         $application->add(new CreatePageCommand($this->getMockContainer()));
 
         return $application;
+    }
+
+    protected function getFixtureFile($name)
+    {
+        return $this->fixturesDir.'/'.$name;
     }
 
     protected function getMDPageContent($title = null, $date = null, $url = null, $homepage = false, $parent = null)
