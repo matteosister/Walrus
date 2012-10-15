@@ -14,18 +14,15 @@ use Walrus\Collection\PageCollection,
 
 class PageCollectionTest extends WalrusTestCase
 {
-    /**
-     * @group collections
-     */
-    public function testFullDir()
+    public function testLoad()
     {
-        $this->addRandomPages(3);
+        $this->addRandomPages(2);
         $pageCollection = new PageCollection();
         $pageCollection->load($this->pagesDir);
+        $this->assertCount(2, $pageCollection);
         $this->assertInstanceOf('\ArrayAccess', $pageCollection);
         $this->assertInstanceOf('\Countable', $pageCollection);
         $this->assertInstanceOf('\Iterator', $pageCollection);
-        $this->assertCount(3, $pageCollection);
         foreach ($pageCollection as $page) {
             $this->assertInstanceOf('Walrus\MDObject\Page\Page', $page);
         }

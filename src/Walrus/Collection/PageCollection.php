@@ -93,6 +93,7 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
             return array();
         }
         $homepageUrl = $homepage->getMetadata()->getUrl();
+        var_dump($homepageUrl);die;
         return $this->getChildrenOf($homepageUrl);
     }
 

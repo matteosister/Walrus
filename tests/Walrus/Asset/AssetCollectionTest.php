@@ -68,4 +68,6 @@ class AssetCollectionTest extends WalrusTestCase
         $ac->addProject($mockJs2);
         $this->assertCount(2, $ac->getJavascriptProjects());
     }
+
+
 }

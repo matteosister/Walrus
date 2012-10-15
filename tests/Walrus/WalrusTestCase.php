@@ -9,9 +9,10 @@
 
 namespace Walrus;
 
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder,
+    Symfony\Component\Console\Application,
+    Symfony\Component\Filesystem\Filesystem,
+    Symfony\Component\Yaml\Yaml;
 use Walrus\Command\CreatePageCommand;
 use Walrus\Utilities\SlugifierTrait;
 
@@ -89,8 +90,9 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
     protected function addRandomPages($num = 1)
     {
         for ($i = 1; $i <= $num; $i++) {
-            $content = $this->getMDPageContent('test '.$i, null, 'test-'.$i);
-            $filename = $this->draftingDir.'/pages/'.sprintf('12-01-01_10:00:00_page_test-%s.md', $i);
+            $content = $this->getMDPageContent('test '.$i, null, 'test-'.$i, $i == 1, $i == 1 ? null : 'test-1');
+            $number = str_pad($i, 4, '0', STR_PAD_RIGHT);
+            $filename = $this->pagesDir.'/'.sprintf('%s-test-%s.md', $number, $i);
             file_put_contents($filename, $content);
         }
     }
@@ -236,24 +238,14 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
         return $application;
     }
 
-    protected function getMDPageContent(
-        $title = null, $date = null, $url = null, $homepage = false, $content = null, $type = null)
+    protected function getMDPageContent($title = null, $date = null, $url = null, $homepage = false, $parent = null)
     {
-        $title = $this->defaultValue($title, static::PAGE_TITLE);
-        $date = $this->defaultValue($date, static::PAGE_DATE);
-        $url = $this->defaultValue($url, static::PAGE_URL);
-        $homepage = $this->defaultValue($homepage, static::PAGE_HOMEPAGE);
-        $content = $this->defaultValue($content, static::PAGE_CONTENT);
-        $type = $this->defaultValue($type, static::PAGE_TYPE);
-        return sprintf('***
-title: %s
-date: %s
-url: %s
-parent:
-homepage: %s
-type: %s
-***
-%s', $title, $date, $url, $homepage, $type, $content);
+        $options = compact('title', 'date', 'url', 'parent', 'homepage');
+        $output = $this->getTwig()->render('page.md.twig', array(
+            'options' => Yaml::dump($options),
+            'title' => $title
+        ));
+        return $output;
     }
 
     protected function defaultValue($var, $defaultValue, $check = array(null, false))
@@ -281,6 +273,6 @@ type: %s
 
     protected function pageFileExists($slug)
     {
-        $this->assertFileExists($this->pagesDir.'/'.static::DATE_DEFAULT.sprintf('_page_%s.md', $slug), sprintf('The page file %s has not been created', $slug));
+        $this->assertFileExists($this->pagesDir.'/'.sprintf('%s.md', $slug), sprintf('The page file %s has not been created', $slug));
     }
 }
