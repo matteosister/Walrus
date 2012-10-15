@@ -21,6 +21,8 @@ class ProjectWatchCommand extends ContainerAwareCommand
 {
     use OutputWriterTrait;
 
+    private $output;
+
     protected function configure()
     {
         $this
@@ -30,6 +32,7 @@ class ProjectWatchCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->output = $output;
         $this->writeHeader($output);
         $output->writeln($this->getLine('watching', 'project for changes'));
         $this->writeRuler($output);
