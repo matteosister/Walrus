@@ -64,20 +64,18 @@ class CreatePageCommand extends ContainerAwareCommand
             $this->runProjectStartup($output, $this->getApplication());
         }
         $title = $input->getArgument('title');
-        $date = $this->getUtilities()->getDateFormatted();
         $slug = $this->getUtilities()->getUniqueSlug(array_map(function(Page $p) {
             return $p->getUrl();
         }, $this->container->get('walrus.collection.page')->toArray()), $title);
         $template = $this->getTwig()->loadTemplate('page.md.twig');
         if (0 == $this->getPageCollection()->count()) {
-            $parent = '';
+            $parent = null;
             $homepage = true;
-            $url = '';
         } else {
             $parent = $input->getArgument('parent') ? $input->getArgument('parent') : $this->getPageCollection()->getHomepage()->getMetadata()->getUrl();
             $homepage = false;
-            $url =  $slug;
         }
+        $url =  $slug;
         $options = compact('title', 'date', 'url', 'parent', 'homepage');
         $fileContent = $template->render(array(
             'title' => $title,
@@ -87,7 +85,8 @@ class CreatePageCommand extends ContainerAwareCommand
         if (!is_dir($dir)) {
             mkdir($dir);
         }
-        $fileName = $dir.'/'.$date.'_page_'.$slug.'.md';
+        $number = str_pad((string)$this->getPageCollection()->count() + 1, 4, '0', STR_PAD_LEFT);
+        $fileName = sprintf('%s/%s-%s.md', $dir, $number, $slug);
         file_put_contents($fileName, $fileContent);
         $this->writeRuler($output);
         $output->writeln(sprintf('<info>Page</info> <comment>%s</comment> created', $title));

@@ -89,7 +89,7 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
     public function getMainNavigation()
     {
         $homepage = $this->getHomepage();
-        if (null == $homepage) {
+        if (null === $homepage) {
             return array();
         }
         $homepageUrl = $homepage->getMetadata()->getUrl();
