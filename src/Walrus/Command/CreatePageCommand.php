@@ -86,7 +86,7 @@ class CreatePageCommand extends ContainerAwareCommand
             mkdir($dir);
         }
         $number = str_pad((string) $this->getPageCollection()->count() + 1, 4, '0', STR_PAD_LEFT);
-        $fileName = sprintf('%s/%s-%s.md', $dir, $number, $slug);
+        $fileName = sprintf('%s/%s_%s.md', $dir, $number, $slug);
         file_put_contents($fileName, $fileContent);
         $this->writeRuler($output);
         $output->writeln(sprintf('<info>Page</info> <comment>%s</comment> created', $title));
