@@ -1,5 +1,5 @@
 {
-    "hash": "90f32ad0e62614c65f087048c4674886",
+    "hash": "3711093d59470779fefb9cc37b932716",
     "packages": [
         {
             "name": "cypresslab/compass-elephant",
@@ -248,6 +248,47 @@
             ]
         },
         {
+            "name": "kriswallsmith/spork",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kriswallsmith/spork.git",
+                "reference": "e6a3ec2fc4d74a174148b539ab8c3c7cebefed0e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/kriswallsmith/spork/zipball/e6a3ec2fc4d74a174148b539ab8c3c7cebefed0e",
+                "reference": "e6a3ec2fc4d74a174148b539ab8c3c7cebefed0e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "symfony/event-dispatcher": "*",
+                "ext-pcntl": "*",
+                "ext-posix": "*"
+            },
+            "time": "1339256178",
+            "type": "library",
+            "installation-source": "source",
+            "autoload": {
+                "psr-0": {
+                    "Spork": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kris Wallsmith",
+                    "email": "kris.wallsmith@gmail.com",
+                    "homepage": "http://kriswallsmith.net/"
+                }
+            ],
+            "description": "Asynchronous PHP",
+            "homepage": "https://github.com/kriswallsmith/spork"
+        },
+        {
             "name": "nervo/yuicompressor",
             "version": "2.4.7",
             "source": {
@@ -421,6 +462,60 @@
                 }
             ],
             "description": "Symfony DependencyInjection Component",
+            "homepage": "http://symfony.com"
+        },
+        {
+            "name": "symfony/event-dispatcher",
+            "version": "v2.1.2",
+            "target-dir": "Symfony/Component/EventDispatcher",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/EventDispatcher",
+                "reference": "v2.1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/symfony/EventDispatcher/zipball/v2.1.2",
+                "reference": "v2.1.2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "symfony/dependency-injection": "2.1.*"
+            },
+            "suggest": {
+                "symfony/dependency-injection": "2.1.*",
+                "symfony/http-kernel": "2.1.*"
+            },
+            "time": "2012-09-10 03:53:42",
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.1-dev"
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\EventDispatcher": ""
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony EventDispatcher Component",
             "homepage": "http://symfony.com"
         },
         {
@@ -714,6 +809,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
+        "kriswallsmith/spork": 20,
         "nervo/yuicompressor": 0,
         "dflydev/github-gist-twig-extension": 0
     }
