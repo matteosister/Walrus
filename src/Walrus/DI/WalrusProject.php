@@ -34,18 +34,12 @@ class WalrusProject
     private $application;
 
     /**
-     * @var bool
-     */
-    private $compress;
-
-    /**
      * class constructor
      *
      * @param string $rootPath root of the project
      */
     public function __construct($rootPath)
     {
-        $this->compress = false;
         $this->container = new ContainerBuilder();
         $this->container->setParameter("ROOT_PATH", realpath($rootPath));
         $this->container->setParameter("WALRUS_PATH", realpath(__DIR__.'/../../../'));
@@ -80,5 +74,15 @@ class WalrusProject
         $loader->load('markdown.yml');
         $loader->load('theme.yml');
         $loader->load('project.yml');
+    }
+
+    /**
+     * Container getter
+     *
+     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    public function getContainer()
+    {
+        return $this->container;
     }
 }
