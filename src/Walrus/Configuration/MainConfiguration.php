@@ -12,6 +12,9 @@ namespace Walrus\Configuration;
 use Symfony\Component\Config\Definition\ConfigurationInterface,
     Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
+/**
+ * main configuration definition
+ */
 class MainConfiguration implements ConfigurationInterface
 {
     /**
@@ -29,6 +32,7 @@ class MainConfiguration implements ConfigurationInterface
                 ->scalarNode('theme')->defaultValue('cypress')->end()
                 ->scalarNode('theme_location')->defaultNull()->end()
             ->end();
+
         return $treeBuilder;
     }
 }

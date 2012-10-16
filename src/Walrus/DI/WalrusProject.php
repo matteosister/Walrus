@@ -19,6 +19,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
 use Walrus\Configuration\MainConfiguration;
 use Walrus\Utilities\SlugifierTrait;
 
+/**
+ * base project class
+ */
 class WalrusProject
 {
     use SlugifierTrait;
@@ -50,6 +53,11 @@ class WalrusProject
         $this->container->compile();
     }
 
+    /**
+     * get application
+     *
+     * @return \Symfony\Component\Console\Application
+     */
     public function getApplication()
     {
         if (null === $this->application) {
@@ -60,6 +68,7 @@ class WalrusProject
             $this->application->add($this->container->get('startup_server.command'));
             $this->application->add($this->container->get('project_watch.command'));
         }
+
         return $this->application;
     }
 

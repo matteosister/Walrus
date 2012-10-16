@@ -10,7 +10,7 @@
 namespace Walrus\Exception;
 
 /**
- * method missing
+ * metadata missing
  */
 class MetadataMissing extends \Exception
 {

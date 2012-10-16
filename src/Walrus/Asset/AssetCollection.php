@@ -16,6 +16,9 @@ use Assetic\Filter\FilterInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Walrus\Theme\Theme;
 
+/**
+ * Assets Collection
+ */
 class AssetCollection implements \Countable, \ArrayAccess, \Iterator
 {
     use OutputWriterTrait;
@@ -74,10 +77,12 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
         switch ($type) {
             case 'css':
                 $this->cssFilter = $filter;
+
                 return;
                 break;
             case 'js':
                 $this->jsFilter = $filter;
+
                 return;
                 break;
         }
@@ -97,10 +102,18 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
     /**
      * compile
      */
+
+    /**
+     * compile assets
+     *
+     * @param \Symfony\Component\Console\Output\OutputInterface $output output
+     * @param string                                            $to     folder
+     */
     public function compile(OutputInterface $output, $to)
     {
         if ($this->groupAssets) {
             $this->compileGrouped($output, $to);
+
             return;
         }
         foreach ($this->projects as $project) {
@@ -110,9 +123,10 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
             $output->writeln($this->getLine('compiling', sprintf('<comment>%s</comment> project', $project->getName())));
             $project->compile();
             $output->writeln($this->getLine('publishing', sprintf('<comment>%s</comment> project', $project->getName())));
-            if ($project->getProjectType() == AbstractProject::TYPE_CSS) {
+            if (AbstractProject::TYPE_CSS === $project->getProjectType()) {
                 $project->publish($to.'/'.$project->getProjectType(), $this->cssFilter);
-            } else {
+            }
+            if (AbstractProject::TYPE_JS === $project->getProjectType()) {
                 $project->publish($to.'/'.$project->getProjectType(), $this->jsFilter);
             }
         }
@@ -122,13 +136,16 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
      * compile assets grouped by type
      *
      * @param \Symfony\Component\Console\Output\OutputInterface $output OutputInterface
-     * @param                                                   $to     folder
+     * @param string                                            $to     folder
+     *
+     * @return mixed
      */
     private function compileGrouped(OutputInterface $output, $to)
     {
         $css = '';
         $js = '';
         $output->writeln($this->getLine('loading', sprintf('stylesheets (%s)', implode(', ', array_map(function($project) {
+
             return '<comment>'.$project->getName().'</comment>';
         }, $this->getStylesheetProjects())))));
         foreach ($this->getStylesheetProjects() as $project) {
@@ -154,6 +171,9 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
         file_put_contents($to.'/javascripts/all.js', $js);
     }
 
+    /**
+     * @return string
+     */
     public function output()
     {
         $out = '';
@@ -165,6 +185,7 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
                 $out .= $project->output();
             }
         }
+
         return $out;
     }
 
@@ -289,11 +310,10 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Whether a offset exists
-     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
      *
-     * @param mixed $offset <p>
-     *                      An offset to check for.
-     * </p>
+     * @param mixed $offset An offset to check for.
+     *
+     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
      *
      * @return boolean true on success or false on failure.
      * </p>
@@ -308,10 +328,10 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Offset to retrieve
+     *
+     * @param mixed $offset The offset to retrieve.
+     *
      * @link http://php.net/manual/en/arrayaccess.offsetget.php
-     * @param mixed $offset <p>
-     *                      The offset to retrieve.
-     * </p>
      * @return mixed Can return all value types.
      */
     public function offsetGet($offset)
@@ -322,13 +342,11 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Offset to set
+     *
+     * @param mixed $offset The offset to assign the value to.
+     * @param mixed $value  The value to set.
+     *
      * @link http://php.net/manual/en/arrayaccess.offsetset.php
-     * @param mixed $offset <p>
-     *                      The offset to assign the value to.
-     * </p>
-     * @param mixed $value  <p>
-     *                      The value to set.
-     * </p>
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -343,10 +361,10 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Offset to unset
+     *
+     * @param mixed $offset The offset to unset.
+     *
      * @link http://php.net/manual/en/arrayaccess.offsetunset.php
-     * @param mixed $offset <p>
-     *                      The offset to unset.
-     * </p>
      * @return void
      */
     public function offsetUnset($offset)

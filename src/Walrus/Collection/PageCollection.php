@@ -44,7 +44,7 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
      */
     public function __construct()
     {
-        $this->objects = array();
+        $this->objects  = array();
         $this->position = 0;
     }
 
@@ -69,7 +69,7 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
         if (!is_dir($dir)) {
             return;
         }
-        $finder = new Finder();
+        $finder         = new Finder();
         $this->iterator = $finder->files()->name('*.md')->in($dir);
         foreach ($this->iterator as $mdFile) {
             $this->objects[] = new Page($mdFile->getRealPath());
@@ -95,6 +95,7 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
     {
         $file1 = $a->getMdPath();
         $file2 = $b->getMdPath();
+
         return $a->getMdPath() > $b->getMdPath() ? 1 : -1;
     }
 
@@ -110,17 +111,26 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
             return array();
         }
         $homepageUrl = $homepage->getMetadata()->getUrl();
+
         return $this->getChildrenOf($homepageUrl);
     }
 
+    /**
+     * gets a collection of pages up to the home
+     *
+     * @param string $url the url of the target page
+     *
+     * @return array
+     */
     public function getBreadcrumbs($url)
     {
-        $page = $this->findOneByUrl($url);
+        $page     = $this->findOneByUrl($url);
         $output[] = $page;
         while (null !== $page->getMetadata()->getParent()) {
-            $page = $this->findOneByUrl($page->getMetadata()->getParent());
+            $page     = $this->findOneByUrl($page->getMetadata()->getParent());
             $output[] = $page;
         }
+
         return array_reverse($output);
     }
 
@@ -133,9 +143,11 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
      */
     public function getChildrenOf($url)
     {
-        return array_filter($this->objects, function(Page $page) use ($url) {
-            return $page->parent == $url;
-        });
+        return array_filter(
+            $this->objects, function (Page $page) use ($url) {
+                return $page->parent == $url;
+            }
+        );
     }
 
     /**
@@ -150,6 +162,7 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
                 return $page;
             }
         }
+
         return null;
     }
 
@@ -167,11 +180,16 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
                 return $page;
             }
         }
+
         return null;
     }
 
     /**
-     * full url
+     * generate the full url of a page
+     *
+     * @param string $url page url
+     *
+     * @return string
      */
     public function generateFullUrl($url)
     {
@@ -184,24 +202,21 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
             if ($page->getMetadata()->getHomepage()) {
                 break;
             }
-            $url = $page->getMetadata()->getUrl().'/'.$url;
+            $url = $page->getMetadata()->getUrl() . '/' . $url;
         }
-        return $url.'.html';
+
+        return $url . '.html';
     }
 
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Whether a offset exists
+     *
+     * @param mixed $offset An offset to check for.
+     *
      * @link http://php.net/manual/en/arrayaccess.offsetexists.php
      *
-     * @param mixed $offset <p>
-     *                      An offset to check for.
-     * </p>
-     *
-     * @return boolean true on success or false on failure.
-     * </p>
-     * <p>
-     *       The return value will be casted to boolean if non-boolean was returned.
+     * @return boolean true on success or false on failure. The return value will be casted to boolean if non-boolean was returned.
      */
     public function offsetExists($offset)
     {
@@ -211,10 +226,11 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Offset to retrieve
+     *
+     * @param mixed $offset The offset to retrieve.
+     *
      * @link http://php.net/manual/en/arrayaccess.offsetget.php
-     * @param mixed $offset <p>
-     *                      The offset to retrieve.
-     * </p>
+     *
      * @return mixed Can return all value types.
      */
     public function offsetGet($offset)
@@ -225,13 +241,12 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Offset to set
+     *
+     * @param mixed $offset The offset to assign the value to.
+     * @param mixed $value  The value to set.
+     *
      * @link http://php.net/manual/en/arrayaccess.offsetset.php
-     * @param mixed $offset <p>
-     *                      The offset to assign the value to.
-     * </p>
-     * @param mixed $value  <p>
-     *                      The value to set.
-     * </p>
+     *
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -246,10 +261,11 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Offset to unset
+     *
+     * @param mixed $offset The offset to unset.
+     *
      * @link http://php.net/manual/en/arrayaccess.offsetunset.php
-     * @param mixed $offset <p>
-     *                      The offset to unset.
-     * </p>
+     *
      * @return void
      */
     public function offsetUnset($offset)
@@ -290,7 +306,7 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
      */
     public function next()
     {
-        ++ $this->position;
+        ++$this->position;
     }
 
     /**

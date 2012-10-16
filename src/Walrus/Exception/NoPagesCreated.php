@@ -9,6 +9,9 @@
 
 namespace Walrus\Exception;
 
+/**
+ * no pages created
+ */
 class NoPagesCreated extends \Exception
 {
 }

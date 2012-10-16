@@ -17,6 +17,9 @@ use Symfony\Component\Console\Input\InputInterface,
 use Spork\ProcessManager,
     Spork\EventDispatcher\EventDispatcher;
 
+/**
+ * project:watch command
+ */
 class ProjectWatchCommand extends ContainerAwareCommand
 {
     use OutputWriterTrait;
@@ -65,6 +68,7 @@ class ProjectWatchCommand extends ContainerAwareCommand
         foreach ($iterator as $file) {
             $content .= file_get_contents($file);
         }
+
         return sha1($content);
     }
 }

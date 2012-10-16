@@ -89,8 +89,10 @@ class GenerateSiteCommand extends ContainerAwareCommand
     }
 
     /**
+     * setup
+     *
      * @param \Symfony\Component\Console\Output\OutputInterface $output OutputInterface
-     * @param                                                   $dir    folder
+     * @param string                                            $dir    folder
      */
     private function setup(OutputInterface $output, $dir)
     {
@@ -150,7 +152,7 @@ class GenerateSiteCommand extends ContainerAwareCommand
      *
      * @param \Symfony\Component\Console\Input\InputInterface   $input  input
      * @param \Symfony\Component\Console\Output\OutputInterface $output output
-     * @param                                                   $dir    folder
+     * @param string                                            $dir    folder
      *
      * @return void
      */
@@ -174,7 +176,7 @@ class GenerateSiteCommand extends ContainerAwareCommand
      * public images folder
      *
      * @param \Symfony\Component\Console\Output\OutputInterface $output output
-     * @param                                                   $dir    folder
+     * @param string                                            $dir    folder
      */
     private function publishImages(OutputInterface $output, $dir)
     {

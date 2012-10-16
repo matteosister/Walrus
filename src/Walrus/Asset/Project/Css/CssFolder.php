@@ -77,16 +77,17 @@ class CssFolder extends AbstractProject implements ProjectInterface
      *
      * @return string
      */
-    function getStream($filter = null)
+    public function getStream($filter = null)
     {
         $iterator = Finder::create()->files()->name('*.css')->in($this->folder);
         $assetCollection = new AssetCollection();
-        foreach($iterator as $file) {
+        foreach ($iterator as $file) {
             $assetCollection->add(new GlobAsset(realpath($file->getPathName())));
         }
         if (null !== $filter && $this->compress) {
             $assetCollection->ensureFilter($filter);
         }
+
         return $assetCollection->dump();
     }
 
@@ -107,6 +108,11 @@ class CssFolder extends AbstractProject implements ProjectInterface
         return $output;
     }
 
+    /**
+     * output folder of compass compile
+     *
+     * @return string
+     */
     public function getOutputFilename()
     {
         return $this->slugify($this->name).'.css';
@@ -117,7 +123,7 @@ class CssFolder extends AbstractProject implements ProjectInterface
      *
      * @return string
      */
-    function getName()
+    public function getName()
     {
         return $this->name;
     }
@@ -125,7 +131,7 @@ class CssFolder extends AbstractProject implements ProjectInterface
     /**
      * @return string
      */
-    function getProjectType()
+    public function getProjectType()
     {
         return static::TYPE_CSS;
     }

@@ -9,6 +9,9 @@
 
 namespace Walrus\Asset\Project;
 
+/**
+ * Abstract asset project
+ */
 abstract class AbstractProject
 {
     const TYPE_CSS = 'stylesheets';
@@ -22,7 +25,7 @@ abstract class AbstractProject
     /**
      * @return string
      */
-    abstract function getProjectType();
+    abstract public function getProjectType();
 
     /**
      * Compress setter

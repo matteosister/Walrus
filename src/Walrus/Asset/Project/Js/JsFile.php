@@ -35,8 +35,11 @@ class JsFile extends AbstractProject implements ProjectInterface
     /**
      * Class constructor
      *
-     * @param string $folder folder
-     * @param null   $name   project name
+     * @param string $file file name
+     * @param null   $name project name
+     *
+     * @throws \Walrus\Exception\FileNotFoundException
+     * @internal param string $folder folder
      */
     public function __construct($file, $name = null)
     {
@@ -76,7 +79,7 @@ class JsFile extends AbstractProject implements ProjectInterface
      */
     public function publish($to = null, $filter = null)
     {
-        file_put_contents($to.'/'.$this->getOutputFilename(), $this->getStream($filter));
+        file_put_contents($to . '/' . $this->getOutputFilename(), $this->getStream($filter));
     }
 
     /**
@@ -92,6 +95,7 @@ class JsFile extends AbstractProject implements ProjectInterface
         if (null !== $filter && $this->compress) {
             $asset->ensureFilter($filter);
         }
+
         return $asset->dump();
     }
 
@@ -110,7 +114,7 @@ class JsFile extends AbstractProject implements ProjectInterface
      */
     public function getOutputFilename()
     {
-        return $this->slugify($this->name).'.js';
+        return $this->slugify($this->name) . '.js';
     }
 
     /**

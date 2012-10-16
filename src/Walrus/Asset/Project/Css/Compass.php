@@ -81,11 +81,11 @@ class Compass extends AbstractProject implements ProjectInterface
     /**
      * get the output stream
      *
-     * @param null $filter FilterInterface
+     * @param null|\Assetic\Filter\FilterInterface $filter FilterInterface
      *
      * @return string
      */
-    function getStream($filter = null)
+    public function getStream($filter = null)
     {
         $iterator = Finder::create()->files()->name('*.css')->in($this->getOutputFolder());
         $assetCollection = new AssetCollection();
@@ -95,6 +95,7 @@ class Compass extends AbstractProject implements ProjectInterface
         if (null !== $filter) {
             $assetCollection->ensureFilter($filter);
         }
+
         return $assetCollection->dump();
     }
 
@@ -115,6 +116,11 @@ class Compass extends AbstractProject implements ProjectInterface
         return $output;
     }
 
+    /**
+     * generates the output filename
+     *
+     * @return string
+     */
     public function getOutputFilename()
     {
         return $this->slugify($this->name).'.css';
@@ -141,9 +147,11 @@ class Compass extends AbstractProject implements ProjectInterface
     }
 
     /**
+     * get project type
+     *
      * @return string
      */
-    function getProjectType()
+    public function getProjectType()
     {
         return static::TYPE_CSS;
     }

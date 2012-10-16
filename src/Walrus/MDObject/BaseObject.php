@@ -73,6 +73,7 @@ class BaseObject
     protected function toHtml($md)
     {
         $parser = new MarkdownParser();
+
         return $parser->transform($md);
     }
 

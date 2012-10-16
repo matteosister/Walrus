@@ -52,6 +52,12 @@ class Theme
      */
     private $compressAssets;
 
+    /**
+     * class constructor
+     *
+     * @param string                        $themePath       theme path
+     * @param \Walrus\Asset\AssetCollection $assetCollection assets collection
+     */
     public function __construct($themePath, AssetCollection $assetCollection)
     {
         $this->themePath = realpath($themePath);
@@ -65,7 +71,7 @@ class Theme
         $this->images = $this->themePath.'/'.$pc['images'];
         $this->compressAssets = $pc['compress_assets'];
         $this->assetCollection->setGroupAssets($pc['group_assets']);
-        foreach($pc['assets'] as $assetsConfiguration) {
+        foreach ($pc['assets'] as $assetsConfiguration) {
             switch($assetsConfiguration['type']) {
                 case 'compass':
                     $this->compassConfiguration($assetsConfiguration);

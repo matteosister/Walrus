@@ -9,6 +9,9 @@
 
 namespace Walrus\Exception;
 
+/**
+ * url not found
+ */
 class UrlNotFoundException extends \Exception
 {
 }

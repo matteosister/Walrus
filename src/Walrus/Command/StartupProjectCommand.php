@@ -20,7 +20,9 @@ use Walrus\Command\OutputWriterTrait,
     Walrus\Command\ContainerAwareCommand,
     Walrus\Configuration\MainConfiguration;
 
-
+/**
+ * startup:project command
+ */
 class StartupProjectCommand extends ContainerAwareCommand
 {
     use OutputWriterTrait;

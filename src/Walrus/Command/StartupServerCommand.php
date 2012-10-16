@@ -24,6 +24,9 @@ class StartupServerCommand extends ContainerAwareCommand
 {
     use OutputWriterTrait;
 
+    /**
+     * configure
+     */
     public function configure()
     {
         $this

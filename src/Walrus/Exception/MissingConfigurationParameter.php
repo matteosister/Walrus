@@ -9,6 +9,9 @@
 
 namespace Walrus\Exception;
 
+/**
+ * missing configuration parameter
+ */
 class MissingConfigurationParameter extends \Exception
 {
 }

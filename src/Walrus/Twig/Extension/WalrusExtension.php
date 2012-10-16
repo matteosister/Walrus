@@ -58,6 +58,14 @@ abstract class WalrusExtension extends \Twig_Extension
         );
     }
 
+    /**
+     * generate a url
+     *
+     * @param string $slug page url
+     *
+     * @return string
+     * @throws \Walrus\Exception\UrlNotFoundException
+     */
     public function urlFor($slug)
     {
         $pages = array_filter($this->getPageCollection()->toArray(), function(Page $page) use ($slug) {
@@ -71,6 +79,7 @@ abstract class WalrusExtension extends \Twig_Extension
         if ($page->getMetadata()->getHomepage()) {
             return '/';
         }
+
         return '/'.$page->getUrl();
     }
 

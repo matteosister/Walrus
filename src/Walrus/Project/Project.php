@@ -13,6 +13,9 @@ use Symfony\Component\Config\Definition\Processor,
     Symfony\Component\Yaml\Yaml;
 use Walrus\Configuration\MainConfiguration;
 
+/**
+ * Project class
+ */
 class Project
 {
     /**
@@ -33,7 +36,7 @@ class Project
     /**
      * constructor
      *
-     * @param array $pc configuration
+     * @param string $rootPath root of the project
      */
     public function __construct($rootPath)
     {
@@ -52,6 +55,7 @@ class Project
         }
         $processor = new Processor();
         $conf = new MainConfiguration();
+
         return $processor->processConfiguration($conf, $config);
     }
 

@@ -33,7 +33,8 @@ class Less extends AbstractProject implements ProjectInterface
     /**
      * class constructor
      *
-     * @param LessProject $project LessProject instace
+     * @param LessProject $project LessProject instance
+     * @param string      $name    project name
      */
     public function __construct(LessProject $project, $name = null)
     {
@@ -55,7 +56,7 @@ class Less extends AbstractProject implements ProjectInterface
      * publish the generate files to the final destination
      *
      * @param null $to     publish to
-     * @param null $filter
+     * @param null $filter filter
      *
      * @return null
      */
@@ -75,12 +76,13 @@ class Less extends AbstractProject implements ProjectInterface
      *
      * @return string
      */
-    function getStream($filter = null)
+    public function getStream($filter = null)
     {
         $asset = new FileAsset($this->project->getDestination());
         if ($this->compress && null !== $filter) {
             $asset->ensureFilter($filter);
         }
+
         return $asset->dump();
     }
 
@@ -88,6 +90,7 @@ class Less extends AbstractProject implements ProjectInterface
     private function getFileName($folder = null)
     {
         $filename = pathinfo($this->project->getSourceFile())['filename'].'.css';
+
         return null === $folder ? $filename : $folder.'/'.$filename;
     }
 
@@ -108,7 +111,7 @@ class Less extends AbstractProject implements ProjectInterface
      *
      * @return string
      */
-    function getName()
+    public function getName()
     {
         return $this->name;
     }
@@ -116,7 +119,7 @@ class Less extends AbstractProject implements ProjectInterface
     /**
      * @return string
      */
-    function getProjectType()
+    public function getProjectType()
     {
         return static::TYPE_CSS;
     }

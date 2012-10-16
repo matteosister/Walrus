@@ -9,6 +9,9 @@
 
 namespace Walrus\Exception;
 
+/**
+ * file not found
+ */
 class FileNotFoundException extends \Exception
 {
 }

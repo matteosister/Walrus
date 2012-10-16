@@ -48,6 +48,7 @@ trait OutputWriterTrait
     protected function getLine($section, $message, $comment = false)
     {
         $tpl = $comment ? '<info>%s</info> <comment>%s</comment>' : '<info>%s</info> %s';
+
         return sprintf($tpl, str_pad($section, $this->commandSectionPad, $this->commandStringPad, STR_PAD_RIGHT), $message);
     }
 
@@ -58,6 +59,7 @@ trait OutputWriterTrait
             'command' => 'startup:project'
         );
         $input = new ArrayInput($arguments);
+
         return 0 === $command->run($input, $output);
     }
 }

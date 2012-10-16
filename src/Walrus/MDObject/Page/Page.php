@@ -62,12 +62,12 @@ class Page extends BaseObject
     /**
      * try to call method on the metadata. Useful for twig
      *
-     * @param string $name      method name
+     * @param string $name property name
      *
      * @throws \Walrus\Exception\MetadataMissing
      * @return mixed
      */
-    function __get($name)
+    public function __get($name)
     {
         $methodName = 'get'.$this->toCamelCase($name, true);
         if (is_callable(array($this->metadata, $methodName))) {

@@ -85,7 +85,7 @@ class CreatePageCommand extends ContainerAwareCommand
         if (!is_dir($dir)) {
             mkdir($dir);
         }
-        $number = str_pad((string)$this->getPageCollection()->count() + 1, 4, '0', STR_PAD_LEFT);
+        $number = str_pad((string) $this->getPageCollection()->count() + 1, 4, '0', STR_PAD_LEFT);
         $fileName = sprintf('%s/%s-%s.md', $dir, $number, $slug);
         file_put_contents($fileName, $fileContent);
         $this->writeRuler($output);

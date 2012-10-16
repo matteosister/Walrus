@@ -14,9 +14,12 @@ use Walrus\MDObject\Page\Page,
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Walrus\Exception\UrlNotFoundException;
 
+/**
+ * extension for md content
+ */
 class MdContentExtension extends WalrusExtension
 {
-    public function linkTo($slug, $label = null, $title = null)
+/*    public function linkTo($slug, $label = null, $title = null)
     {
         try {
             $url = $this->urlFor($slug);
@@ -36,14 +39,14 @@ class MdContentExtension extends WalrusExtension
                 }
             }
         }
-    }
+    }*/
 
     /**
      * Returns the name of the extension.
      *
      * @return string The extension name
      */
-    function getName()
+    public function getName()
     {
         return 'md_content_extension';
     }

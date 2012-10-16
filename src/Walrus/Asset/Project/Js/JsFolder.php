@@ -13,7 +13,6 @@ use Walrus\Asset\ProjectInterface,
     Walrus\Asset\Project\AbstractProject,
     Walrus\Utilities\SlugifierTrait;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Filesystem\Filesystem;
 use Assetic\Asset\AssetCollection,
     Assetic\Asset\GlobAsset;
 
@@ -77,16 +76,17 @@ class JsFolder extends AbstractProject implements ProjectInterface
      *
      * @return string
      */
-    function getStream($filter = null)
+    public function getStream($filter = null)
     {
         $iterator = Finder::create()->files()->name('*.js')->in($this->folder)->depth('== 0');
         $assetCollection = new AssetCollection();
-        foreach($iterator as $file) {
+        foreach ($iterator as $file) {
             $assetCollection->add(new GlobAsset(realpath($file->getPathName())));
         }
         if (null !== $filter && $this->compress) {
             $assetCollection->ensureFilter($filter);
         }
+
         return $assetCollection->dump();
     }
 
@@ -113,7 +113,7 @@ class JsFolder extends AbstractProject implements ProjectInterface
      *
      * @return string
      */
-    function getName()
+    public function getName()
     {
         return $this->name;
     }
@@ -121,7 +121,7 @@ class JsFolder extends AbstractProject implements ProjectInterface
     /**
      * @return string
      */
-    function getProjectType()
+    public function getProjectType()
     {
         return static::TYPE_JS;
     }

@@ -12,6 +12,9 @@ namespace Walrus\Configuration;
 use Symfony\Component\Config\Definition\ConfigurationInterface,
     Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
+/**
+ * theme configuration definition
+ */
 class ThemeConfiguration implements ConfigurationInterface
 {
     /**

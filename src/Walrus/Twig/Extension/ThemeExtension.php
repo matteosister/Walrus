@@ -17,6 +17,9 @@ use Symfony\Component\Finder\Finder,
     Symfony\Component\DependencyInjection\ContainerInterface;
 use dflydev\markdown\MarkdownParser;
 
+/**
+ * theme extension
+ */
 class ThemeExtension extends WalrusExtension
 {
     /**

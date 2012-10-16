@@ -14,6 +14,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Console\Output\OutputInterface,
     Symfony\Component\Console\Input\ArrayInput;
 
+/**
+ * base class for command that needs container access
+ */
 abstract class ContainerAwareCommand extends Command
 {
     protected $container;
