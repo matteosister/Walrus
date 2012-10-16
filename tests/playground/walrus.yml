@@ -1,0 +1,4 @@
+walrus:
+    site_name: 'Test'
+    theme: test
+    theme_location: null

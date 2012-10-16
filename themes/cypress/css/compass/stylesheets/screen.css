@@ -160,10 +160,9 @@ code {
   font-size: 1.05em;
   color: #772953;
   font-family: 'Ubuntu mono', Menlo, Monaco, Consolas, "Courier New", monospace;
-  font-weight: bold;
   position: relative;
 }
-/* line 36, ../sass/screen.scss */
+/* line 35, ../sass/screen.scss */
 code:after {
   content: url('/images/logo_code_40.png');
   width: 40px;

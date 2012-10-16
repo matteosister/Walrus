@@ -31,7 +31,6 @@ code {
     font-size: 1.05em;
     color: $purple;
     font-family: 'Ubuntu mono', Menlo, Monaco, Consolas, "Courier New", monospace;
-    font-weight: bold;
     position: relative;
     &:after {
         content: image-url("images/logo_code_40.png");

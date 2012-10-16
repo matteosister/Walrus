@@ -10,7 +10,8 @@
 namespace Walrus\Project;
 
 use Symfony\Component\Config\Definition\Processor,
-    Symfony\Component\Yaml\Yaml;
+    Symfony\Component\Yaml\Yaml,
+    Symfony\Component\Config\FileLocator;
 use Walrus\Configuration\MainConfiguration;
 
 /**
@@ -40,14 +41,20 @@ class Project
      */
     public function __construct($rootPath)
     {
-        $pc = $this->parseConfiguration($rootPath.'/walrus.yml');
+        $pc = $this->parseConfiguration($rootPath);
         $this->siteName = $pc['site_name'];
         $this->theme = $pc['theme'];
         $this->themeLocation = $pc['theme_location'];
     }
 
-    private function parseConfiguration($file)
+    private function parseConfiguration($rootPath)
     {
+        $locator = new FileLocator($rootPath);
+        try {
+            $file = $locator->locate('walrus.yml');
+        } catch (\InvalidArgumentException $e) {
+            $file = null;
+        }
         if (file_exists($file)) {
             $config = Yaml::parse($file);
         } else {
