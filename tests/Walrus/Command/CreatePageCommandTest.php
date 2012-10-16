@@ -27,13 +27,13 @@ class CreatePageCommandTest extends WalrusTestCase
         $command = $application->find('create:page');
         $tester = new CommandTester($command);
         $tester->execute(array('command' => $command->getName(), 'title' => 'test'));
-        $this->pageFileExists('0001-test');
+        $this->pageFileExists('0001_test');
         $page = new Page($this->pagesDir.'/0001_test.md');
         $this->generatedPages[] = $page;
         $this->assertTrue($page->homepage);
 
         $tester->execute(array('command' => $command->getName(), 'title' => 'test2', 'parent' => 'test'));
-        $this->pageFileExists('0002-test2');
+        $this->pageFileExists('0002_test2');
         $page2 = new Page($this->pagesDir.'/0002_test2.md');
         $this->generatedPages[] = $page2;
         $this->assertFalse($page2->homepage);
