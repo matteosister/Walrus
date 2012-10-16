@@ -12,12 +12,15 @@
     }
 }
 
-.container.page {
-    h1 {
-        color: $purple;
-    }
-    .logo {
-        @include logo(30px);
+.main {
+    padding-top: 60px;
+    &.page {
+        h1 {
+            color: $purple;
+        }
+        .logo {
+            @include logo(30px);
+        }
     }
 }
 

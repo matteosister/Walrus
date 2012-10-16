@@ -78,6 +78,24 @@ class PageCollection implements \ArrayAccess, \Countable, \Iterator
             $page->setUrl($this->generateFullUrl($page->getMetadata()->getUrl()));
             $page->setHasChildren(0 !== count($this->getChildrenOf($page->getMetadata()->getUrl())));
         }
+        $objects = $this->objects;
+        usort($objects, array($this, 'sortObjects'));
+        $this->objects = $objects;
+    }
+
+    /**
+     * sort objects by filename
+     *
+     * @param Page $a page 1
+     * @param Page $b page 2
+     *
+     * @return int
+     */
+    private function sortObjects($a, $b)
+    {
+        $file1 = $a->getMdPath();
+        $file2 = $b->getMdPath();
+        return $a->getMdPath() > $b->getMdPath() ? 1 : -1;
     }
 
     /**

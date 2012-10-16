@@ -112,12 +112,16 @@
   bottom: 1em;
 }
 
-/* line 16, ../sass/screen.scss */
-.container.page h1 {
+/* line 15, ../sass/screen.scss */
+.main {
+  padding-top: 60px;
+}
+/* line 18, ../sass/screen.scss */
+.main.page h1 {
   color: #772953;
 }
-/* line 19, ../sass/screen.scss */
-.container.page .logo {
+/* line 21, ../sass/screen.scss */
+.main.page .logo {
   display: block;
   width: 30px;
   height: 30px;
@@ -137,7 +141,7 @@
   box-shadow: 0px 0px 1em #dd4814;
 }
 /* line 14, ../sass/_mixins.scss */
-.container.page .logo:after {
+.main.page .logo:after {
   content: 'W';
   color: white;
   font-size: 24px;
@@ -148,7 +152,7 @@
   font-family: 'Ubuntu';
 }
 
-/* line 24, ../sass/screen.scss */
+/* line 27, ../sass/screen.scss */
 code {
   display: block;
   padding: 0.6em 40px 0.6em 1em;
@@ -159,7 +163,7 @@ code {
   font-weight: bold;
   position: relative;
 }
-/* line 33, ../sass/screen.scss */
+/* line 36, ../sass/screen.scss */
 code:after {
   content: url('/images/logo_code_40.png');
   width: 40px;
