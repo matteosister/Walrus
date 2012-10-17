@@ -68,7 +68,7 @@ class Theme
         $conf = new ThemeConfiguration();
         $pc = $processor->processConfiguration($conf, $config);
         $this->name = $pc['name'];
-        $this->images = $this->themePath.'/'.$pc['images'];
+        $this->images = null !== $pc['images'] ? $this->themePath.'/'.$pc['images'] : null;
         $this->compressAssets = $pc['compress_assets'];
         $this->assetCollection->setGroupAssets($pc['group_assets']);
         foreach ($pc['assets'] as $assetsConfiguration) {
@@ -150,21 +150,41 @@ class Theme
     }
 
     /**
-     * AssetProjects setter
+     * ThemePath setter
      *
-     * @param \Walrus\Asset\AssetCollection $assetProjects la variabile assetProjects
+     * @param string $themePath la variabile themePath
      */
-    public function setAssetProjects($assetProjects)
+    public function setThemePath($themePath)
     {
-        $this->assetCollection = $assetProjects;
+        $this->themePath = $themePath;
     }
 
     /**
-     * AssetProjects getter
+     * ThemePath getter
+     *
+     * @return string
+     */
+    public function getThemePath()
+    {
+        return $this->themePath;
+    }
+
+    /**
+     * AssetCollection setter
+     *
+     * @param \Walrus\Asset\AssetCollection $assetCollection la variabile assetCollection
+     */
+    public function setAssetCollection($assetCollection)
+    {
+        $this->assetCollection = $assetCollection;
+    }
+
+    /**
+     * AssetCollection getter
      *
      * @return \Walrus\Asset\AssetCollection
      */
-    public function getAssetProjects()
+    public function getAssetCollection()
     {
         return $this->assetCollection;
     }

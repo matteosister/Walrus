@@ -73,7 +73,7 @@ class Page extends BaseObject
         if (is_callable(array($this->metadata, $methodName))) {
             return $this->metadata->$methodName();
         } else {
-            throw new MetadataMissing();
+            throw new MetadataMissing($name);
         }
     }
 

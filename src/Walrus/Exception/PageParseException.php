@@ -14,4 +14,5 @@ namespace Walrus\Exception;
  */
 class PageParseException extends \Exception
 {
+    protected $message = 'Your page file is not well formatted';
 }

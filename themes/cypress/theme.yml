@@ -2,7 +2,7 @@ theme:
   name: cypress
   images: images
   compress_assets: false
-  group_assets: true
+  group_assets: false
   assets:
     - { name: bootstrap, type: less, source_file: css/bootstrap/less/bootstrap.less }
     - { name: bootstrap_responsive, type: less, source_file: css/bootstrap/less/responsive.less }

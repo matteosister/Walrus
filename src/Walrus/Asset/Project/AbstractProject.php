@@ -14,8 +14,8 @@ namespace Walrus\Asset\Project;
  */
 abstract class AbstractProject
 {
-    const TYPE_CSS = 'stylesheets';
-    const TYPE_JS = 'javascripts';
+    const TYPE_CSS = '__css';
+    const TYPE_JS = '__js';
 
     /**
      * @var bool

@@ -22,6 +22,11 @@ class Project
     /**
      * @var string
      */
+    private $configurationFile;
+
+    /**
+     * @var string
+     */
     private $siteName;
 
     /**
@@ -37,21 +42,30 @@ class Project
     /**
      * constructor
      *
-     * @param string $rootPath root of the project
+     * @param string $rootPath          root of the project
+     * @param string $configurationFile name of the main configuration file
      */
-    public function __construct($rootPath)
+    public function __construct($rootPath, $configurationFile = 'walrus.yml')
     {
+        $this->configurationFile = $configurationFile;
         $pc = $this->parseConfiguration($rootPath);
-        $this->siteName = $pc['site_name'];
-        $this->theme = $pc['theme'];
-        $this->themeLocation = $pc['theme_location'];
+        $this->setSiteName($pc['site_name']);
+        $this->setTheme($pc['theme']);
+        $this->setThemeLocation($pc['theme_location']);
     }
 
+    /**
+     * parse main configuration file walrus.yml
+     *
+     * @param string $rootPath root path of the project
+     *
+     * @return array
+     */
     private function parseConfiguration($rootPath)
     {
         $locator = new FileLocator($rootPath);
         try {
-            $file = $locator->locate('walrus.yml');
+            $file = $locator->locate($this->configurationFile);
         } catch (\InvalidArgumentException $e) {
             $file = null;
         }
@@ -64,6 +78,26 @@ class Project
         $conf = new MainConfiguration();
 
         return $processor->processConfiguration($conf, $config);
+    }
+
+    /**
+     * ConfigurationFile setter
+     *
+     * @param string $configurationFile la variabile configurationFile
+     */
+    public function setConfigurationFile($configurationFile)
+    {
+        $this->configurationFile = $configurationFile;
+    }
+
+    /**
+     * ConfigurationFile getter
+     *
+     * @return string
+     */
+    public function getConfigurationFile()
+    {
+        return $this->configurationFile;
     }
 
     /**

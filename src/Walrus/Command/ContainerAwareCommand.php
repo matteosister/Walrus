@@ -95,7 +95,7 @@ abstract class ContainerAwareCommand extends Command
      */
     protected function getAssetCollection()
     {
-        return $this->getTheme()->getAssetProjects();
+        return $this->getTheme()->getAssetCollection();
     }
 
     /**

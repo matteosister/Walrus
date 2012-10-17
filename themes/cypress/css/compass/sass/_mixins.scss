@@ -10,7 +10,8 @@
     background-color: $bgColor;
     @include border-radius($size/2);
     @include background(linear-gradient(top, $bgColor, $bgColor + #333));
-    @include single-box-shadow;
+    @include single-box-shadow($blur: 15px);
+    //@include single-box-shadow($color: $orange, $blur: 6px, $inset: true);
     &:after {
         content: 'W';
         color: $frontColor;
@@ -20,5 +21,6 @@
         text-align: center;
         font-style: normal;
         font-family: 'Ubuntu';
+        @include single-text-shadow($color: $orange);
     }
 }

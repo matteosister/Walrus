@@ -25,4 +25,13 @@ class ProjectTest extends WalrusTestCase
         $this->assertEquals('test', $project->getTheme());
         $this->assertNull($project->getThemeLocation());
     }
+
+    public function testCustomConfigurationFile()
+    {
+        $this->filesystem->copy($this->getFixtureFile('walrus.yml'), $this->playgroundDir.'/test.yml');
+        $project = new Project($this->playgroundDir, 'test.yml');
+        $this->assertEquals('Test', $project->getSiteName());
+        $this->assertEquals('test', $project->getTheme());
+        $this->assertNull($project->getThemeLocation());
+    }
 }

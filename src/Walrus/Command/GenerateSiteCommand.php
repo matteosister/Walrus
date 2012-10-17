@@ -86,6 +86,8 @@ class GenerateSiteCommand extends ContainerAwareCommand
         $iterator = Finder::create()->files()->in($this->container->getParameter('PUBLIC_PATH'));
         $fs = new Filesystem();
         $fs->remove($iterator);
+        $folders = Finder::create()->directories()->in($this->container->getParameter('PUBLIC_PATH'));
+        $fs->remove($folders);
     }
 
     /**
@@ -180,6 +182,9 @@ class GenerateSiteCommand extends ContainerAwareCommand
      */
     private function publishImages(OutputInterface $output, $dir)
     {
+        if (null === $this->getTheme()->getImages()) {
+            return;
+        }
         $images = $this->getTheme()->getImages();
         $iterator = Finder::create()->files()->in($images);
         $fs = new Filesystem();
