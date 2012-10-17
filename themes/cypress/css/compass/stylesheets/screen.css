@@ -122,8 +122,13 @@
 /* line 18, ../sass/screen.scss */
 .main.page h1 {
   color: #772953;
+  text-shadow: 0px 0px 3px #999999;
 }
-/* line 21, ../sass/screen.scss */
+/* line 22, ../sass/screen.scss */
+.main.page h3 {
+  color: #333333;
+}
+/* line 25, ../sass/screen.scss */
 .main.page .logo {
   display: block;
   width: 30px;
@@ -156,7 +161,7 @@
   text-shadow: 0px 0px 3px #dd4814;
 }
 
-/* line 27, ../sass/screen.scss */
+/* line 31, ../sass/screen.scss */
 code {
   display: block;
   padding: 0.6em 40px 0.6em 1em;
@@ -166,12 +171,12 @@ code {
   font-family: 'Ubuntu mono', Menlo, Monaco, Consolas, "Courier New", monospace;
   position: relative;
 }
-/* line 35, ../sass/screen.scss */
+/* line 39, ../sass/screen.scss */
 code:after {
   content: url('/images/logo_code_40.png');
   width: 40px;
   height: 40px;
   position: absolute;
   right: 10px;
-  bottom: -20px;
+  bottom: -5px;
 }

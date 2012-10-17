@@ -13,7 +13,8 @@ use Walrus\Command\ContainerAwareCommand,
     Walrus\Command\OutputWriterTrait;
 use Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface,
-    Symfony\Component\Finder\Finder;
+    Symfony\Component\Finder\Finder,
+    Symfony\Component\Console\Input\InputOption;
 use Spork\ProcessManager,
     Spork\EventDispatcher\EventDispatcher;
 
@@ -30,7 +31,8 @@ class ProjectWatchCommand extends ContainerAwareCommand
     {
         $this
             ->setName('project:watch')
-            ->setDescription('Watch project for changes and recompile');
+            ->setDescription('Watch project for changes and recompile')
+            ->addOption('period', 'p', InputOption::VALUE_REQUIRED, 'seconds between every check', 1);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -54,7 +56,7 @@ class ProjectWatchCommand extends ContainerAwareCommand
                 } catch (\Exception $e) {
                     $output->writeln('<error>Compilation error!</error>');
                 }
-                sleep(1);
+                sleep($input->getOption('period'));
             }
         }
     }
@@ -63,7 +65,12 @@ class ProjectWatchCommand extends ContainerAwareCommand
     {
         $draftingPath = $this->container->getParameter('DRAFTING_PATH');
         $themePath = $this->container->getParameter('THEME_PATH');
-        $iterator = Finder::create()->files()->in(array($draftingPath, $themePath));
+        $check = array($draftingPath, $themePath);
+        $imagesPath = $this->getTheme()->getImages();
+        if (null !== $imagesPath) {
+            $check[] = $imagesPath;
+        }
+        $iterator = Finder::create()->files()->in($check);
         $content = '';
         foreach ($iterator as $file) {
             $content .= file_get_contents($file);

@@ -124,6 +124,7 @@ class GenerateSiteCommand extends ContainerAwareCommand
             }
             $output->writeln($this->getLine('generating', sprintf('%s page/s', count($this->getPageCollection()))));
             foreach ($this->getPageCollection() as $page) {
+                var_dump('YEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE');
                 if ($page->getMetadata()->getHomepage()) {
                     $url = 'index.html';
                 } else {

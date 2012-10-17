@@ -1,0 +1,11 @@
+<ul class="breadcrumb">
+    {% for thePage in pages.getBreadcrumbs(page.metadata.url) %}
+        {% if loop.last %}
+            <li class="active">{{ thePage|title }}</li>
+        {% elseif thePage.metadata.homepage %}
+            <li><a href="{{ url_for(thePage.metadata.url) }}"><img src="/images/logo_40.png" /></a> <span class="divider">/</span></li>
+        {% else %}
+            <li><a href="{{ url_for(thePage.metadata.url) }}">{{ thePage|title }}</a> <span class="divider">/</span></li>
+        {% endif %}
+    {% endfor %}
+</ul>

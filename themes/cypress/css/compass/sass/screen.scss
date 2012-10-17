@@ -17,6 +17,10 @@
     &.page {
         h1 {
             color: $purple;
+            @include single-text-shadow($color: $grayLight);
+        }
+        h3 {
+            color: $grayDark;
         }
         .logo {
             @include logo(30px);
@@ -38,6 +42,6 @@ code {
         height: 40px;
         position: absolute;
         right: 10px;
-        bottom: -20px;
+        bottom: -5px;
     }
 }

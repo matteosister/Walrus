@@ -13,8 +13,13 @@ use Symfony\Component\Finder\Finder,
     Symfony\Component\Console\Application,
     Symfony\Component\Filesystem\Filesystem,
     Symfony\Component\Yaml\Yaml;
-use Walrus\Command\CreatePageCommand;
-use Walrus\Utilities\SlugifierTrait;
+use Walrus\Command\CreatePageCommand,
+    Walrus\Command\GenerateSiteCommand,
+    Walrus\Utilities\SlugifierTrait,
+    Walrus\MDObject\Page\Page,
+    Walrus\Twig\Extension\MdContentExtension,
+    Dflydev\Twig\Extension\GitHubGist\GistTwigExtension,
+    Walrus\Twig\Extension\ThemeExtension;
 
 /**
  * base test case
@@ -69,16 +74,8 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $finder = new Finder();
-        $iterator = $finder->files()->in(array(
-            $this->pagesDir,
-            $this->postsDir,
-            $this->assetsProjectsDir
-        ));
+        $iterator = $finder->in($this->playgroundDir);
         $this->filesystem->remove($iterator);
-        $this->filesystem->remove($this->pagesDir);
-        $this->filesystem->remove($this->postsDir);
-        $this->filesystem->remove($this->draftingDir);
-        $this->filesystem->remove($this->assetsProjectsDir);
         $this->generatedPages = array();
     }
 
@@ -92,18 +89,42 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
     protected function addRandomPages($num = 1)
     {
         for ($i = 1; $i <= $num; $i++) {
-            $content = $this->getMDPageContent('test '.$i, null, 'test-'.$i, $i == 1, $i == 1 ? null : 'test-1');
+            if (0 === count($this->generatedPages)) {
+                $content = $this->getMDPageContent('homepage', null, 'homepage', true, null);
+            } else {
+                $content = $this->getMDPageContent('test '.$i, null, 'test-'.$i, false, $i == 1 ? null : 'homepage');
+            }
             $number = str_pad($i, 4, '0', STR_PAD_RIGHT);
             $filename = $this->pagesDir.'/'.sprintf('%s-test-%s.md', $number, $i);
             file_put_contents($filename, $content);
+            $this->generatedPages[] = new Page($filename);
         }
     }
 
     protected function getTwig()
     {
-        \Twig_Autoloader::register();
+        //\Twig_Autoloader::register();
         $loader = new \Twig_Loader_Filesystem(__DIR__.'/../../src/Walrus/Resources/tpl');
         return new \Twig_Environment($loader, array('cache' => false));
+    }
+
+    protected function getTwigMdContent()
+    {
+        //\Twig_Autoloader::register();
+        $loader = new \Twig_Loader_String();
+        $env = new \Twig_Environment($loader, array('cache' => false));
+        $env->addExtension(new MdContentExtension($this->getMockContainer()));
+        $env->addExtension(new GistTwigExtension());
+        return $env;
+    }
+
+    protected function getTwigTheme($name = 'test1')
+    {
+        //\Twig_Autoloader::register();
+        $loader = new \Twig_Loader_Filesystem($this->fixturesDir.sprintf('/themes/%s/templates', $name));
+        $env = new \Twig_Environment($loader, array('cache' => false));
+        $env->addExtension(new ThemeExtension($this->getMockContainer()));
+        return $env;
     }
 
     protected function getMockContainer()
@@ -116,7 +137,11 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
                 $this->equalTo('utilities'),
                 $this->equalTo('walrus.configuration'),
                 $this->equalTo('walrus.collection.page'),
-                $this->equalTo('twig')
+                $this->equalTo('twig'),
+                $this->equalTo('twig.md_content'),
+                $this->equalTo('twig.theme'),
+                $this->equalTo('walrus.theme'),
+                $this->equalTo('walrus.project')
             ))
             ->will($this->returnCallback(array($this, 'containerGetCallback')));
         $container
@@ -124,7 +149,8 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
             ->method('getParameter')
             ->with($this->logicalOr(
                 $this->equalTo('DRAFTING_PATH'),
-                $this->equalTo('ROOT_PATH')
+                $this->equalTo('ROOT_PATH'),
+                $this->equalTo('PUBLIC_PATH')
             ))
             ->will($this->returnCallback(array($this, 'containerGetParameterCallback')));
 
@@ -146,6 +172,18 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
             case 'twig':
                 return $this->getTwig();
                 break;
+            case 'walrus.theme':
+                return $this->getMockTheme();
+                break;
+            case 'twig.md_content':
+                return $this->getTwigMdContent();
+                break;
+            case 'twig.theme':
+                return $this->getTwigTheme();
+                break;
+            case 'walrus.project':
+                return $this->getMockProject();
+                break;
         }
     }
 
@@ -157,6 +195,9 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
                 break;
             case 'ROOT_PATH':
                 return $this->playgroundDir;
+                break;
+            case 'PUBLIC_PATH':
+                return $this->playgroundDir.'/public';
                 break;
         }
     }
@@ -175,20 +216,72 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
 
     protected function getMockAssetCollection()
     {
-        $assetCollection = $this->getMock('Walrus\Asset\AssetCollection', array());
+        $assetCollection = $this->getMock('Walrus\Asset\AssetCollection', array('output'));
+        $assetCollection->expects($this->any())
+            ->method('output')
+            ->will($this->returnValue(''));
         return $assetCollection;
     }
 
     protected function getMockPageCollection()
     {
-        $pageCollection = $this->getMock('Walrus\Collection\PageCollection', array('toArray', 'count'), array());
-        $pageCollection->expects($this->any())
+        $mock = $this->getMock('Walrus\Collection\PageCollection');
+        $mock->expects($this->any())
             ->method('toArray')
             ->will($this->returnValue($this->generatedPages));
-        $pageCollection->expects($this->any())
+        $mock->expects($this->any())
             ->method('count')
             ->will($this->returnValue(count($this->generatedPages)));
-        return $pageCollection;
+        //$this->expectIterator($mock, $this->generatedPages);
+
+        return $mock;
+    }
+
+    public function expectIterator($mock, array $content, $withKey = false, $counter = 0)
+    {
+        $mock
+            ->expects($this->at($counter))
+            ->method('rewind');
+
+        foreach ($content as $key => $value) {
+            $mock
+                ->expects($this->at(++$counter))
+                ->method('valid')
+                ->will($this->returnValue(true));
+
+            $mock
+                ->expects($this->at(++$counter))
+                ->method('current')
+                ->will($this->returnValue($value));
+
+            if ($withKey) {
+                $mock
+                    ->expects($this->at(++$counter))
+                    ->method('key')
+                    ->will($this->returnValue($key));
+            }
+
+            $mock
+                ->expects($this->at(++$counter))
+                ->method('next');
+        }
+
+        $mock
+            ->expects($this->at(++$counter))
+            ->method('valid')
+            ->will($this->returnValue(false));
+
+        return ++$counter;
+    }
+
+
+    protected function getMockTheme($name = 'test1')
+    {
+        $theme = $this->getMock('Walrus\Theme\Theme', array('getAssetCollection'), array($this->fixturesDir.sprintf('/themes/%s', $name), $this->getMockAssetCollection()));
+        $theme->expects($this->any())
+            ->method('getAssetCollection')
+            ->will($this->returnValue($this->getMockAssetCollection()));
+        return $theme;
     }
 
     protected function getMockUtilities()
@@ -205,6 +298,12 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
             ->will($this->returnCallback(array($this, 'callbackUniqueUrl')));
 
         return $utilities;
+    }
+
+    protected function getMockProject()
+    {
+        $project = $this->getMock('Walrus\Project\Project', array(), array($this->playgroundDir));
+        return $project;
     }
 
     public function callbackUniqueUrl()
@@ -236,6 +335,7 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
         $kernel = $this->getMock('Kernel');
         $application = new Application($kernel);
         $application->add(new CreatePageCommand($this->getMockContainer()));
+        $application->add(new GenerateSiteCommand($this->getMockContainer()));
 
         return $application;
     }

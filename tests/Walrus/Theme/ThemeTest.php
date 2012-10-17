@@ -16,7 +16,7 @@ class ThemeTest extends WalrusTestCase
 {
     public function testConstructor()
     {
-        $t = new Theme($this->fixturesDir.'/theme', $this->getMockAssetCollection());
+        $t = new Theme($this->fixturesDir.'/themes/test1', $this->getMockAssetCollection());
         $this->assertEquals($t->getName(), 'test1');
         $this->assertFalse($t->getCompressAssets());
         $this->assertNull($t->getImages());
