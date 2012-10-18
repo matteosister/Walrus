@@ -19,10 +19,8 @@ use Walrus\MDObject\Page\Page,
 use Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Output\OutputInterface,
     Symfony\Component\Console\Input\InputOption,
-    Symfony\Component\Console\Input\ArrayInput,
     Symfony\Component\Finder\Finder,
-    Symfony\Component\Filesystem\Filesystem,
-    Symfony\Component\Process\Process;
+    Symfony\Component\Filesystem\Filesystem;
 
 /**
  * generate:site command
@@ -46,7 +44,8 @@ class GenerateSiteCommand extends ContainerAwareCommand
             ->setDescription('Generate the website')
             ->addOption('compress-assets', null, InputOption::VALUE_NONE, 'compress the assets')
             ->addOption('group-assets', null, InputOption::VALUE_NONE, 'group the assets')
-            ->addOption('no-header', null, InputOption::VALUE_NONE, 'do not display walrus header');
+            ->addOption('no-header', null, InputOption::VALUE_NONE, 'do not display walrus header')
+            ->addOption('optimize', 'o', InputOption::VALUE_NONE, 'optimize the output for production');
     }
 
     /**
@@ -124,7 +123,6 @@ class GenerateSiteCommand extends ContainerAwareCommand
             }
             $output->writeln($this->getLine('generating', sprintf('%s page/s', count($this->getPageCollection()))));
             foreach ($this->getPageCollection() as $page) {
-                var_dump('YEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE');
                 if ($page->getMetadata()->getHomepage()) {
                     $url = 'index.html';
                 } else {
@@ -161,10 +159,10 @@ class GenerateSiteCommand extends ContainerAwareCommand
      */
     private function compileAssets(InputInterface $input, OutputInterface $output, $dir)
     {
-        if ($input->getOption('group-assets')) {
+        if ($input->getOption('group-assets') || $input->getOption('optimize')) {
             $this->getAssetCollection()->setGroupAssets(true);
         }
-        if ($input->getOption('compress-assets')) {
+        if ($input->getOption('compress-assets') || $input->getOption('optimize')) {
             $this->getAssetCollection()->setForceAssetCompression(true);
         }
         if (count($this->getAssetCollection()) > 0) {

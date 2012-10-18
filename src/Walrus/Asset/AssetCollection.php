@@ -144,19 +144,22 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
     {
         $css = '';
         $js = '';
-        $output->writeln($this->getLine('loading', sprintf('stylesheets (%s)', implode(', ', array_map(function($project) {
-
+        // STYLESHEETS
+        $output->writeln($this->getLine('loading grouped', sprintf('stylesheets (%s)', implode(', ', array_map(function($project) {
             return '<comment>'.$project->getName().'</comment>';
         }, $this->getStylesheetProjects())))));
         foreach ($this->getStylesheetProjects() as $project) {
-            $output->writeln($this->getLine('compiling', sprintf('<comment>%s</comment>', $project->getName())));
+            $output->writeln($this->getLine('buffering', sprintf('<comment>%s</comment>', $project->getName())));
             if ($this->getForceAssetCompression()) {
                 $project->setCompress(true);
             }
             $project->compile();
             $css .= sprintf("/* %s*/\n%s\n", $project->getName(), $project->getStream($this->cssFilter));
         }
-        $output->writeln($this->getLine('loading', sprintf('javascripts (%s)', implode(', ', array_map(function($project) {
+        $output->writeln($this->getLine('publishing', '<comment>stylesheets</comment> grouped'));
+        file_put_contents($to.'/'.AbstractProject::TYPE_CSS.'/all.css', $css);
+        // JAVASCRIPTS
+        $output->writeln($this->getLine('loading grouped', sprintf('javascripts (%s)', implode(', ', array_map(function($project) {
             return '<comment>'.$project->getName().'</comment>';
         }, $this->getJavascriptProjects())))));
         foreach ($this->getJavascriptProjects() as $project) {
@@ -167,8 +170,8 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
             $project->compile();
             $js .= sprintf("/* %s */\n%s\n", $project->getName(), $project->getStream($this->jsFilter));
         }
-        file_put_contents($to.'/stylesheets/all.css', $css);
-        file_put_contents($to.'/javascripts/all.js', $js);
+        $output->writeln($this->getLine('publishing', '<comment>javascripts</comment> grouped'));
+        file_put_contents($to.'/'.AbstractProject::TYPE_JS.'/all.js', $js);
     }
 
     /**
@@ -178,8 +181,8 @@ class AssetCollection implements \Countable, \ArrayAccess, \Iterator
     {
         $out = '';
         if ($this->groupAssets) {
-            $out .= '<link rel="stylesheet" type="text/css" href="/stylesheets/all.css">'."\n";
-            $out .= '<script type="text/javascript" src="/javascripts/all.js"></script>'."\n";
+            $out .= sprintf('<link rel="stylesheet" type="text/css" href="/%s/all.css">', AbstractProject::TYPE_CSS)."\n";
+            $out .= sprintf('<script type="text/javascript" src="/%s/all.js"></script>', AbstractProject::TYPE_JS)."\n";
         } else {
             foreach ($this->projects as $project) {
                 $out .= $project->output();

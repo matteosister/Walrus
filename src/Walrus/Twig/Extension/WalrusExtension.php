@@ -41,8 +41,7 @@ abstract class WalrusExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'url_for' => new \Twig_Function_Method($this, 'urlFor', array('is_safe' => array('all'))),
-            'link_to' => new \Twig_Function_Method($this, 'linkTo', array('is_safe' => array('all')))
+            'url_for' => new \Twig_Function_Method($this, 'urlFor', array('is_safe' => array('all')))
         );
     }
 
