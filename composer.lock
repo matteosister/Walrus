@@ -1,5 +1,5 @@
 {
-    "hash": "bd41b47143a4898b4aa7d75415b8740f",
+    "hash": "cd2355b92ca2038ffaa2b5f9cb2a5d6b",
     "packages": [
         {
             "name": "cypresslab/compass-elephant",
@@ -657,53 +657,6 @@
                 }
             ],
             "description": "Symfony Process Component",
-            "homepage": "http://symfony.com"
-        },
-        {
-            "name": "symfony/templating",
-            "version": "v2.1.2",
-            "target-dir": "Symfony/Component/Templating",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/Templating",
-                "reference": "v2.1.0-RC2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/symfony/Templating/zipball/v2.1.0-RC2",
-                "reference": "v2.1.0-RC2",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "time": "2012-08-22 13:48:41",
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.1-dev"
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "psr-0": {
-                    "Symfony\\Component\\Templating": ""
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "http://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony Templating Component",
             "homepage": "http://symfony.com"
         },
         {
