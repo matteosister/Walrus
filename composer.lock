@@ -1,5 +1,5 @@
 {
-    "hash": "3711093d59470779fefb9cc37b932716",
+    "hash": "bd41b47143a4898b4aa7d75415b8740f",
     "packages": [
         {
             "name": "cypresslab/compass-elephant",
@@ -20,7 +20,7 @@
                 "symfony/process": "2.1.*",
                 "symfony/finder": "2.1.*"
             },
-            "time": "2012-08-22 05:26:32",
+            "time": "2012-08-22 12:26:32",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -66,7 +66,7 @@
                 "symfony/process": "<2.2.0",
                 "symfony/finder": "<2.2.0"
             },
-            "time": "2012-09-08 15:40:19",
+            "time": "2012-09-08 22:40:19",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -167,7 +167,7 @@
             "require": {
                 "php": ">=5.3"
             },
-            "time": "2012-01-15 19:36:37",
+            "time": "2012-01-16 03:36:37",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -221,7 +221,7 @@
             "require": {
                 "php": ">=5.3.1"
             },
-            "time": "2012-08-28 05:18:28",
+            "time": "2012-08-28 12:18:28",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -302,7 +302,7 @@
                 "reference": "2.4.7",
                 "shasum": ""
             },
-            "time": "2012-05-12 01:31:30",
+            "time": "2012-05-12 08:31:30",
             "type": "library",
             "installation-source": "dist",
             "license": [
@@ -322,18 +322,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config",
-                "reference": "v2.1.2"
+                "reference": "v2.1.0-RC2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Config/zipball/v2.1.2",
-                "reference": "v2.1.2",
+                "url": "https://github.com/symfony/Config/zipball/v2.1.0-RC2",
+                "reference": "v2.1.0-RC2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-08-22 06:48:41",
+            "time": "2012-08-22 13:48:41",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -380,7 +380,7 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-08-22 06:48:41",
+            "time": "2012-08-22 13:48:41",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -435,7 +435,7 @@
                 "symfony/yaml": "2.1.*",
                 "symfony/config": "2.1.*"
             },
-            "time": "2012-09-17 13:41:57",
+            "time": "2012-09-17 20:41:57",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -489,7 +489,7 @@
                 "symfony/dependency-injection": "2.1.*",
                 "symfony/http-kernel": "2.1.*"
             },
-            "time": "2012-09-10 03:53:42",
+            "time": "2012-09-10 10:53:42",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -525,18 +525,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Filesystem",
-                "reference": "v2.1.2"
+                "reference": "v2.1.0-RC2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Filesystem/zipball/v2.1.2",
-                "reference": "v2.1.2",
+                "url": "https://github.com/symfony/Filesystem/zipball/v2.1.0-RC2",
+                "reference": "v2.1.0-RC2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-08-22 06:48:41",
+            "time": "2012-08-22 13:48:41",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -572,18 +572,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Finder",
-                "reference": "v2.1.2"
+                "reference": "v2.1.0-RC2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Finder/zipball/v2.1.2",
-                "reference": "v2.1.2",
+                "url": "https://github.com/symfony/Finder/zipball/v2.1.0-RC2",
+                "reference": "v2.1.0-RC2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-08-22 06:48:41",
+            "time": "2012-08-22 13:48:41",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -630,7 +630,7 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-09-18 15:37:29",
+            "time": "2012-09-18 22:37:29",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -677,7 +677,7 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-08-22 06:48:41",
+            "time": "2012-08-22 13:48:41",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -724,7 +724,7 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-08-22 06:48:41",
+            "time": "2012-08-22 13:48:41",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -770,7 +770,7 @@
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "2012-08-25 10:32:57",
+            "time": "2012-08-25 17:32:57",
             "type": "library",
             "extra": {
                 "branch-alias": {
