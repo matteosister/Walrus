@@ -1,5 +1,5 @@
 {
-    "hash": "cd2355b92ca2038ffaa2b5f9cb2a5d6b",
+    "hash": "ba37101d8acf29fb9ebe746b21a4ac7e",
     "packages": [
         {
             "name": "cypresslab/compass-elephant",
@@ -20,7 +20,7 @@
                 "symfony/process": "2.1.*",
                 "symfony/finder": "2.1.*"
             },
-            "time": "2012-08-22 12:26:32",
+            "time": "2012-08-22 05:26:32",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -66,7 +66,7 @@
                 "symfony/process": "<2.2.0",
                 "symfony/finder": "<2.2.0"
             },
-            "time": "2012-09-08 22:40:19",
+            "time": "2012-09-08 15:40:19",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -167,7 +167,7 @@
             "require": {
                 "php": ">=5.3"
             },
-            "time": "2012-01-16 03:36:37",
+            "time": "2012-01-15 19:36:37",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -206,28 +206,51 @@
         },
         {
             "name": "kriswallsmith/assetic",
-            "version": "v1.0.4",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "http://github.com/kriswallsmith/assetic.git",
-                "reference": "v1.0.4"
+                "reference": "fa85fb99d63ad0a10d832bde584fc3963e0a7918"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/kriswallsmith/assetic/zipball/v1.0.4",
-                "reference": "v1.0.4",
+                "url": "https://github.com/kriswallsmith/assetic/zipball/fa85fb99d63ad0a10d832bde584fc3963e0a7918",
+                "reference": "fa85fb99d63ad0a10d832bde584fc3963e0a7918",
                 "shasum": ""
             },
             "require": {
+                "symfony/process": ">=2.1.0,<2.3-dev",
                 "php": ">=5.3.1"
             },
-            "time": "2012-08-28 12:18:28",
+            "require-dev": {
+                "twig/twig": ">=1.6.0,<2.0",
+                "leafo/lessphp": "*",
+                "leafo/scssphp": "*",
+                "ptachoire/cssembed": "*",
+                "leafo/scssphp-compass": "*"
+            },
+            "suggest": {
+                "twig/twig": "Assetic provides the integration with the Twig templating engine",
+                "leafo/lessphp": "Assetic provides the integration with the lessphp LESS compiler",
+                "leafo/scssphp": "Assetic provides the integration with the scssphp SCSS compiler",
+                "ptachoire/cssembed": "Assetic provides the integration with phpcssembed to embed data uris",
+                "leafo/scssphp-compass": "Assetic provides the integration with the SCSS compass plugin"
+            },
+            "time": "1350597340",
             "type": "library",
-            "installation-source": "dist",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "installation-source": "source",
             "autoload": {
                 "psr-0": {
                     "Assetic": "src/"
-                }
+                },
+                "files": [
+                    "src/functions.php"
+                ]
             },
             "license": [
                 "MIT"
@@ -302,7 +325,7 @@
                 "reference": "2.4.7",
                 "shasum": ""
             },
-            "time": "2012-05-12 08:31:30",
+            "time": "2012-05-12 01:31:30",
             "type": "library",
             "installation-source": "dist",
             "license": [
@@ -322,18 +345,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Config",
-                "reference": "v2.1.0-RC2"
+                "reference": "v2.1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Config/zipball/v2.1.0-RC2",
-                "reference": "v2.1.0-RC2",
+                "url": "https://github.com/symfony/Config/zipball/v2.1.2",
+                "reference": "v2.1.2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-08-22 13:48:41",
+            "time": "2012-08-22 06:48:41",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -380,7 +403,7 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-08-22 13:48:41",
+            "time": "2012-08-22 06:48:41",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -435,7 +458,7 @@
                 "symfony/yaml": "2.1.*",
                 "symfony/config": "2.1.*"
             },
-            "time": "2012-09-17 20:41:57",
+            "time": "2012-09-17 13:41:57",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -489,7 +512,7 @@
                 "symfony/dependency-injection": "2.1.*",
                 "symfony/http-kernel": "2.1.*"
             },
-            "time": "2012-09-10 10:53:42",
+            "time": "2012-09-10 03:53:42",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -525,18 +548,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Filesystem",
-                "reference": "v2.1.0-RC2"
+                "reference": "v2.1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Filesystem/zipball/v2.1.0-RC2",
-                "reference": "v2.1.0-RC2",
+                "url": "https://github.com/symfony/Filesystem/zipball/v2.1.2",
+                "reference": "v2.1.2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-08-22 13:48:41",
+            "time": "2012-08-22 06:48:41",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -572,18 +595,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Finder",
-                "reference": "v2.1.0-RC2"
+                "reference": "v2.1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Finder/zipball/v2.1.0-RC2",
-                "reference": "v2.1.0-RC2",
+                "url": "https://github.com/symfony/Finder/zipball/v2.1.2",
+                "reference": "v2.1.2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-08-22 13:48:41",
+            "time": "2012-08-22 06:48:41",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -630,7 +653,7 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-09-18 22:37:29",
+            "time": "2012-09-18 15:37:29",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -677,7 +700,7 @@
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "2012-08-22 13:48:41",
+            "time": "2012-08-22 06:48:41",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -723,7 +746,7 @@
             "require": {
                 "php": ">=5.2.4"
             },
-            "time": "2012-08-25 17:32:57",
+            "time": "2012-08-25 10:32:57",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -762,6 +785,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
+        "kriswallsmith/assetic": 20,
         "kriswallsmith/spork": 20,
         "nervo/yuicompressor": 0,
         "dflydev/github-gist-twig-extension": 0

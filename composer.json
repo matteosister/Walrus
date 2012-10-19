@@ -20,7 +20,7 @@
 		"dflydev/markdown": "1.0.*",
         "cypresslab/less-elephant": "0.2.*",
         "cypresslab/compass-elephant": "0.2.*",
-        "kriswallsmith/assetic": "1.0.4",
+        "kriswallsmith/assetic": "dev-master",
         "kriswallsmith/spork": "dev-master",
         "nervo/yuicompressor": "@stable",
         "dflydev/github-gist-twig-extension": "@stable"
