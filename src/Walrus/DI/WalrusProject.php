@@ -78,11 +78,26 @@ class WalrusProject
         $loader->load('templating.yml');
         $loader->load('commands.yml');
         $loader->load('utilities.yml');
-        $loader->load('assets.yml');
         $loader->load('collections.yml');
         $loader->load('markdown.yml');
         $loader->load('theme.yml');
         $loader->load('project.yml');
+
+        // TODO: load different filters for css and js, maybe a compiler pass?
+        /*$project = $this->container->get('walrus.project');
+        if (null !== $cssCompressor = $project->getCssCompressor()) {
+            $this->container->setParameter('asset.css.compressor.path', $cssCompressor['path']);
+        }
+        if (null !== $jsCompressor = $project->getJsCompressor()) {
+            $this->container->setParameter('asset.js.compressor.path', $jsCompressor['path']);
+        }
+        if ($cssCompressor && $jsCompressor) {
+            $loader->load(sprintf('assets/assets_%s.yml', $cssCompressor['name']));
+        } else {
+            $loader->load('assets/assets.yml');
+        }*/
+
+        $loader->load('assets/assets.yml');
     }
 
     /**

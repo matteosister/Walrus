@@ -40,6 +40,16 @@ class Project
     private $themeLocation;
 
     /**
+     * @var string
+     */
+    private $cssCompressor;
+
+    /**
+     * @var string
+     */
+    private $jsCompressor;
+
+    /**
      * constructor
      *
      * @param string $rootPath          root of the project
@@ -52,6 +62,8 @@ class Project
         $this->setSiteName($pc['site_name']);
         $this->setTheme($pc['theme']);
         $this->setThemeLocation($pc['theme_location']);
+        $this->setCssCompressor($pc['css_compressor']);
+        $this->setJsCompressor($pc['js_compressor']);
     }
 
     /**
@@ -160,5 +172,43 @@ class Project
         return $this->themeLocation;
     }
 
+    /**
+     * CssCompressor setter
+     *
+     * @param string $cssCompressor la variabile cssCompressor
+     */
+    public function setCssCompressor($cssCompressor)
+    {
+        $this->cssCompressor = $cssCompressor;
+    }
 
+    /**
+     * CssCompressor getter
+     *
+     * @return string
+     */
+    public function getCssCompressor()
+    {
+        return $this->cssCompressor;
+    }
+
+    /**
+     * JsCompressor setter
+     *
+     * @param string $jsCompressor la variabile jsCompressor
+     */
+    public function setJsCompressor($jsCompressor)
+    {
+        $this->jsCompressor = $jsCompressor;
+    }
+
+    /**
+     * JsCompressor getter
+     *
+     * @return string
+     */
+    public function getJsCompressor()
+    {
+        return $this->jsCompressor;
+    }
 }

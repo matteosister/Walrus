@@ -1,0 +1,7 @@
+parameters:
+  asset.collection.class: Walrus\Asset\AssetCollection
+
+services:
+  asset.collection:
+    class: %asset.collection.class%
+    arguments: ~
