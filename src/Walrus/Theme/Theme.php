@@ -59,9 +59,8 @@ class Theme
      * @param string                        $themePath       theme path
      * @param \Walrus\Asset\AssetCollection $assetCollection assets collection
      */
-    public function __construct($themePath, AssetCollection $assetCollection)
+    public function __construct(AssetCollection $assetCollection)
     {
-        $this->themePath = realpath($themePath);
         $this->assetCollection = $assetCollection;
     }
 

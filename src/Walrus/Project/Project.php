@@ -17,7 +17,8 @@ use Symfony\Component\Config\Definition\Processor,
 use Walrus\Configuration\MainConfiguration,
     Walrus\Theme\Theme,
     Walrus\Configuration\ThemeConfiguration,
-    Walrus\Exception\MultipleThemeFoldersException;
+    Walrus\Exception\MultipleThemeFoldersException,
+    Walrus\Exception\ThemeFolderNotFound;
 use Assetic\Filter\UglifyCssFilter,
     Assetic\Filter\UglifyJsFilter;
 
@@ -100,6 +101,9 @@ class Project
             return;
         }
         $iterator = Finder::create()->files()->name('theme.yml')->in($this->getRootPath());
+        if (0 === iterator_count($iterator)) {
+            throw new ThemeFolderNotFound();
+        }
         $themeFiles = array();
         foreach ($iterator as $file) {
             try {

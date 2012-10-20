@@ -273,7 +273,7 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
 
     protected function getMockTheme($name = 'test1')
     {
-        $theme = $this->getMock('Walrus\Theme\Theme', array('getAssetCollection'), array($this->fixturesDir.sprintf('/themes/%s', $name), $this->getMockAssetCollection()));
+        $theme = $this->getMock('Walrus\Theme\Theme', array('getAssetCollection'), array($this->getMockAssetCollection()));
         $theme->expects($this->any())
             ->method('getAssetCollection')
             ->will($this->returnValue($this->getMockAssetCollection()));

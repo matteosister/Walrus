@@ -1,0 +1,14 @@
+theme:
+  name: test2
+  compress_assets: true
+  group_assets: false
+  assets: ~
+#    - { name: bootstrap, type: less, source_file: css/bootstrap/less/bootstrap.less }
+#    - { name: bootstrap_responsive, type: less, source_file: css/bootstrap/less/responsive.less }
+#    - { name: compass project, type: compass, source_folder: css/compass }
+#    - { name: a css folder, type: css_source, source_folder: css/custom_css }
+#    - { name: jquery, type: js_source, source_folder: js/jquery }
+#    - { name: modernizr, type: js_source, source_folder: js/modernizr }
+#    - { name: boilerplate, type: js_source, source_folder: js/boilerplate }
+#    - { name: an awesome js folder, type: js_source, source_folder: js/custom_js }
+#    - { name: bootstrap_js_dropdown, type: js_file, source_file: css/bootstrap/js/bootstrap-dropdown.js }

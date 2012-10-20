@@ -1,6 +1,6 @@
 walrus:
     site_name: 'Test'
-    theme: test
+    theme_name: test1
     theme_location: null
     uglify_css:
         enabled: true

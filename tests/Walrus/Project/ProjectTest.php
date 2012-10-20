@@ -32,4 +32,38 @@ class ProjectTest extends WalrusTestCase
         $this->assertEquals('Test', $project->getSiteName());
         $this->assertNull($project->getThemeLocation());
     }
+
+    /**
+     * @expectedException \Walrus\Exception\ThemeFolderNotFound
+     */
+    public function testAutoLoadThemesNotFound()
+    {
+        $this->filesystem->copy($this->getFixtureFile('walrus.yml'), $this->playgroundDir.'/walrus.yml');
+        $project = new Project($this->playgroundDir, $this->getMockTheme());
+        $project->buildTheme();
+    }
+
+    /**
+     * @expectedException \Walrus\Exception\MultipleThemeFoldersException
+     */
+    public function testAutoLoadThemesMultiple()
+    {
+        $this->filesystem->copy($this->getFixtureFile('walrus.yml'), $this->playgroundDir.'/walrus.yml');
+        $project = new Project($this->playgroundDir, $this->getMockTheme());
+        $this->filesystem->mkdir(array($this->playgroundDir.'/theme1', $this->playgroundDir.'/theme2'));
+        $this->filesystem->mirror($this->fixturesDir.'/themes/test1', $this->playgroundDir.'/theme1');
+        $this->filesystem->mirror($this->fixturesDir.'/themes/test1', $this->playgroundDir.'/theme2');
+        $project->buildTheme();
+    }
+
+    public function testAutoLoadThemes()
+    {
+        $this->filesystem->copy($this->getFixtureFile('walrus.yml'), $this->playgroundDir.'/walrus.yml');
+        $project = new Project($this->playgroundDir, $this->getMockTheme());
+        $this->filesystem->mkdir(array($this->playgroundDir.'/theme1', $this->playgroundDir.'/theme2'));
+        $this->filesystem->mirror($this->fixturesDir.'/themes/test1', $this->playgroundDir.'/theme2');
+        $project->buildTheme();
+        $this->assertEquals($this->playgroundDir.'/theme2', $project->getTheme()->getThemePath());
+        $this->assertEquals('test1', $project->getTheme()->getName());
+    }
 }
