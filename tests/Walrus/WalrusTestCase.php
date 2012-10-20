@@ -140,7 +140,6 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
                 $this->equalTo('twig'),
                 $this->equalTo('twig.md_content'),
                 $this->equalTo('twig.theme'),
-                $this->equalTo('walrus.theme'),
                 $this->equalTo('walrus.project')
             ))
             ->will($this->returnCallback(array($this, 'containerGetCallback')));
@@ -171,9 +170,6 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
                 break;
             case 'twig':
                 return $this->getTwig();
-                break;
-            case 'walrus.theme':
-                return $this->getMockTheme();
                 break;
             case 'twig.md_content':
                 return $this->getTwigMdContent();
@@ -302,7 +298,10 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
 
     protected function getMockProject()
     {
-        $project = $this->getMock('Walrus\Project\Project', array(), array($this->playgroundDir));
+        $project = $this->getMock('Walrus\Project\Project', array(), array($this->playgroundDir, $this->getMockTheme()));
+        $project->expects($this->any())
+            ->method('getTheme')
+            ->will($this->returnValue($this->getMockTheme()));
         return $project;
     }
 

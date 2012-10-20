@@ -2,9 +2,9 @@ walrus:
     site_name: 'Test'
     theme: test
     theme_location: null
-    css_compressor:
-        name: uglifier # or yui
+    uglify_css:
+        enabled: true
         path: /usr/bin/uglifycss
-    js_compressor:
-        name: uglifier # or yui
-        path: /usr/bin/uglifycss
+    uglify_js:
+        enabled: true
+        path: /usr/bin/uglifyjs

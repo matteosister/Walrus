@@ -3,6 +3,7 @@ parameters:
 
 services:
   walrus.theme:
+    public: false
     class: %theme.class%
     arguments:
       - %THEME_PATH%

@@ -58,7 +58,7 @@ class GenerateSiteCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if ($input->getOption('no-header')) {
+        if (!$input->getOption('no-header')) {
             $this->writeHeader($output);
         }
         $tmpFolder = sys_get_temp_dir().'/walrus_'.sha1(uniqid());

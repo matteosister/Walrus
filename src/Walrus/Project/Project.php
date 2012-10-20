@@ -12,7 +12,10 @@ namespace Walrus\Project;
 use Symfony\Component\Config\Definition\Processor,
     Symfony\Component\Yaml\Yaml,
     Symfony\Component\Config\FileLocator;
-use Walrus\Configuration\MainConfiguration;
+use Walrus\Configuration\MainConfiguration,
+    Walrus\Theme\Theme;
+use Assetic\Filter\UglifyCssFilter,
+    Assetic\Filter\UglifyJsFilter;
 
 /**
  * Project class
@@ -30,7 +33,7 @@ class Project
     private $siteName;
 
     /**
-     * @var string
+     * @var Theme
      */
     private $theme;
 
@@ -42,12 +45,12 @@ class Project
     /**
      * @var string
      */
-    private $cssCompressor;
+    private $uglifyCss;
 
     /**
      * @var string
      */
-    private $jsCompressor;
+    private $uglifyJs;
 
     /**
      * constructor
@@ -55,15 +58,19 @@ class Project
      * @param string $rootPath          root of the project
      * @param string $configurationFile name of the main configuration file
      */
-    public function __construct($rootPath, $configurationFile = 'walrus.yml')
+    public function __construct($rootPath, Theme $theme, $configurationFile = 'walrus.yml')
     {
+        $this->theme = $theme;
         $this->configurationFile = $configurationFile;
         $pc = $this->parseConfiguration($rootPath);
         $this->setSiteName($pc['site_name']);
-        $this->setTheme($pc['theme']);
         $this->setThemeLocation($pc['theme_location']);
-        $this->setCssCompressor($pc['css_compressor']);
-        $this->setJsCompressor($pc['js_compressor']);
+        if ($pc['uglify_css']['enabled']) {
+            $this->theme->getAssetCollection()->addFilter('css', new UglifyCssFilter($pc['uglify_css']['path']));
+        }
+        if ($pc['uglify_js']['enabled']) {
+            $this->theme->getAssetCollection()->addFilter('js', new UglifyJsFilter($pc['uglify_js']['path']));
+        }
     }
 
     /**
@@ -135,7 +142,7 @@ class Project
     /**
      * Theme setter
      *
-     * @param string $theme la variabile theme
+     * @param \Walrus\Theme\Theme $theme la variabile theme
      */
     public function setTheme($theme)
     {
@@ -145,7 +152,7 @@ class Project
     /**
      * Theme getter
      *
-     * @return string
+     * @return \Walrus\Theme\Theme
      */
     public function getTheme()
     {
@@ -173,42 +180,42 @@ class Project
     }
 
     /**
-     * CssCompressor setter
+     * UglifyCss setter
      *
-     * @param string $cssCompressor la variabile cssCompressor
+     * @param string $uglifyCss la variabile uglifyCss
      */
-    public function setCssCompressor($cssCompressor)
+    public function setUglifyCss($uglifyCss)
     {
-        $this->cssCompressor = $cssCompressor;
+        $this->uglifyCss = $uglifyCss;
     }
 
     /**
-     * CssCompressor getter
+     * UglifyCss getter
      *
      * @return string
      */
-    public function getCssCompressor()
+    public function getUglifyCss()
     {
-        return $this->cssCompressor;
+        return $this->uglifyCss;
     }
 
     /**
-     * JsCompressor setter
+     * UglifyJs setter
      *
-     * @param string $jsCompressor la variabile jsCompressor
+     * @param string $uglifyJs la variabile uglifyJs
      */
-    public function setJsCompressor($jsCompressor)
+    public function setUglifyJs($uglifyJs)
     {
-        $this->jsCompressor = $jsCompressor;
+        $this->uglifyJs = $uglifyJs;
     }
 
     /**
-     * JsCompressor getter
+     * UglifyJs getter
      *
      * @return string
      */
-    public function getJsCompressor()
+    public function getUglifyJs()
     {
-        return $this->jsCompressor;
+        return $this->uglifyJs;
     }
 }

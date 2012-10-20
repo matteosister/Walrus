@@ -95,7 +95,7 @@ abstract class ContainerAwareCommand extends Command
      */
     protected function getAssetCollection()
     {
-        return $this->getTheme()->getAssetCollection();
+        return $this->getProject()->getTheme()->getAssetCollection();
     }
 
     /**
@@ -103,7 +103,15 @@ abstract class ContainerAwareCommand extends Command
      */
     protected function getTheme()
     {
-        return $this->get('walrus.theme');
+        return $this->getProject()->getTheme();
+    }
+
+    /**
+     * @return \Walrus\Project\Project
+     */
+    protected function getProject()
+    {
+        return $this->get('walrus.project');
     }
 
     /**

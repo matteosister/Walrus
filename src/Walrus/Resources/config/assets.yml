@@ -3,5 +3,6 @@ parameters:
 
 services:
   asset.collection:
+    public: false
     class: %asset.collection.class%
     arguments: ~

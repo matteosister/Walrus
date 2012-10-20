@@ -66,7 +66,7 @@ class ThemeExtension extends WalrusExtension
      */
     public function assets()
     {
-        return $this->container->get('walrus.theme')->getAssetCollection()->output();
+        return $this->container->get('walrus.project')->getTheme()->getAssetCollection()->output();
     }
 
     /**

@@ -6,3 +6,4 @@ services:
     class: %project.class%
     arguments:
       - %ROOT_PATH%
+      - @walrus.theme
