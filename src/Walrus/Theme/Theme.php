@@ -32,6 +32,7 @@ class Theme
      * @var string
      */
     private $themePath;
+
     /**
      * @var \Walrus\Asset\AssetCollection
      */
@@ -62,7 +63,14 @@ class Theme
     {
         $this->themePath = realpath($themePath);
         $this->assetCollection = $assetCollection;
-        $locator = new FileLocator($themePath);
+    }
+
+    /**
+     * build the theme configuration
+     */
+    public function buildTheme()
+    {
+        $locator = new FileLocator($this->themePath);
         $config = Yaml::parse($locator->locate('theme.yml'));
         $processor = new Processor();
         $conf = new ThemeConfiguration();
@@ -156,7 +164,8 @@ class Theme
      */
     public function setThemePath($themePath)
     {
-        $this->themePath = $themePath;
+        $this->themePath = realpath($themePath);
+        $this->buildTheme();
     }
 
     /**

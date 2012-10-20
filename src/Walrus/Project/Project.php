@@ -11,9 +11,13 @@ namespace Walrus\Project;
 
 use Symfony\Component\Config\Definition\Processor,
     Symfony\Component\Yaml\Yaml,
-    Symfony\Component\Config\FileLocator;
+    Symfony\Component\Config\FileLocator,
+    Symfony\Component\Finder\Finder,
+    Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Walrus\Configuration\MainConfiguration,
-    Walrus\Theme\Theme;
+    Walrus\Theme\Theme,
+    Walrus\Configuration\ThemeConfiguration,
+    Walrus\Exception\MultipleThemeFoldersException;
 use Assetic\Filter\UglifyCssFilter,
     Assetic\Filter\UglifyJsFilter;
 
@@ -22,6 +26,11 @@ use Assetic\Filter\UglifyCssFilter,
  */
 class Project
 {
+    /**
+     * @var string
+     */
+    private $rootPath;
+
     /**
      * @var string
      */
@@ -36,6 +45,11 @@ class Project
      * @var Theme
      */
     private $theme;
+
+    /**
+     * @var string
+     */
+    private $themeName;
 
     /**
      * @var string
@@ -60,10 +74,12 @@ class Project
      */
     public function __construct($rootPath, Theme $theme, $configurationFile = 'walrus.yml')
     {
+        $this->rootPath = $rootPath;
         $this->theme = $theme;
         $this->configurationFile = $configurationFile;
         $pc = $this->parseConfiguration($rootPath);
         $this->setSiteName($pc['site_name']);
+        $this->setThemeName($pc['theme_name']);
         $this->setThemeLocation($pc['theme_location']);
         if ($pc['uglify_css']['enabled']) {
             $this->theme->getAssetCollection()->addFilter('css', new UglifyCssFilter($pc['uglify_css']['path']));
@@ -71,6 +87,36 @@ class Project
         if ($pc['uglify_js']['enabled']) {
             $this->theme->getAssetCollection()->addFilter('js', new UglifyJsFilter($pc['uglify_js']['path']));
         }
+    }
+
+    /**
+     * called from the dic
+     * find the theme folder and build the theme
+     */
+    public function buildTheme()
+    {
+        if (null !== $this->getThemeLocation()) {
+            $this->getTheme()->setThemePath($this->rootPath.'/'.$this->getThemeLocation());
+            return;
+        }
+        $iterator = Finder::create()->files()->name('theme.yml')->in($this->getRootPath());
+        $themeFiles = array();
+        foreach ($iterator as $file) {
+            try {
+                $config = Yaml::parse($this->rootPath.'/'.$file->getRelativePathname());
+                $processor = new Processor();
+                $conf = new ThemeConfiguration();
+                $pc = $processor->processConfiguration($conf, $config);
+                if ($this->getThemeName() === $pc['name']) {
+                    $themeFiles[] = $file->getRelativePath();
+                }
+            } catch (InvalidConfigurationException $e) {
+            }
+        }
+        if (1 < count($themeFiles)) {
+            throw new MultipleThemeFoldersException();
+        }
+        $this->getTheme()->setThemePath($this->rootPath.'/'.$themeFiles[0]);
     }
 
     /**
@@ -97,6 +143,26 @@ class Project
         $conf = new MainConfiguration();
 
         return $processor->processConfiguration($conf, $config);
+    }
+
+    /**
+     * RootPath setter
+     *
+     * @param string $rootPath la variabile rootPath
+     */
+    public function setRootPath($rootPath)
+    {
+        $this->rootPath = $rootPath;
+    }
+
+    /**
+     * RootPath getter
+     *
+     * @return string
+     */
+    public function getRootPath()
+    {
+        return $this->rootPath;
     }
 
     /**
@@ -157,6 +223,27 @@ class Project
     public function getTheme()
     {
         return $this->theme;
+    }
+
+    /**
+     * ThemeName setter
+     *
+     * @param string $themeName la variabile themeName
+     */
+    public function setThemeName($themeName)
+    {
+        $this->themeName = $themeName;
+
+    }
+
+    /**
+     * ThemeName getter
+     *
+     * @return string
+     */
+    public function getThemeName()
+    {
+        return $this->themeName;
     }
 
     /**

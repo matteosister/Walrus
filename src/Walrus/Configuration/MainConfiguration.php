@@ -29,7 +29,7 @@ class MainConfiguration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('site_name')->defaultValue('My first Walrus website')->end()
-                ->scalarNode('theme')->defaultValue('cypress')->end()
+                ->scalarNode('theme_name')->defaultValue('cypress')->end()
                 ->scalarNode('theme_location')->defaultNull()->end()
                 ->arrayNode('uglify_css')
                     ->addDefaultsIfNotSet()

@@ -1,5 +1,6 @@
 parameters:
   project.class: Walrus\Project\Project
+  theme.class: Walrus\Theme\Theme
 
 services:
   walrus.project:
@@ -7,3 +8,12 @@ services:
     arguments:
       - %ROOT_PATH%
       - @walrus.theme
+    calls:
+      - [ buildTheme ]
+
+  walrus.theme:
+    public: false
+    class: %theme.class%
+    arguments:
+      - %THEME_PATH%
+      - @asset.collection

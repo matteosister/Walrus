@@ -80,7 +80,6 @@ class WalrusProject
         $loader->load('utilities.yml');
         $loader->load('collections.yml');
         $loader->load('markdown.yml');
-        $loader->load('theme.yml');
         $loader->load('project.yml');
         $loader->load('assets.yml');
     }
