@@ -40,7 +40,7 @@ trait SlugifierTrait
         $slug = str_replace(array('\'', '`', '^'), '', $slug);
 
         // replace non letter or digits with separator
-        $slug = preg_replace('/\W+/', $replacement, $slug);
+        //$slug = preg_replace('/\W+/', $replacement, $slug);
 
         // trim
         $slug = trim($slug, $replacement);
