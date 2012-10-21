@@ -20,7 +20,6 @@ class UtilitiesTest extends WalrusTestCase
     public function testSlugify()
     {
         $u = new Utilities();
-        var_dump(function_exists('iconv'));
         $this->assertEquals('test', $u->slugify('test'));
         $this->assertEquals('test', $u->slugify('test?'));
         $this->assertEquals('test', $u->slugify('?test'));
