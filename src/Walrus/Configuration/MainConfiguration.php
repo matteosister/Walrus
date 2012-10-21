@@ -24,8 +24,8 @@ class MainConfiguration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('walrus');
+        $mainBuilder = new TreeBuilder();
+        $rootNode = $mainBuilder->root('walrus');
         $rootNode
             ->children()
                 ->scalarNode('site_name')->defaultValue('My first Walrus website')->end()
@@ -47,6 +47,6 @@ class MainConfiguration implements ConfigurationInterface
                 ->end()
             ->end();
 
-        return $treeBuilder;
+        return $mainBuilder;
     }
 }

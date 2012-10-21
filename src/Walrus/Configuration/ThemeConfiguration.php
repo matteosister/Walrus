@@ -24,8 +24,8 @@ class ThemeConfiguration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('theme');
+        $themeBuilder = new TreeBuilder();
+        $rootNode = $themeBuilder->root('theme');
         $rootNode
             ->children()
                 ->scalarNode('name')->isRequired()->end()
@@ -50,6 +50,6 @@ class ThemeConfiguration implements ConfigurationInterface
             ->end();
 
 
-        return $treeBuilder;
+        return $themeBuilder;
     }
 }
