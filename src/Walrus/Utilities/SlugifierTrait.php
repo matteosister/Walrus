@@ -36,11 +36,11 @@ trait SlugifierTrait
             $slug = strtolower($slug);
         }
 
-        // remove accents resulting from OSX's iconv
-        $slug = str_replace(array('\'', '`', '^'), '', $slug);
-
         // replace non letter or digits with separator
-        $slug = preg_replace('/\W+/', $replacement, $slug);
+        $slug = preg_replace('~[^\\pL\d]+~u', '-', $slug);
+
+        // remove unwanted characters
+        $slug = preg_replace('~[^-\w]+~', '', $slug);
 
         // trim
         $slug = trim($slug, $replacement);
