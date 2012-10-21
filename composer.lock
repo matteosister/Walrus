@@ -1,18 +1,18 @@
 {
-    "hash": "0212c5283f36a0c4d1f817f9c189a419",
+    "hash": "2d486b5ba25ec5ae5e794d38f6277a06",
     "packages": [
         {
             "name": "cypresslab/compass-elephant",
-            "version": "0.2.7",
+            "version": "0.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matteosister/CompassElephant",
-                "reference": "v0.2.7"
+                "reference": "0.2.8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/matteosister/CompassElephant/zipball/v0.2.7",
-                "reference": "v0.2.7",
+                "url": "https://github.com/matteosister/CompassElephant/zipball/0.2.8",
+                "reference": "0.2.8",
                 "shasum": ""
             },
             "require": {
@@ -20,7 +20,7 @@
                 "symfony/process": "2.1.*",
                 "symfony/finder": "2.1.*"
             },
-            "time": "2012-08-22 05:26:32",
+            "time": "2012-10-20 12:51:41",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -647,18 +647,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Process",
-                "reference": "fc5b082e436161427e29652e3316d7def5f7a64f"
+                "reference": "6d483356f7496f1305a67f6a50cc33ec900c3930"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Process/zipball/fc5b082e436161427e29652e3316d7def5f7a64f",
-                "reference": "fc5b082e436161427e29652e3316d7def5f7a64f",
+                "url": "https://github.com/symfony/Process/zipball/6d483356f7496f1305a67f6a50cc33ec900c3930",
+                "reference": "6d483356f7496f1305a67f6a50cc33ec900c3930",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1349553363",
+            "time": "1350717030",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -785,6 +785,73 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "pdepend/pdepend",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/pdepend/pdepend.git",
+                "reference": "1.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/pdepend/pdepend/zipball/1.1.0",
+                "reference": "1.1.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.3"
+            },
+            "time": "2012-09-12 04:09:19",
+            "bin": [
+                "src/bin/pdepend"
+            ],
+            "type": "library",
+            "installation-source": "dist",
+            "description": "Official version of pdepend to be handled with Composer"
+        },
+        {
+            "name": "phpcpd/phpcpd",
+            "version": "1.4.0",
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/sebastianbergmann/phpcpd/zipball/1.4.0",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library",
+            "installation-source": "dist"
+        },
+        {
+            "name": "phpmd/phpmd",
+            "version": "1.4.0",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/phpmd/phpmd.git",
+                "reference": "1.4.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/phpmd/phpmd/zipball/1.4.0",
+                "reference": "1.4.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "pdepend/pdepend": "*"
+            },
+            "time": "2012-09-07 14:52:24",
+            "bin": [
+                "src/bin/phpmd"
+            ],
+            "type": "library",
+            "installation-source": "dist",
+            "include-path": [
+                "../../pdepend/pdepend/src/main/php",
+                "src/main/php"
+            ],
+            "description": "Official version of PHPMD handled with Composer."
+        },
         {
             "name": "phpunit/php-code-coverage",
             "version": "1.2.x-dev",
@@ -1155,6 +1222,8 @@
         "kriswallsmith/spork": 20,
         "nervo/yuicompressor": 0,
         "dflydev/github-gist-twig-extension": 0,
-        "phpunit/phpunit": 0
+        "phpunit/phpunit": 0,
+        "pdepend/pdepend": 0,
+        "phpmd/phpmd": 0
     }
 }

@@ -2,3 +2,6 @@
 vendor
 .sass-cache
 tests/Walrus/Playground
+build
+cache.properties
+composer.phar
