@@ -70,8 +70,16 @@ class StartupProjectCommand extends ContainerAwareCommand
         return array(
             'walrus' => array(
                 'site_name' => 'My first Walrus website',
-                'theme' => 'cypress',
-                'theme_location' => null
+                'theme_name' => 'cypress',
+                'theme_location' => null,
+                'uglify_css' => array(
+                    'enabled' => false,
+                    'path' => '/usr/bin/uglifycss'
+                ),
+                'uglify_js' => array(
+                    'enabled' => false,
+                    'path' => '/usr/bin/uglifyjs'
+                ),
             )
         );
     }

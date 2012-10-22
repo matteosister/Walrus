@@ -21,7 +21,6 @@
         "cypresslab/less-elephant": "0.2.*@stable",
         "cypresslab/compass-elephant": "0.2.*@stable",
         "kriswallsmith/assetic": "dev-master",
-        "nervo/yuicompressor": "@stable",
         "dflydev/github-gist-twig-extension": "@stable"
 	},
 	"require-dev": {
