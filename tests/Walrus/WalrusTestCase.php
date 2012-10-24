@@ -12,14 +12,17 @@ namespace Walrus;
 use Symfony\Component\Finder\Finder,
     Symfony\Component\Console\Application,
     Symfony\Component\Filesystem\Filesystem,
-    Symfony\Component\Yaml\Yaml;
+    Symfony\Component\Yaml\Yaml,
+    Symfony\Component\Console\Input\ArrayInput,
+    Symfony\Component\Console\Output\StreamOutput;
 use Walrus\Command\CreatePageCommand,
     Walrus\Command\GenerateSiteCommand,
     Walrus\Utilities\SlugifierTrait,
     Walrus\MDObject\Page\Page,
     Walrus\Twig\Extension\MdContentExtension,
     Dflydev\Twig\Extension\GitHubGist\GistTwigExtension,
-    Walrus\Twig\Extension\ThemeExtension;
+    Walrus\Twig\Extension\ThemeExtension,
+    Walrus\Collection\PageCollection;
 
 /**
  * base test case
@@ -101,6 +104,22 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
         }
     }
 
+    protected function generatePage($title, $parent = null)
+    {
+        $application = $this->getApplication();
+        $command = $application->find('create:page');
+        $inputArgs = array('command' => $command->getName(), 'title' => $title);
+        if (null !== $parent) {
+            $inputArgs['parent'] = $parent;
+        }
+        $input = new ArrayInput($inputArgs);
+        $output = new StreamOutput(fopen('php://memory', 'w', false));
+        $command->run($input, $output);
+        $slug = $this->slugify($title);
+        $finder = Finder::create()->files()->in($this->pagesDir)->name(sprintf('/(\d+)_(%s)\.md/', $slug));
+        $this->assertCount(1, $finder);
+    }
+
     protected function getTwig()
     {
         //\Twig_Autoloader::register();
@@ -148,6 +167,7 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
             ->method('getParameter')
             ->with($this->logicalOr(
                 $this->equalTo('DRAFTING_PATH'),
+                $this->equalTo('PAGES_PATH'),
                 $this->equalTo('ROOT_PATH'),
                 $this->equalTo('PUBLIC_PATH')
             ))
@@ -188,6 +208,9 @@ class WalrusTestCase extends \PHPUnit_Framework_TestCase
         switch ($name) {
             case 'DRAFTING_PATH':
                 return $this->draftingDir;
+                break;
+            case 'PAGES_PATH':
+                return $this->pagesDir;
                 break;
             case 'ROOT_PATH':
                 return $this->playgroundDir;

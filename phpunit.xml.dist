@@ -15,6 +15,7 @@
 
     <testsuites>
         <testsuite name="Walrus">
+            <directory>tests/Walrus/Command</directory>
             <directory>tests/Walrus</directory>
         </testsuite>
     </testsuites>

@@ -48,6 +48,7 @@ class WalrusProject
         $this->container->setParameter("WALRUS_PATH", realpath(__DIR__.'/../../../'));
         $this->container->setParameter("PUBLIC_PATH", $this->container->getParameter('ROOT_PATH').'/public');
         $this->container->setParameter("DRAFTING_PATH", $this->container->getParameter('ROOT_PATH').'/drafting');
+        $this->container->setParameter("PAGES_PATH", $this->container->getParameter('ROOT_PATH').'/drafting/pages');
         $this->container->setParameter('THEME_PATH', $this->container->getParameter('WALRUS_PATH').'/themes/cypress');
         $this->loadWalrusDI();
         $this->container->compile();

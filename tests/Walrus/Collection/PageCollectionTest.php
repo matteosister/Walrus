@@ -38,4 +38,16 @@ class PageCollectionTest extends WalrusTestCase
         $pageCollection = new PageCollection();
         $this->assertNull($pageCollection->load($this->playgroundDir.'/non-existent'));
     }
+
+    public function testTreePages()
+    {
+        $pageCollection = new PageCollection();
+        $this->generatePage('homepage');
+        $this->generatePage('child1', 'homepage');
+        $this->generatePage('child2', 'child1');
+        $this->generatePage('child3', 'child2');
+        $pageCollection->load($this->pagesDir);
+        $this->assertCount(4, $pageCollection);
+        $this->assertCount(4, $pageCollection->getBreadcrumbs('child3'));
+    }
 }

@@ -59,6 +59,19 @@ abstract class ContainerAwareCommand extends Command
     }
 
     /**
+     * service parameter getter
+     *
+     * @param string $name    parameter name
+     * @param null   $default default
+     *
+     * @return mixed
+     */
+    protected function getParameter($name, $default = null)
+    {
+        return $this->container->getParameter($name, $default);
+    }
+
+    /**
      * @return \Walrus\Utilities\Utilities
      */
     protected function getUtilities()

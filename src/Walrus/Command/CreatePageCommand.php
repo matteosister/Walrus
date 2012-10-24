@@ -13,9 +13,9 @@ use Symfony\Component\Console\Input\InputArgument,
     Symfony\Component\Console\Input\InputInterface,
     Symfony\Component\Console\Input\InputOption,
     Symfony\Component\Console\Output\OutputInterface,
-    Symfony\Component\DependencyInjection\ContainerInterface;
-use Walrus\Utilities\Utilities,
-    Walrus\DI\Configuration,
+    Symfony\Component\DependencyInjection\ContainerInterface,
+    Symfony\Component\Finder\Finder;
+use Walrus\DI\Configuration,
     Walrus\MDObject\Page\Page,
     Walrus\Command\ContainerAwareCommand;
 use Symfony\Component\Yaml\Yaml;
@@ -68,7 +68,7 @@ class CreatePageCommand extends ContainerAwareCommand
             return $p->getUrl();
         }, $this->container->get('walrus.collection.page')->toArray()), $title);
         $template = $this->getTwig()->loadTemplate('page.md.twig');
-        if (0 == $this->getPageCollection()->count()) {
+        if (0 === $this->getActualPagesNumber()) {
             $parent = null;
             $homepage = true;
         } else {
@@ -85,10 +85,17 @@ class CreatePageCommand extends ContainerAwareCommand
         if (!is_dir($dir)) {
             mkdir($dir);
         }
-        $number = str_pad((string) $this->getPageCollection()->count() + 1, 4, '0', STR_PAD_LEFT);
+        $number = str_pad((string) $this->getActualPagesNumber() + 1, 4, '0', STR_PAD_LEFT);
         $fileName = sprintf('%s/%s_%s.md', $dir, $number, $slug);
         file_put_contents($fileName, $fileContent);
         $this->writeRuler($output);
         $output->writeln(sprintf('<info>Page</info> <comment>%s</comment> created', $title));
+    }
+
+    private function getActualPagesNumber()
+    {
+        // md may change in future implementations, so I use it as a parameter
+        $finder = Finder::create()->files()->name(sprintf('*.%s', 'md'))->in($this->getParameter('PAGES_PATH'));
+        return iterator_count($finder);
     }
 }
