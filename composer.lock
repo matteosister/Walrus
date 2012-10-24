@@ -1,5 +1,5 @@
 {
-    "hash": "471938b5ce040c8347d895c4aa7864f8",
+    "hash": "4ffd2a9a10a64c0fdb5a5f62faeddfff",
     "packages": [
         {
             "name": "cypresslab/compass-elephant",
@@ -276,33 +276,6 @@
             ]
         },
         {
-            "name": "nervo/yuicompressor",
-            "version": "2.4.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nervo/yuicompressor.git",
-                "reference": "2.4.7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://github.com/nervo/yuicompressor/zipball/2.4.7",
-                "reference": "2.4.7",
-                "shasum": ""
-            },
-            "time": "2012-05-12 01:31:30",
-            "type": "library",
-            "installation-source": "dist",
-            "license": [
-                "BSD"
-            ],
-            "description": "YUI Compressor is an open source tool that supports the compression of both JavaScript and CSS files. The JavaScript compression removes comments and white-spaces as well as obfuscates local variables using the smallest possible variable name. CSS compression is done using a regular-expression-based CSS minifier.",
-            "homepage": "https://github.com/yui/yuicompressor",
-            "keywords": [
-                "java",
-                "yui"
-            ]
-        },
-        {
             "name": "symfony/config",
             "version": "v2.1.2",
             "target-dir": "Symfony/Component/Config",
@@ -547,30 +520,30 @@
         },
         {
             "name": "symfony/process",
-            "version": "2.1.x-dev",
+            "version": "v2.1.2",
             "target-dir": "Symfony/Component/Process",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Process",
-                "reference": "6d483356f7496f1305a67f6a50cc33ec900c3930"
+                "reference": "v2.1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/Process/zipball/6d483356f7496f1305a67f6a50cc33ec900c3930",
-                "reference": "6d483356f7496f1305a67f6a50cc33ec900c3930",
+                "url": "https://github.com/symfony/Process/zipball/v2.1.2",
+                "reference": "v2.1.2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "time": "1350717030",
+            "time": "2012-09-18 15:37:29",
             "type": "library",
             "extra": {
                 "branch-alias": {
                     "dev-master": "2.1-dev"
                 }
             },
-            "installation-source": "source",
+            "installation-source": "dist",
             "autoload": {
                 "psr-0": {
                     "Symfony\\Component\\Process": ""
@@ -696,6 +669,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "symfony/console": 0,
+        "symfony/process": 0,
         "symfony/config": 0,
         "symfony/dependency-injection": 0,
         "symfony/yaml": 0,
@@ -705,7 +679,6 @@
         "cypresslab/less-elephant": 0,
         "cypresslab/compass-elephant": 0,
         "kriswallsmith/assetic": 20,
-        "nervo/yuicompressor": 0,
         "dflydev/github-gist-twig-extension": 0,
         "phpunit/phpunit": 0,
         "pdepend/pdepend": 0,
