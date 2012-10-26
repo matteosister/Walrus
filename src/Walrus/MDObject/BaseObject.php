@@ -28,7 +28,7 @@ class BaseObject
      */
     protected function checkPage($md)
     {
-        if (!preg_match('/^\*\*\*\n(.*)\*\*\*(\n?)(.*?)$/s', $md)) {
+        if (!preg_match('/^(.*)\*\*\*(\n?)(.*?)$/s', $md)) {
             throw new PageParseException();
         }
     }
@@ -88,10 +88,10 @@ class BaseObject
     private function splitContent($md)
     {
         $sections = preg_split(sprintf('/%s\n/', preg_quote(static::SEPARATOR)), $md);
-        if (3 === count($sections)) {
-            return array('metadata' => $sections[1], 'content' => $sections[2]);
-        } else if (2 === count($sections)) {
-            return array('metadata' => trim($sections[1], static::SEPARATOR), 'content' => '');
+        if (2 === count($sections)) {
+            return array('metadata' => $sections[0], 'content' => $sections[1]);
+        } else if (1 === count($sections)) {
+            return array('metadata' => trim($sections[0], static::SEPARATOR), 'content' => '');
         } else {
             throw new MalformedMarkdownException();
         }
