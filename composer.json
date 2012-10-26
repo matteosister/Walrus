@@ -22,6 +22,7 @@
         "cypresslab/less-elephant": "0.2.*@stable",
         "cypresslab/compass-elephant": "0.2.*@stable",
         "kriswallsmith/assetic": "dev-master",
+        "kriswallsmith/spork": "dev-master",
         "dflydev/github-gist-twig-extension": "@stable"
 	},
 	"require-dev": {
